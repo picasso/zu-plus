@@ -132,7 +132,7 @@ class ZU_PlusFunctions {
 
 	public function remove_classes($classes, $remove = [], $implode = true) {
 
-		$classes = tplus_merge_classes($classes, false);
+		$classes = $this->merge_classes($classes, false);
 		
 		foreach($remove as $test) if(in_array($test, $classes)) unset($classes[array_search($test, $classes)]);
 		
@@ -336,7 +336,26 @@ class ZU_PlusFunctions {
 	// Color, Background, Thumbnail, Attachment functions ------------------------]
 	
 	public function get_post_gallery($post_id = null) {
-		return function_exists('mplus_get_post_gallery') ? mplus_get_post_gallery($post_id) : get_post_gallery($post_id, false);
+		
+		// Replace of WP 'get_post_gallery' to avoid multiple resolving of shortcodes
+		
+		if(!$post = get_post($post_id)) return [];
+		if(!has_shortcode($post->post_content, 'gallery')) return [];
+	
+		$galleries = [];
+		if(preg_match_all('/'.get_shortcode_regex().'/s', $post->post_content, $matches, PREG_SET_ORDER)) {
+			foreach($matches as $shortcode) {
+				if('gallery' === $shortcode[2]) {
+					
+					$shortcode_attrs = shortcode_parse_atts($shortcode[3]);
+					if(!is_array($shortcode_attrs)) $shortcode_attrs = [];
+	
+					$galleries[] = $shortcode_attrs;
+				}
+			}
+		}
+	
+		return isset($galleries[0]) ? $galleries[0] : [];
 	}
 
 // !! change for plugin

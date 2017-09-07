@@ -1,3 +1,7 @@
+#### 0.5.5 / 2017-09-07
+* bug fixing
+* function `get_post_gallery` ported from `Media+` plugin
+
 #### 0.5.4 / 2017-09-07
 * initial commit for GitHub
 
