@@ -11,6 +11,7 @@ class ZU_PlusFunctions {
 	private 	$advanced_style;
 	private $admin_style;
 	private $fonts;
+	private $copy_string;
 	
 	function __construct() {
 		
@@ -18,6 +19,8 @@ class ZU_PlusFunctions {
 		$this->advanced_style = [];
 		$this->admin_style = [];
 		$this->fonts = [];
+		$this->copy_string = '';
+		
 		add_action('wp_footer', [$this, 'maybe_add_advanced_styles']);
 	}
 	
@@ -332,6 +335,14 @@ class ZU_PlusFunctions {
 		);
 		return $curve;
 	}
+	
+	public function set_copyright($copy_string) {
+		$this->copy_string = $copy_string;
+	}
+
+	public function get_copyright() {
+		return $this->copy_string;
+	}
 
 	// Color, Background, Thumbnail, Attachment functions ------------------------]
 	
@@ -382,12 +393,26 @@ class ZU_PlusFunctions {
 		return $attachment_id;
 	}
 	
-	public function set_random_featured_attachment_id($post_id = null, $gallery = null) {
+	public function set_random_featured_attachment_id($post_id = null, $gallery = null, $only_landscape = false) {
 	
 		$gallery = empty($gallery) ? $this->get_post_gallery($post_id) : $gallery;
-		$ids = empty($gallery) ? [] : wp_parse_id_list($gallery['ids']);
-	
-		$this->random_attachment_id = empty($ids) ? null : (int)$ids[rand(0, count($ids) - 1)];
+		$ids = empty($gallery) ? [] : (isset($gallery['ids']) ? wp_parse_id_list($gallery['ids']) : $gallery);
+		
+		$this->random_attachment_id = null;
+		
+		if(!empty($ids) && is_array($ids)) {
+			if($only_landscape) {
+				$landscaped = [];
+				foreach($ids as $attachment_id) {
+					$image = wp_get_attachment_image_src($attachment_id, 'full'); // Returns an array (url, width, height, is_intermediate)
+					if($image !== false && ($image[1] >= intval($image[2] * 1.5))) $landscaped[] = $attachment_id;		// minimum ratio - 3/2
+				}
+				if(empty($landscaped)) $landscaped = $ids;
+				$this->random_attachment_id = (int)$landscaped[rand(0, count($landscaped) - 1)];
+			} else { 
+				$this->random_attachment_id = (int)$ids[rand(0, count($ids) - 1)];
+			}
+		}
 		
 		return $this->random_attachment_id;
 	}

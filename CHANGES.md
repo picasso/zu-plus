@@ -1,4 +1,5 @@
-#### 0.5.7 / 2017-09-07
+#### 0.5.8 / 2017-09-07
+* `landscape_only` for featured background
 * functionality to duplicate menu ported from `Translate+` plugin
 
 #### 0.5.6 / 2017-09-07
