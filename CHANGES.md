@@ -1,8 +1,7 @@
-#### 0.5.5 / 2017-09-07
+#### 0.5.6 / 2017-09-07
 * bug fixing
 * function `get_post_gallery` ported from `Media+` plugin
-
-#### 0.5.4 / 2017-09-07
+* `GITHUB_UPDATER_OVERRIDE_DOT_ORG` define added
 * initial commit for GitHub
 
 #### 0.5.2 / 2017-09-05
