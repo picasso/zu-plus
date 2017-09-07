@@ -1,3 +1,6 @@
+#### 0.5.4 / 2017-09-07
+* initial commit for GitHub
+
 #### 0.5.2 / 2017-09-05
 * ported some functions from `ZU`
 * split `ZU_PlusFunctions` with Traits

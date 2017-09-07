@@ -10,7 +10,7 @@ See [Dmitry Rudakov Coding](https://dmitryrudakov.com/coding/) for complete docs
 
 ### Download
 
-+ [dev-plus on GitHub](https://github.com/picasso/zu-plus/archive/master.zip) 
++ [ZU+ on GitHub](https://github.com/picasso/zu-plus/archive/master.zip) 
 
 ## Description
 
