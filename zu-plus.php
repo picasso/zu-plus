@@ -4,7 +4,7 @@ Plugin Name: ZU+
 Plugin URI: https://dmitryrudakov.ru/plugins/
 GitHub Plugin URI: https://github.com/picasso/zu-plus
 Description: This plugin encompasses ZU framework functionality.
-Version: 0.5.6
+Version: 0.5.7
 Author: Dmitry Rudakov
 Author URI: https://dmitryrudakov.ru/about/
 Text Domain: zu-plugin
@@ -30,7 +30,7 @@ Domain Path: /lang/
 
 // Prohibit direct script loading
 defined('ABSPATH') || die('No direct script access allowed!');
-define('ZUPLUS_VERSION', '0.5.6');
+define('ZUPLUS_VERSION', '0.5.7');
 define('ZUPLUS_NAME', 'ZU+');
 define('__ZUPLUS_ROOT__', plugin_dir_path(__FILE__)); 
 define('__ZUPLUS_FILE__', __FILE__); 
@@ -38,6 +38,7 @@ define('__ZUPLUS_FILE__', __FILE__);
 // Do not include it in your file! --------------------------------------------]
 require_once(__ZUPLUS_ROOT__ . 'includes/zuplus-plugin.php');
 require_once(__ZUPLUS_ROOT__ . 'includes/debug/zuplus-debug.php');
+require_once(__ZUPLUS_ROOT__ . 'includes/zuplus-duplicate-menu.php');
 define('GITHUB_UPDATER_OVERRIDE_DOT_ORG', true);
 
 class ZU_Plugin extends zuplus_Plugin {
@@ -52,7 +53,7 @@ class ZU_Plugin extends zuplus_Plugin {
 			'plugin_file'			=> 	__ZUPLUS_FILE__,
 			'plugin_name'		=>	ZUPLUS_NAME,
 			'version'				=> 	ZUPLUS_VERSION,
-			'options_nosave'	=>	['log_location'],
+			'options_nosave'	=>	['log_location', 'source_menu', 'new_menu'],
 		];
 		parent::__construct($config);
 		$this->dbug = new ZU_Debug($this->options()); 
@@ -88,6 +89,7 @@ class ZU_Admin extends zuplus_Admin {
 		// Custom Boxes -------------------------------------------------------------]
 		
 		$this->form->add_meta_box('log', __('Actual Log Location', 'zu-plugin'), [$this, 'print_log_location']);
+		$this->form->add_meta_box('duplicate', __('Duplicate Menu', 'zu-plugin'), [$this, 'print_duplicate_menu']);
 	}
 
 	public function status_callback() {
@@ -116,9 +118,33 @@ class ZU_Admin extends zuplus_Admin {
 
 		echo $this->form->fields('It can be changed with the function <span>_dbug_change_log_location()</span>.');
 	}
+
+	public function print_duplicate_menu($post) {
+
+        $nav_menus = wp_get_nav_menus();
+		$desc = empty($nav_menus) ? 'You haven\'t created any Menus yet.' : 'Here you can easily duplicate WordPress Menus.';
+
+		if(!empty($nav_menus)) {
+
+			$select_values = [];	
+			foreach($nav_menus as $_nav_menu) $select_values[$_nav_menu->term_id] = $_nav_menu->name;
+
+			$this->form->add_value('source_menu', array_keys($select_values)[0]);
+			$this->form->select('source_menu', 'Duplicate this menu:', $select_values);
+			
+			$this->form->add_value('new_menu', '?');
+            $this->form->text('new_menu', 'And call it', 'The name will be assigned to duplicated menu.');
+        
+			$this->form->button_link('zuplus_duplicate_menu', __('Duplicate', 'tplus-plugin'), 'images-alt2', 'red', true, false);
+		}
+		
+		echo $this->form->fields($desc, 'zuplus_duplicate_menu'); // last argument -> data-ajaxrel : used in js to serialize form
+	}
 	
 	public function ajax_more($option_name) {
 		if($option_name === 'zuplus_clear_log') return $this->plugin->dbug->clear_log();
+		if($option_name === 'zuplus_duplicate_menu') return zuplus_ajax_duplicate_menu();
+
 		return [];					
 	}
 }

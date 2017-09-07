@@ -1,3 +1,6 @@
+#### 0.5.7 / 2017-09-07
+* functionality to duplicate menu ported from `Translate+` plugin
+
 #### 0.5.6 / 2017-09-07
 * bug fixing
 * function `get_post_gallery` ported from `Media+` plugin
