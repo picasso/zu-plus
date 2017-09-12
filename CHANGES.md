@@ -1,3 +1,6 @@
+#### 0.5.9 / 2017-09-12
+* remove `GITHUB_UPDATER_OVERRIDE_DOT_ORG` setting
+
 #### 0.5.8 / 2017-09-07
 * `landscape_only` for featured background
 * functionality to duplicate menu ported from `Translate+` plugin
