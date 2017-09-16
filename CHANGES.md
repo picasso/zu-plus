@@ -1,3 +1,8 @@
+#### 0.6.0 / 2017-09-16
+* added functions `array_prefix_keys` and `check_option`
+* modified class `ZU_PlusRepeaters` to extract variables from `args`
+* added some functionality to `zuplus_Plugin`
+
 #### 0.5.9 / 2017-09-12
 * remove `GITHUB_UPDATER_OVERRIDE_DOT_ORG` setting
 

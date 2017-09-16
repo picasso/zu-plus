@@ -56,6 +56,10 @@ class zuplus_Plugin {
 			$this->admin = new $this->admin($config, $this);
 		}
 	}
+
+	protected function extend_defaults() {
+		return [];
+	}
 	
 	public function defaults() {
 		
@@ -65,7 +69,7 @@ class zuplus_Plugin {
 				$this->prefix.'_nonce'     	=> $this->ajax_nonce(),
 			];
 		
-			$this->defaults = $defaults;
+			$this->defaults = array_merge($defaults, $this->extend_defaults());
 		}
 		
 		return $this->defaults;
@@ -91,11 +95,22 @@ class zuplus_Plugin {
 		$this->frontend_enqueue();
 	}
 
+	public function should_load_css() {
+		return true;
+	}
+	
+	public function should_load_js() {
+		return true;
+	}
+	
 	public function frontend_enqueue() {					
 
-		zu()->add_style_from_file(plugin_dir_path($this->plugin_file) . 'css/'.$this->prefix.'.css');
-		wp_enqueue_script($this->prefix.'-script', plugins_url('js/'.$this->prefix.'.min.js', $this->plugin_file), ['jquery'], $this->version, true);
-		wp_localize_script($this->prefix.'-script', $this->prefix.'_custom', $this->defaults());
+		if($this->should_load_css()) zu()->add_style_from_file(plugin_dir_path($this->plugin_file) . 'css/'.$this->prefix.'.css');
+		
+		if($this->should_load_js()) {
+			wp_enqueue_script($this->prefix.'-script', plugins_url('js/'.$this->prefix.'.min.js', $this->plugin_file), ['jquery'], $this->version, true);
+			wp_localize_script($this->prefix.'-script', $this->prefix.'_custom', $this->defaults());
+		}
 	}
 }
 
@@ -104,19 +119,11 @@ class zuplus_Addon {
 	private $options; 
 	
 	function __construct($options) {
-
 		$this->options = empty($options) ? [] : $options;
 	}
 	
 	protected function check_option($key, $check = true) {
-		
-		if(!isset($this->options[$key])) return false;
-		
-		if(is_bool($check)) $value = filter_var($this->options[$key], FILTER_VALIDATE_BOOLEAN);
-		else if(is_int($check)) $value = intval($this->options[$key]);
-		else $value = strval($this->options[$key]);
-		
-		return $value === $check ? true : false;
+		return zu()->check_option($this->options, $key, $check);
 	}
 }
 

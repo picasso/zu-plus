@@ -67,6 +67,21 @@ class ZU_PlusFunctions {
 
 	// Useful functions ----------------------------------------------------------]
 
+	public function check_option($options, $key, $check = true) {
+		
+		if(!isset($options[$key])) return false;
+		
+		if(is_bool($check)) $value = filter_var($options[$key], FILTER_VALIDATE_BOOLEAN);
+		else if(is_int($check)) $value = intval($options[$key]);
+		else $value = strval($options[$key]);
+		
+		return $value === $check ? true : false;
+	}
+
+	public function array_prefix_keys($array, $prefix) {
+		return array_combine(array_map(function($v) use($prefix) { return $prefix.$v;}, array_keys($array)), $array);
+	}
+
 	public function format_bytes($bytes, $precision = 0) { 
 	    $units = array('Bytes', 'Kb', 'Mb', 'Gb', 'Tb'); 
 	
@@ -523,9 +538,10 @@ class ZU_PlusRepeaters {
 		$_template = $repeater;
 		$_classes = $classes;
 		$_args = $args;
+		extract(zu()->array_prefix_keys($args, '_'));		// Import variables into the current symbol table from an array
 		
 		ob_start();
-		include($include); 						// Include repeater template
+		include($include); 											// Include repeater template
 		$output = ob_get_contents();
 		ob_end_clean();
 	
