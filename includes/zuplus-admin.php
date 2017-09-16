@@ -163,7 +163,15 @@ class zuplus_Admin {
 		return $create ? wp_create_nonce($ajax_nonce) : $ajax_nonce; 
 	}
 
-	public function admin_enqueue() {		// admin
+	protected function should_enqueue_css() {
+		return true;
+	}
+
+	protected function should_enqueue_js() {
+		return true;
+	}
+	
+	public function admin_enqueue() {		
 
 		$data = [
 			'ajaxurl'                => admin_url('admin-ajax.php'),
@@ -171,9 +179,12 @@ class zuplus_Admin {
 			'screen_id'				=> $this->hook_suffix,
 		];
 		
-		wp_enqueue_style($this->prefix.'-style', plugins_url('css/'.$this->prefix.'-admin.css', $this->plugin_file), [], $this->version);		
-		wp_enqueue_script($this->prefix.'-script', plugins_url('js/'.$this->prefix.'-admin.min.js', $this->plugin_file), ['jquery'], $this->version, true);
-		wp_localize_script($this->prefix.'-script', $this->prefix.'_custom', $data);
+		if($this->should_enqueue_css()) wp_enqueue_style($this->prefix.'-style', plugins_url('css/'.$this->prefix.'-admin.css', $this->plugin_file), [], $this->version);
+		
+		if($this->should_enqueue_js()) { 
+			wp_enqueue_script($this->prefix.'-script', plugins_url('js/'.$this->prefix.'-admin.min.js', $this->plugin_file), ['jquery'], $this->version, true);
+			wp_localize_script($this->prefix.'-script', $this->prefix.'_custom', $data);
+		}
 	}
 	
 	public function admin_settings_link($links) {
@@ -233,8 +244,9 @@ class zuplus_Admin {
 	}
 
 	public function include_admin_template() {
-		$_prefix = $this->plugin_prefix(false);
+		$_prefix = $this->used_plugin_prefix();
 		$_prefix_parent = $this->plugin_prefix(true);
+		$_wrap_class = zu()->merge_classes(['wrap', $_prefix, $_prefix_parent]);
 		if(empty($this->template)) {
 			include_once(__ZUPLUS_ROOT__ . 'includes/zuplus-admin-page.php');
 		} else {
@@ -284,10 +296,13 @@ class zuplus_Admin {
 		print('<script> postboxes.add_postbox_toggles(pagenow);</script>');
 	}
 
+	protected function used_plugin_prefix() { 
+		return $this->plugin_prefix(empty($this->template));
+	}
+	
 	public function render_admin_page() {
-		
-		$prefix = $this->plugin_prefix(empty($this->template));
-		
+
+		$prefix = $this->used_plugin_prefix();
 		add_action($prefix.'_print_title', function() {
 			echo $this->title_callback();
 		});
@@ -681,7 +696,7 @@ class zuplus_Form {
 	
 	public function print_status($post) {
 		
-		echo apply_filters($this->prefix.'_print_side_settings', '');	
+		echo apply_filters($this->parent_prefix.'_print_side_settings', '');	
 		echo $this->button_side(__('Save Options', 'zu-plugin'), 'admin-tools');
 	}
 	

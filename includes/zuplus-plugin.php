@@ -138,5 +138,3 @@ class zuplus_Addon {
 		return zu()->check_option($this->options, $key, $check);
 	}
 }
-
-do_action('zuplus_loaded');
