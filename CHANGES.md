@@ -1,7 +1,8 @@
-#### 0.6.3 / 2017-09-16
+#### 0.6.5 / 2017-09-16
 * modified singleton of `zuplus_Plugin` to be extended in child classes
 * fixed bug with plugin `prefix` in template
-* fixed bug in `print_status` 
+* fixed bug in `print_status`
+* added functions `option_value` and `default_value`
 
 #### 0.6.0 / 2017-09-16
 * added functions `array_prefix_keys` and `check_option`

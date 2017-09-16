@@ -83,6 +83,10 @@ class zuplus_Plugin {
 		return $this->defaults;
 	}
 
+	public function default_value($key) {
+		return isset($this->defaults[$key]) ? $this->defaults[$key] : [];
+	}
+
 	public function options() { 
 		return get_option($this->options_id, []); 
 	}
@@ -91,12 +95,13 @@ class zuplus_Plugin {
 		return zu()->check_option($this->options(), $key, $check);
 	}
 	
-	public function ajax_nonce($create = 'true') { 
-		return $create ? wp_create_nonce($this->nonce) : $this->nonce; 
+	public function option_value($key, $default_value = '') {
+		$options = $this->options();
+		return isset($options[$key]) ? $options[$key] : $default_value;
 	}
 
-	public function get_value($key) {
-			return isset($this->defaults[$key]) ? $this->defaults[$key] : [];
+	public function ajax_nonce($create = 'true') { 
+		return $create ? wp_create_nonce($this->nonce) : $this->nonce; 
 	}
 
 	public function init() {

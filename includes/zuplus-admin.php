@@ -193,6 +193,16 @@ class zuplus_Admin {
 		return $links;
 	}
 	
+	public function validate_email_list($input, $key) {
+	
+		$mails = explode(',', isset($input[$key]) ? $input[$key] : '');
+		foreach($mails as $key => $value) {
+			$mails[$key] = filter_var($value, FILTER_VALIDATE_EMAIL);
+		}		
+		
+		return implode(',', array_filter($mails));
+	}
+	
 	//
 	// Should/Could be Redefined in Child Class ----------------------------------]
 	//
