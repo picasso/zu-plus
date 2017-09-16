@@ -1,3 +1,6 @@
+#### 0.6.1 / 2017-09-16
+* modified singleton of `zuplus_Plugin` to be extended in child classes
+
 #### 0.6.0 / 2017-09-16
 * added functions `array_prefix_keys` and `check_option`
 * modified class `ZU_PlusRepeaters` to extract variables from `args`

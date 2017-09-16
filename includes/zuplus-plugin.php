@@ -18,15 +18,19 @@ class zuplus_Plugin {
 	protected $version;
 	protected $defaults = [];
 
-	protected static $_zuplus_instance;
-	public static function instance() {
+	final public static function instance() {
 		
-		if(!isset(self::$_zuplus_instance)) {
-			$calledClass = get_called_class();
-			self::$_zuplus_instance = new $calledClass();
+        static $instances = [];
+        
+		$calledClass = get_called_class();
+		if(!isset($instances[$calledClass])) {
+			 $instances[$calledClass] = new $calledClass();
 		}
-		return self::$_zuplus_instance;
+		return $instances[$calledClass];
 	}
+
+    final private function __clone() {
+    }
 
 	function __construct($config = []) {
 
@@ -38,7 +42,7 @@ class zuplus_Plugin {
 			'version'			=> 	'x.x.x',
 		];
 		
-		$config = array_merge($config_default, $config);
+		$config = array_merge($config_default, $this->extend_config(), $config);
 
 		$this->prefix = $config['prefix'];
 		$this->admin = $config['admin'];
@@ -56,7 +60,11 @@ class zuplus_Plugin {
 			$this->admin = new $this->admin($config, $this);
 		}
 	}
-
+	
+	protected function extend_config() {
+		return [];
+	}
+	
 	protected function extend_defaults() {
 		return [];
 	}
@@ -77,6 +85,10 @@ class zuplus_Plugin {
 
 	public function options() { 
 		return get_option($this->options_id, []); 
+	}
+
+	public function check_option($key, $check = true) { 
+		return zu()->check_option($this->options(), $key, $check);
 	}
 	
 	public function ajax_nonce($create = 'true') { 
