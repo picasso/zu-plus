@@ -108,11 +108,11 @@ class zuplus_Plugin {
 	}
 
 	public function should_load_css() {
-		return true;
+		return false;
 	}
 	
 	public function should_load_js() {
-		return true;
+		return false;
 	}
 	
 	public function frontend_enqueue() {					
