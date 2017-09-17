@@ -158,17 +158,12 @@ class zuplus_Admin {
 		update_option($this->options_id, $this->options); 
 	}
 	
-	public function ajax_nonce($create = false) { 
-		$ajax_nonce = $this->prefix.'_ajax_nonce';
-		return $create ? wp_create_nonce($ajax_nonce) : $ajax_nonce; 
-	}
-
 	protected function should_enqueue_css() {
-		return true;
+		return false;
 	}
 
 	protected function should_enqueue_js() {
-		return true;
+		return false;
 	}
 	
 	public function admin_enqueue() {		
@@ -193,7 +188,16 @@ class zuplus_Admin {
 		return $links;
 	}
 	
-	public function validate_email_list($input, $key) {
+	//
+	// Helpers -------------------------------------------------------------------]
+	//
+
+	public function ajax_nonce($create = false) { 
+		$ajax_nonce = $this->prefix.'_ajax_nonce';
+		return $create ? wp_create_nonce($ajax_nonce) : $ajax_nonce; 
+	}
+
+	public function validate_emails($input, $key) {
 	
 		$mails = explode(',', isset($input[$key]) ? $input[$key] : '');
 		foreach($mails as $key => $value) {
