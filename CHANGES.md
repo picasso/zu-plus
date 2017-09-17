@@ -1,3 +1,6 @@
+#### 0.6.7 / 2017-09-17
+* improvement in `filter trace` function
+
 #### 0.6.6 / 2017-09-16
 * modified singleton of `zuplus_Plugin` to be extended in child classes
 * fixed bug with plugin `prefix` in template

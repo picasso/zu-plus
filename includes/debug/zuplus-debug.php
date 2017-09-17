@@ -185,10 +185,11 @@ class ZU_Debug extends zuplus_Addon {
 			} else {
 				if(isset(self::$show_args[$trace['function']])) {
 					$args = [];
-					for($i = 0; $i < count($trace['args']); $i++) {
+					$check_args = self::$show_args[$trace['function']];
+					for($i = 0; $i < $check_args; $i++) {
 						if(isset($trace['args'][$i])) {
 							if(is_array($trace['args'][$i])) $args[] = 'array[' . count($trace['args'][$i]) . ']';
-							else $args[] = '\'' . $trace['args'][$i] . '\'';
+							else $args[] = '\'' . print_r($trace['args'][$i], true) . '\'';
 						}
 					}
 					$return['display'] = $trace['function'] . '(' . implode(',', $args) . ')';
