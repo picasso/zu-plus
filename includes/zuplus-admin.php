@@ -495,11 +495,11 @@ class zuplus_Form {
 		$option_name = $this->name($name);
 		$option_value = $this->value($name, $option_type == 'checkbox' ? false : '');
 		
-		$tr = '<tr valign="top"><td class="field_label"><laber for="">%1$s</label></td><td class="zu-field">%2$s</td></tr>';
-		$option_check = '<input type="checkbox" name="%1$s" value="1" %2$s class="zu-input zu-checkbox %4$s" /><span class="field_desc">%3$s</span>';
-		$option_text = '<input type="text" name="%1$s" value="%2$s" class="zu-input zu-text %4$s" /><span class="field_desc">%3$s</span>';
-		$option_text_readonly = '<input type="text" name="%1$s" value="%2$s" class="zu-input zu-text %4$s readonly" readonly /><span class="field_desc">%3$s</span>';
-		$option_select = '<select name="%1$s" class="zu-input zu-select %4$s">%2$s</select><span class="field_desc">%3$s</span>';
+		$tr = '<tr valign="top"><td class="field_label%3$s"><laber for="">%1$s</label></td><td class="zu-field">%2$s</td></tr>';
+		$option_check = '<input type="checkbox" name="%1$s" value="1" %2$s class="zu-input zu-checkbox %4$s" /><span class="field_desc desc-checkbox">%3$s</span>';
+		$option_text = '<input type="text" name="%1$s" value="%2$s" class="zu-input zu-text %4$s" /><span class="field_desc desc-text">%3$s</span>';
+		$option_text_readonly = '<input type="text" name="%1$s" value="%2$s" class="zu-input zu-text %4$s readonly" readonly /><span class="field_desc desc-text">%3$s</span>';
+		$option_select = '<select name="%1$s" class="zu-input zu-select %4$s">%2$s</select><span class="field_desc desc-select">%3$s</span>';
 		
 		if($option_type == 'hidden') return sprintf('<input type="hidden" name="%1$s" value="%2$s" class="zu-input zu-hidden %3$s" />', $option_name, $option_value, $name);
 		
@@ -521,7 +521,8 @@ class zuplus_Form {
 			$option_value = ($option_type == 'checkbox') ? ($option_value ? 'checked' : '') : $option_value;
 		}
 		
-		$output = sprintf($tr, $label, sprintf($option_template, $option_name, $option_value, $option_desc, $name));
+		$label_class = ($option_type == 'text' && !empty($option_desc)) ? ' top' : '';
+		$output = sprintf($tr, $label, sprintf($option_template, $option_name, $option_value, $option_desc, $name), $label_class);
 		$this->items[] = $output;
 		return $output;
 	}
