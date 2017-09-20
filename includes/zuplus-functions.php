@@ -296,6 +296,9 @@ class ZU_PlusFunctions {
 	}
 
 	public function get_svgcurve($look = 'upright', $height = 100, $class = '', $html_id = '') {
+	
+	// 	to use 'custom curve' you need add_filter('zu_custom_curve', 'your_function', 10, 2); 
+	// 	args: $curve,  $height
 		
 		$height = intval(str_replace('px', '', $height));
 		
@@ -329,6 +332,10 @@ class ZU_PlusFunctions {
 		    	$path = sprintf('M0 0 C 50 0 80 %1$s 100 0 Z', intval($height * 1.3));
 				break;
 	
+		    case 'custom': 	
+		    	$path = apply_filters('zu_custom_curve', '', $height);
+				break;
+
 		    default;
 		    	$path = sprintf('M0 %1$s C 50 0 80 -%2$s 100 %1$s Z', $height, intval($height/3));
 				break;
