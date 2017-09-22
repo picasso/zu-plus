@@ -236,8 +236,12 @@ class zuplus_Admin {
 	
 	public function meta_boxes_callback($settings_page, $no_default_boxes = false) {
 
+		if($this->hook_suffix == false) return false;
+		
 		$this->form = new zuplus_Form($this->plugin_root());
 		$this->form->add_admin_meta_boxes($settings_page, $this, $no_default_boxes);
+		
+		return true;
 	}
 
 	public function title_callback() {
@@ -285,7 +289,8 @@ class zuplus_Admin {
 			$this->slug, 
 			[$this, 'render_admin_page']
 		);
-		if($this->hook_suffix == false) return;
+
+		if($this->hook_suffix == false) return false;
 
 		add_action('load-'.$this->hook_suffix, [$this, 'admin_page_actions'], 9);
 		add_action('admin_footer-'.$this->hook_suffix, [$this, 'admin_footer_scripts']);
@@ -317,8 +322,6 @@ class zuplus_Admin {
 	}
 	
 	public function render_admin_page() {
-
-		if($this->hook_suffix == false) return;
 		
 		$prefix = $this->used_plugin_prefix();
 		add_action($prefix.'_print_title', function() {
@@ -619,6 +622,9 @@ class zuplus_Form {
 	// Meta Box Configuration -----------------------------------------------------]
 
 	public function add_meta_box($name, $title, $callback, $context = 'normal', $priority = 'high') {
+		
+		if(empty($this->settings_id)) return;
+		
 		add_meta_box(
 			sprintf('%1$s-%2$s-mb', $this->prefix, $name), 
 			$title, 
@@ -630,6 +636,8 @@ class zuplus_Form {
 	}
 	
 	public function add_admin_meta_boxes($settings_page, $admin, $no_default_boxes = false) {
+		
+		if(is_null($admin) || $admin->hook_suffix == false) return;
 		
 		$this->settings_page = $settings_page;
 		$this->settings_id = $admin->hook_suffix;
