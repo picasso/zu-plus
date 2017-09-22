@@ -1,3 +1,6 @@
+#### 0.6.9 / 2017-09-22
+* bug fixed for metaboxes when user does not have the capability required
+
 #### 0.6.8 / 2017-09-20
 * added option `custom` for `get_svgcurve()` function
 
