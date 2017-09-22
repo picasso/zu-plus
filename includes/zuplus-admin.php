@@ -285,10 +285,10 @@ class zuplus_Admin {
 			$this->slug, 
 			[$this, 'render_admin_page']
 		);
-		if($this->hook_suffix !== false) {
-			add_action('load-'.$this->hook_suffix, [$this, 'admin_page_actions'], 9);
-			add_action('admin_footer-'.$this->hook_suffix, [$this, 'admin_footer_scripts']);
-		}
+		if($this->hook_suffix == false) return;
+
+		add_action('load-'.$this->hook_suffix, [$this, 'admin_page_actions'], 9);
+		add_action('admin_footer-'.$this->hook_suffix, [$this, 'admin_footer_scripts']);
 	}
 
 	public function admin_page_actions() {
@@ -318,6 +318,8 @@ class zuplus_Admin {
 	
 	public function render_admin_page() {
 
+		if($this->hook_suffix == false) return;
+		
 		$prefix = $this->used_plugin_prefix();
 		add_action($prefix.'_print_title', function() {
 			echo $this->title_callback();
