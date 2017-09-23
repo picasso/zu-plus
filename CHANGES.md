@@ -1,4 +1,4 @@
-#### 0.7.1 / 2017-09-23
+#### 0.7.2 / 2017-09-23
 * added dbug trace for `Query Monitor`
 * improvement in function `fix_content()`
 

@@ -247,7 +247,7 @@ class ZU_PlusFunctions {
 		return $content;
 	}
 	
-	public function fix_content($content, $add_p = true, $preserve_br = false) {
+	public function fix_content($content, $add_p = false, $preserve_br = false) {
 		$replace_tags_from_to = array (
 			'<br />' => '',
 			"<br />\n" => '',
