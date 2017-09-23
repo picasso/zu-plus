@@ -279,8 +279,7 @@ class zuplus_Admin {
 	// Wordpress Admin Page ------------------------------------------------------]
 	//
 
-	public function admin_menu() {
-		
+	public function admin_menu() {	
 		$this->hook_suffix = add_submenu_page(
 			$this->hook, 
 			$this->title, 

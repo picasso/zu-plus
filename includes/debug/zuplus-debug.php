@@ -261,8 +261,19 @@ class ZU_Debug extends zuplus_Addon {
 		} else {
 			$ip = $ajax = $refer = '';
 		}
+		
+		$tracelog = [];
+		foreach($trace as $traceline) {
+			$t_display = isset($traceline['display']) ? $traceline['display'] : 'unknown';
+			$t_file = isset($traceline['calling_file']) ? $traceline['calling_file'] : 'unknown';
+			$t_line = isset($traceline['calling_line']) ? $traceline['calling_line'] : 'unknown';
 			
-		$refer =  sprintf('%1$s%5$s	%2$s:%3$s%5$s		from %4$s',  $trace[0]['display'], $trace[0]['calling_file'], $trace[0]['calling_line'], $refer, PHP_EOL);
+			$t_file = empty($t_file) ? 'closure' : $t_file;
+			$t_line = $t_line == '0' ? '?' : $t_line;
+			
+			$tracelog[] = sprintf('%1$s%4$s<span class="_shift zuplus_green">%2$s:%3$s</span>%4$s',  $t_display, $t_file, $t_line, PHP_EOL);	
+		}	
+		$refer =  sprintf('%1$s<p><span class="_shift">from %2$s</span></p>',  implode('', $tracelog), $refer);
 		
 		if($save_debug_bar) $this->save_log($msg, ($var !== 'novar' ? $this->process_var($var) : ''), $ip, $refer);
 		

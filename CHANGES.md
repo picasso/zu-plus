@@ -1,3 +1,7 @@
+#### 0.7.1 / 2017-09-23
+* added dbug trace for `Query Monitor`
+* improvement in function `fix_content()`
+
 #### 0.7.0 / 2017-09-22
 * bug fixed for metaboxes when user does not have the capability required
 
