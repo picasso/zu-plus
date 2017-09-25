@@ -87,17 +87,17 @@ class ZU_DebugBar {
 		$full_time  = microtime(true) - $this->_profiler_start;
 		if($this->profiler_active) $this->save_log('Printing!', $this->convert_time($full_time));
 		
-		printf('<h3><span class="zuplus_magenta">%s:</span> <strong>%s</strong></h3>', 'Total Profiler', $this->convert_time($full_time));
+		printf('<h3><span class="qm-nonselectsql">%s:</span> <strong>%s</strong></h3>', 'Total Profiler', $this->convert_time($full_time));
 
 		$this->_profiler = $this->get_profiler();
 		$this->_dlogs = $this->get_logs();
 		
 		if($this->profiler_active) {
-			printf('<div class="clear"></div><h3 id="dr-custom-profiler" class="zuplus_red">Custom Profiler%s</h3>', empty($this->_profiler) ? ': <span class="zuplus_blue">No profiler data found.</span>' : '');
+			printf('<div class="clear"></div><h3 id="dr-custom-profiler" class="qm-warn">Custom Profiler%s</h3>', empty($this->_profiler) ? ': <span class="qm-nonselectsql zuplus_blue">No profiler data found.</span>' : '');
 			if(!empty($this->_profiler)) $this->display_profiler();
 		}
 		
-		printf('<div class="clear"></div><h3 id="dr-custom-logs" class="zuplus_green">Debug Logs%s</h3>', empty($this->_dlogs) ? ': <span class="zuplus_blue">No logs found.</span>' : '');
+		printf('<div class="clear"></div><h3 id="dr-custom-logs" class="qm-true">Debug Logs%s</h3>', empty($this->_dlogs) ? ': <span class="qm-nonselectsql zuplus_blue">No logs found.</span>' : '');
 		if(!empty($this->_dlogs)) $this->display_logs();
 		
 		$this->reset_logs();
@@ -138,7 +138,7 @@ class ZU_DebugBar {
 		$log = [];
 		$log['time'] = time();
 		$log['name'] = $log_name;
-		$log['value'] = sprintf('<pre>%s</pre>', $log_value);
+		$log['value'] = $log_value;
 		$log['ip'] = empty($log_ip) ? $this->get_request_ip() : $log_ip;
 		$log['refer'] = empty($log_refer) ? $this->get_request_refer() : str_replace(PHP_EOL, '<br />', $log_refer) ;
 
@@ -251,16 +251,16 @@ class ZU_DebugBar {
 			$name = preg_replace('/\n+/', '', $row['name']);
 			$name = trim(preg_replace('/=$/', '', $name));
 			
-			$value = print_r($row['value'], true);
-			$value = (is_array($row['value']) || is_object($row['value'])) ? sprintf('<pre>%1$s</pre>', $value) : $value;
+			$template = (is_array($row['value']) || is_object($row['value'])) ? '<pre>%1$s</pre>' : '%1$s';
+			$value = sprintf($template, print_r($row['value'], true));
 			
 			printf(
 				'<tr>
-					<td class="qm-ltr %6$s">%1$s</td>
+					<td class="qm-ltr qm-false"><strong>%1$s</strong></td>
 					<td class="qm-ltr %6$s">%2$s</td>
-					<td class="qm-ltr %6$s">%3$s</td>
-					<td class="qm-ltr %6$s zuplus_green">%4$s</td>
-					<td class="qm-ltr %6$s">%5$s</td>
+					<td class="qm-ltr">%3$s</td>
+					<td class="qm-ltr qm-true">%4$s</td>
+					<td class="qm-ltr qm-warn">%5$s</td>
 				</tr>', 
 				date('d.m H:i:s', $row['time']),
 				$row['ip'],

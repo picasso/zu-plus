@@ -271,17 +271,20 @@ class ZU_Debug extends zuplus_Addon {
 			$t_file = empty($t_file) ? 'closure' : $t_file;
 			$t_line = $t_line == '0' ? '?' : $t_line;
 			
-			$tracelog[] = sprintf('%1$s%4$s<span class="_shift zuplus_green">%2$s:%3$s</span>%4$s',  $t_display, $t_file, $t_line, PHP_EOL);	
+			$tracelog[] = sprintf('%1$s%4$s<span class="qm-info qm-supplemental">%2$s:%3$s</span>%4$s',  $t_display, $t_file, $t_line, '<br>');	
 		}	
-		$refer =  sprintf('%1$s<p><span class="_shift">from %2$s</span></p>',  implode('', $tracelog), $refer);
+		$refer_html =  sprintf('%1$s<br><span class=""><strong>from %2$s</strong></span><br>',  implode('', $tracelog), $refer);
 		
-		if($save_debug_bar) $this->save_log($msg, ($var !== 'novar' ? $this->process_var($var) : ''), $ip, $refer);
+		if($bt) $refer = strip_tags(str_replace('<br>',  PHP_EOL, $refer_html));
+		else $refer = sprintf('%1$s%4$s	%2$s:%3$s%4$s		from %5$s%4$s',  $trace[0]['display'], $trace[0]['calling_file'], $trace[0]['calling_line'], PHP_EOL, $refer);
 		
-		$msg = sprintf('%6$s[%1$s]	%5$s (%4$s~%3$s)%6$s	------------------- %2$s%6$s', 
+		if($save_debug_bar) $this->save_log($msg, ($var !== 'novar' ? $this->process_var($var) : ''), $ip, $refer_html);
+			
+		$msg = sprintf('%6$s[%1$s]		%4$s~%3$s%6$s%5$s-- %2$s -------------------%6$s', 
 			date('d.m H:i:s'), 
 			str_replace('\n', PHP_EOL, $msg), 
 			$ip, 
-			$ajax ? 'A ' : '', 
+			$ajax ? 'A ' : 'N', 
 			$refer, 
 			PHP_EOL
 		);
