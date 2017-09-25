@@ -89,7 +89,7 @@ class ZU_Admin extends zuplus_Admin {
 	public function meta_boxes_callback($settings_page, $no_default_boxes = false) {
 	
 		$is_page_available = parent::meta_boxes_callback($settings_page, $no_default_boxes);
-_dbug_log('$is_page_available=', $is_page_available);
+
 		if($is_page_available) {
 
 			// Add button to clear logs -------------------------------------------------]
