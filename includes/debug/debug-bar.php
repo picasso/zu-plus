@@ -251,7 +251,7 @@ class ZU_DebugBar {
 			$name = preg_replace('/\n+/', '', $row['name']);
 			$name = trim(preg_replace('/=$/', '', $name));
 			
-			$template = (is_array($row['value']) || is_object($row['value'])) ? '<pre>%1$s</pre>' : '%1$s';
+			$template = (stripos($row['value'], 'array') !== false || stripos($row['value'], '::') !== false) ? '<pre>%1$s</pre>' : '%1$s';
 			$value = sprintf($template, print_r($row['value'], true));
 			
 			printf(
