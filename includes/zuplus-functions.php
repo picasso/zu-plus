@@ -104,6 +104,16 @@ class ZU_PlusFunctions {
 		
 		return $svg;	
 	}
+	
+	public function is_child($post_id = null) {
+	
+		$post_id = empty($post_id) ? get_the_ID() : $post_id;
+		return empty(get_post_ancestors($post_id)) ? false : true;	
+	}
+	
+	public function is_child_of_slug($slug, $post_id = null) {
+		return ($this->is_child($post_id) && $this->get_top_ancestor_slug($post_id) == $slug) ? true : false;
+	}
 
 	public function get_slug($post_id = null) {
 		return basename(get_permalink($post_id));
