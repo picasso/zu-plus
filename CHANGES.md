@@ -1,3 +1,6 @@
+#### 0.7.6 / 2017-09-30
+* bug fixing
+
 #### 0.7.5 / 2017-09-28
 * added functions `is_child()` and `is_child_of_slug()`
 
