@@ -1,7 +1,8 @@
-#### 0.7.8 / 2017-10-03
+#### 0.7.9 / 2017-10-03
 * changed logic in meta boxes creation
 * added functions `meta_boxes_more()` and `construct_more()`
 * css updated (remove plugin advertisements)
+* improvement in classes
 
 #### 0.7.6 / 2017-09-30
 * bug fixing

@@ -59,6 +59,8 @@ class zuplus_Plugin {
 			unset($config['admin']);
 			$this->admin = new $this->admin($config, $this);
 		}
+		
+		$this->construct_more();
 	}
 	
 	protected function extend_config() {
@@ -67,6 +69,9 @@ class zuplus_Plugin {
 	
 	protected function extend_defaults() {
 		return [];
+	}
+
+	protected function construct_more() {
 	}
 	
 	public function defaults() {
@@ -137,6 +142,10 @@ class zuplus_Addon {
 	
 	function __construct($options) {
 		$this->options = empty($options) ? [] : $options;
+		$this->construct_more();
+	}
+	
+	protected function construct_more() {
 	}
 	
 	protected function check_option($key, $check = true) {

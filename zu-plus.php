@@ -4,7 +4,7 @@ Plugin Name: ZU+
 Plugin URI: https://dmitryrudakov.ru/plugins/
 GitHub Plugin URI: https://github.com/picasso/zu-plus
 Description: This plugin encompasses ZU framework functionality.
-Version: 0.7.8
+Version: 0.7.9
 Author: Dmitry Rudakov
 Author URI: https://dmitryrudakov.ru/about/
 Text Domain: zu-plugin
@@ -30,7 +30,7 @@ Domain Path: /lang/
 
 // Prohibit direct script loading
 defined('ABSPATH') || die('No direct script access allowed!');
-define('ZUPLUS_VERSION', '0.7.8');
+define('ZUPLUS_VERSION', '0.7.9');
 define('ZUPLUS_NAME', 'ZU+');
 define('__ZUPLUS_ROOT__', plugin_dir_path(__FILE__)); 
 define('__ZUPLUS_FILE__', __FILE__); 
@@ -39,6 +39,8 @@ define('__ZUPLUS_FILE__', __FILE__);
 require_once(__ZUPLUS_ROOT__ . 'includes/zuplus-plugin.php');
 require_once(__ZUPLUS_ROOT__ . 'includes/debug/zuplus-debug.php');
 require_once(__ZUPLUS_ROOT__ . 'includes/zuplus-duplicate-menu.php');
+
+define('QM_HIDE_SELF', true);		// Hides the internal actions of Query Monitor in the output info from the plugin itself.
 //
 // define('GITHUB_UPDATER_OVERRIDE_DOT_ORG', true);
 //
@@ -87,11 +89,7 @@ class ZU_Admin extends zuplus_Admin {
 	}
 	
 	public function meta_boxes_more($settings_page, $no_default_boxes) {
-/*
-		$is_page_available = parent::meta_boxes_callback($settings_page, $no_default_boxes);
 
-		if($is_page_available) {
-*/
 		// Add button to clear logs -------------------------------------------------]
 		
 		add_filter($this->prefix_default.'_print_debug_buttons', function() {
@@ -102,7 +100,6 @@ class ZU_Admin extends zuplus_Admin {
 		
 		$this->form->add_meta_box('log', __('Actual Log Location', 'zu-plugin'), [$this, 'print_log_location']);
 		$this->form->add_meta_box('duplicate', __('Duplicate Menu', 'zu-plugin'), [$this, 'print_duplicate_menu']);
-// 		}
 	}
 
 	public function status_callback() {
