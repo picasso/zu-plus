@@ -177,7 +177,7 @@ class zuplus_Addon {
 
 	protected function enqueue_script($file, $deps = ['jquery'], $bottom = true) {
 		
-		$src = plugins_url(sprintf('css/%1$s.min.js', $file), $this->plugin_file);
+		$src = plugins_url(sprintf('js/%1$s.min.js', $file), $this->plugin_file);
 		$handle = $file.'-script';
 		wp_enqueue_script($handle, $src, $deps, $this->version, $bottom);
 		return $handle;
