@@ -139,6 +139,14 @@ class zuplus_Admin {
 		//
 		if($test_plugin) $this->plugin_test();
 		if($clear_errors) $this->empty_errors();
+
+		//
+		// Init additional classes --------------------------------------------------]
+		//
+		$this->construct_more();		
+	}
+
+	protected function construct_more() {
 	}
 
 	public function plugin_prefix($default = false) {
@@ -241,7 +249,12 @@ class zuplus_Admin {
 		$this->form = new zuplus_Form($this->plugin_root());
 		$this->form->add_admin_meta_boxes($settings_page, $this, $no_default_boxes);
 		
+		$this->meta_boxes_more($settings_page, $no_default_boxes);
+		
 		return true;
+	}
+
+	public function meta_boxes_more($settings_page, $no_default_boxes) {
 	}
 
 	public function title_callback() {

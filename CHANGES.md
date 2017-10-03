@@ -1,3 +1,7 @@
+#### 0.7.7 / 2017-10-03
+* changed logic in meta boxes creation
+* added functions `meta_boxes_more()` and `construct_more()`
+
 #### 0.7.6 / 2017-09-30
 * bug fixing
 
