@@ -1,6 +1,6 @@
 #### 0.8.0 / 2017-10-03
 * changed logic in meta boxes creation
-* added functions `meta_boxes_more()` and `construct_more()`
+* added functions `config_addon()`, `meta_boxes_more()` and `construct_more()`
 * css updated (remove plugin advertisements)
 * improvement in classes
 

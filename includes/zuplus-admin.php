@@ -149,6 +149,11 @@ class zuplus_Admin {
 	protected function construct_more() {
 	}
 
+	public function config_addon() {
+		
+		return $this->plugin->config_addon();
+	}
+
 	public function plugin_prefix($default = false) {
 		return $default ? $this->prefix_default : $this->prefix;
 	}
