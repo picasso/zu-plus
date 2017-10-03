@@ -48,9 +48,8 @@ class ZU_Debug extends zuplus_Addon {
 		'apply_filters'        => 1,
 	];
 	
-	function __construct($options) {
+	protected function construct_more() {
 		
-		parent::__construct($options);
 		$this->dlog = $this->check_option('debug_log');
 		$this->alog = $this->check_option('ajax_log');		
 		$this->profiler = $this->check_option('profiler');		

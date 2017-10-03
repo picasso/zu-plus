@@ -74,6 +74,16 @@ class zuplus_Plugin {
 	protected function construct_more() {
 	}
 	
+	public function config_addon() {
+		
+		return [
+			'options'			=> $this->options(),
+			'version'			=> $this->version,
+			'prefix'				=> $this->prefix,
+			'plugin_file'		=> $this->plugin_file,
+		];
+	}
+	
 	public function defaults() {
 		
 		if(empty($this->defaults)) {
@@ -138,10 +148,17 @@ class zuplus_Plugin {
 
 class zuplus_Addon {
 
-	private $options; 
+	protected $options;
+	protected $version;
+	protected $prefix;
+	protected $plugin_file;
 	
-	function __construct($options) {
-		$this->options = empty($options) ? [] : $options;
+	function __construct($config) {
+		
+		$this->prefix= isset($config['prefix']) ? $config['prefix'] : 'zuplus';
+		$this->version= isset($config['version']) ? $config['version'] : ZUPLUS_VERSION;
+		$this->plugin_file= isset($config['plugin_file']) ? $config['plugin_file'] : __ZUPLUS_FILE__;
+		$this->options = isset($config['options']) ? $config['options'] : [];
 		$this->construct_more();
 	}
 	
@@ -150,5 +167,19 @@ class zuplus_Addon {
 	
 	protected function check_option($key, $check = true) {
 		return zu()->check_option($this->options, $key, $check);
+	}
+	
+	protected function enqueue_style($file, $deps = []) {
+		
+		$src = plugins_url(sprintf('css/%1$s.css', $file), $this->plugin_file);
+		wp_enqueue_style($file.'-style', $src, $deps, $this->version);
+	}
+
+	protected function enqueue_script($file, $deps = ['jquery'], $bottom = true) {
+		
+		$src = plugins_url(sprintf('css/%1$s.min.js', $file), $this->plugin_file);
+		$handle = $file.'-script';
+		wp_enqueue_script($handle, $src, $deps, $this->version, $bottom);
+		return $handle;
 	}
 }

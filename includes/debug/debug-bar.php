@@ -87,7 +87,7 @@ class ZU_DebugBar {
 		$full_time  = microtime(true) - $this->_profiler_start;
 		if($this->profiler_active) $this->save_log('Printing!', $this->convert_time($full_time));
 		
-		printf('<h3><span class="qm-nonselectsql">%s:</span> <strong>%s</strong></h3>', 'Total Profiler', $this->convert_time($full_time));
+		printf('<h3><span class="qm-nonselectsql">%s:</span> <strong>%s</strong></h3>', 'Total Profiler', $this->convert_time($full_time, true));
 
 		$this->_profiler = $this->get_profiler();
 		$this->_dlogs = $this->get_logs();
@@ -197,13 +197,13 @@ class ZU_DebugBar {
 		printf('</table>');
 	}
 
-	private function convert_time($time) {
+	private function convert_time($time, $in_seconds = false) {
 	
 		$time *= 1000;
 		$atts = 'ms';
 		$class = '';
 		
-		if($time > 500) {
+		if($time > 500 || $in_seconds) {
 			$time /= 1000;
 			$atts = '<strong>s</strong>';
 			$class = 'qm-warn';
