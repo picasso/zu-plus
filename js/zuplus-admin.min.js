@@ -53,11 +53,12 @@
 		$('.zuplus_ajax_option').each(function() {  
 			var $ajax_link = $(this);
 			var option_name = $ajax_link.data('zuplus_option');
+			var prefix_name = $ajax_link.data('zuplus_prefix');
 			
 			if(option_name !== undefined && option_name.length !== 0) {
 				$ajax_link.unbind().click(function(e) {
 					e.preventDefault();
-					zuplus_turn_option(option_name);
+					zuplus_turn_option(option_name, prefix_name);
 				}); 
 			}
 		});
@@ -76,10 +77,10 @@
 	    return data;
 	}
 	
-	function zuplus_turn_option(option_name) {
+	function zuplus_turn_option(option_name, prefix_name) {
 
 		var data = {
-			action: 'zuplus_option',
+			action: prefix_name + '_option',
 			option_name: option_name
 		};
 

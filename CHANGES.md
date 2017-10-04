@@ -1,3 +1,6 @@
+#### 0.8.2 / 2017-10-04
+* AJAX prefix was changed
+
 #### 0.8.1 / 2017-10-03
 * changed logic in meta boxes creation
 * added functions `config_addon()`, `meta_boxes_more()` and `construct_more()`

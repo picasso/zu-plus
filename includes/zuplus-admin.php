@@ -31,6 +31,8 @@ class zuplus_Admin {
 
 	public $hook_suffix = null;	
 	public $form = null;	
+	
+	public $debug_value;
 
 	public function __construct($options, $plugin) {
 		
@@ -361,7 +363,7 @@ class zuplus_Admin {
 	//
 
 	public function plugin_test() {
-		return ['info'	=> sprintf('Plugin tested on %1$s', date('H:i <b>d.m.y</b> ', $this->current_timestamp()))];
+		return ['info'	=> sprintf('Plugin "%2$s" (%3$s) was tested on %1$s', date('H:i <b>d.m.y</b> ', $this->current_timestamp()), $this->plugin_name, $this->version)];
 	}
 
 	public function plugin_status() {
@@ -470,7 +472,7 @@ class zuplus_Admin {
 	protected function empty_errors() {
 		$this->set_or_dismiss_error();
 		update_option($this->errors_id, []);
-		return ['info'	=> sprintf('All errors have been successfully deleted on %1$s', date('H:i <b>d.m.y</b> ', $this->current_timestamp()))];
+		return ['info'	=> sprintf('All errors of "%2$s" have been successfully deleted on %1$s', date('H:i <b>d.m.y</b> ', $this->current_timestamp()), $this->plugin_name)];
 	}
 }
 
@@ -598,7 +600,7 @@ class zuplus_Form {
 		$tr = '<tr valign="top"><td class="field_label"></td><td class="zu-field">%1$s</td></tr>';
 		$basic_classes = ['button', 'button-primary', 'zu-dashicons', 'zu-button', 'zuplus_ajax_option'];
 		$output =	sprintf(
-			'<a href="%1$s" class="%5$s zu-button-%4$s" data-zuplus_option="%6$s">
+			'<a href="%1$s" class="%5$s zu-button-%4$s" data-zuplus_option="%6$s" data-zuplus_prefix="%7$s">
 				<span class="dashicons dashicons-%3$s"></span> 
 				<span class="zu-link-text">%2$s</span>
 			</a>',
@@ -607,7 +609,8 @@ class zuplus_Form {
 			$icon,
 			$color,
 			zu()->merge_classes(array_merge($basic_classes, [$in_table ? 'zu-button-right' : '', $side_button ? 'zu-side-button' : ''])),
-			$button_option
+			$button_option,
+			$this->prefix
 		);
 		
 		$output = $in_table ? sprintf($tr, $output) : $output;
@@ -746,7 +749,7 @@ class zuplus_Form {
 	
 	public function print_debug($post) {
 		
-		$output = apply_filters($this->prefix.'_print_debug_values', '');	
+		$output = apply_filters($this->parent_prefix.'_print_debug_values', '');	
 		printf('<div class="form_desc">%1$s</div>', empty($output) ? '' : $output);
 
 		echo apply_filters($this->prefix.'_print_debug_buttons', '');	
