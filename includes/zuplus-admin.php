@@ -743,19 +743,19 @@ class zuplus_Form {
 	
 	public function print_status($post) {
 		
-		echo apply_filters($this->parent_prefix.'_print_side_settings', '');	
+		echo apply_filters('zuplus_print_side_settings', '');	
 		echo $this->button_side(__('Save Options', 'zu-plugin'), 'admin-tools');
 	}
 	
 	public function print_debug($post) {
 		
-		$output = apply_filters($this->parent_prefix.'_print_debug_values', '');	
+		$output = apply_filters('zuplus_print_debug_values', '');	
 		printf('<div class="form_desc">%1$s</div>', empty($output) ? '' : $output);
 
 		echo apply_filters($this->prefix.'_print_debug_buttons', '');	
 		
-		echo $this->button_link($this->parent_prefix.'_clear_errors', __('Clear Errors', 'zu-plugin'), 'trash', 'red');
-		echo $this->button_link($this->parent_prefix.'_test', __('Test', 'zu-plugin'), 'dashboard', 'green');
+		echo $this->button_link('zuplus_clear_errors', __('Clear Errors', 'zu-plugin'), 'trash', 'red');
+		echo $this->button_link('zuplus_test', __('Test', 'zu-plugin'), 'dashboard', 'green');
 	}
 }
 
