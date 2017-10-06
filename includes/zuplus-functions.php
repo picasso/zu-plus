@@ -408,14 +408,8 @@ class ZU_PlusFunctions {
 		return isset($galleries[0]) ? $galleries[0] : [];
 	}
 
-// !! change for plugin
-	public function get_dominant_by_attachment_id($post_or_attachment_id) {
-		return function_exists('zu_get_dominant_by_attachment_id') ? zu_get_dominant_by_attachment_id($post_or_attachment_id) : 'black';
-	}
-
-// !! change for plugin
-	public function get_dominant_by_post_id($post_or_attachment_id) {
-		return function_exists('zu_get_dominant_by_post_id') ? zu_get_dominant_by_post_id($post_or_attachment_id) : 'black';
+	public function get_dominant($post_or_attachment_id = null) {
+		return function_exists('mplus_get_dominant_by_id') ? mplus_get_dominant_by_id($post_or_attachment_id) : 'black';
 	}
 
 	public function get_attachment_id($post_or_attachment_id = null) {
@@ -473,8 +467,7 @@ class ZU_PlusFunctions {
 	
 	public function get_background_color($post_or_attachment_id = null) {
 		
-		if(get_post_type($post_or_attachment_id) == 'attachment') $color = $this->get_dominant_by_attachment_id($post_or_attachment_id);
-		else $color = $this->get_dominant_by_post_id($post_or_attachment_id);
+		$color = $this->get_dominant($post_or_attachment_id);
 		$color_bg = empty($color) ? '' : 'background-color:'.$color.';';
 		return $color_bg;
 	}

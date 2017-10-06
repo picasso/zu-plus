@@ -1,3 +1,6 @@
+#### 0.8.6 / 2017-10-07
+* "Dominant Color" now used from `Media+` function
+
 #### 0.8.5 / 2017-10-06
 * AJAX spinner added
 * added functions `check_config()` and `get_config()`
