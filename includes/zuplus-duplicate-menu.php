@@ -79,15 +79,12 @@ class zuplus_Duplicate {
 
 function zuplus_ajax_duplicate_menu() {
 
-_dbug_log('$_POST=', $_POST);
     $source = intval($_POST['source_menu']);
     $destination = sanitize_text_field($_POST['new_menu']);
-_dbug_log('$source=', $source);
-_dbug_log('$destination=', $destination);
     // go ahead and duplicate our menu
     $duplicator = new zuplus_Duplicate();
     $new_menu_id = $duplicator->duplicate($source, $destination);
-    
+
 	if($new_menu_id) return ['ok' => sprintf('Menu was duplicated with name <strong>%1$s</strong>', $destination)];
 	else return ['error' => 'There was a problem duplicating your menu. No action was taken.'];
 }

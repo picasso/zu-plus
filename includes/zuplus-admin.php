@@ -151,9 +151,12 @@ class zuplus_Admin {
 	protected function construct_more() {
 	}
 
-	public function config_addon() {
-		
-		return $this->plugin->config_addon();
+	public function config_addon($more_params = []) {
+		return $this->plugin->config_addon($more_params);
+	}
+	
+	public function check_option($key, $check = true) { 
+		return $this->plugin->check_option($key, $check);
 	}
 
 	public function plugin_prefix($default = false) {
@@ -189,11 +192,25 @@ class zuplus_Admin {
 			'screen_id'				=> $this->hook_suffix,
 		];
 		
-		if($this->should_enqueue_css()) wp_enqueue_style($this->prefix.'-style', plugins_url('css/'.$this->prefix.'-admin.css', $this->plugin_file), [], $this->version);
+		if($this->should_enqueue_css()) {
+			
+			$filename = 'css/'.$this->prefix.'-admin.css';
+			$filepath = plugin_dir_path($this->plugin_file).$filename;
+			if(file_exists($filepath)) {
+				$version = filemtime($filepath);
+				wp_enqueue_style($this->prefix.'-style', plugins_url($filename, $this->plugin_file), [], defined('ZUDEBUG') ? $version : $this->version);
+			}
+		}
 		
 		if($this->should_enqueue_js()) { 
-			wp_enqueue_script($this->prefix.'-script', plugins_url('js/'.$this->prefix.'-admin.min.js', $this->plugin_file), ['jquery'], $this->version, true);
-			wp_localize_script($this->prefix.'-script', $this->prefix.'_custom', $data);
+			
+			$filename = 'js/'.$this->prefix.'-admin.min.js';
+			$filepath = plugin_dir_path($this->plugin_file).$filename;
+			if(file_exists($filepath)) {
+				$version = filemtime($filepath);
+				wp_enqueue_script($this->prefix.'-script', plugins_url($filename, $this->plugin_file), ['jquery'], defined('ZUDEBUG') ? $version : $this->version, true);
+				wp_localize_script($this->prefix.'-script', $this->prefix.'_custom', $data);
+			}
 		}
 	}
 	
@@ -618,16 +635,17 @@ class zuplus_Form {
 		return $output;
 	}
 	
-	public function fields($form_desc = '', $ajax_rel = '') {
+	public function fields($form_desc = '', $ajax_rel = '', $spinner = false) {
 		
 		$form_items = is_array($this->items) ? implode('', $this->items) : $this->items;
 		$this->items = [];
 		return sprintf(
-				'<div class="form_desc">%1$s</div>
+				'<div class="form_desc">%1$s%4$s</div>
 				<table class="form-table form-general"%3$s>%2$s</table>',
 				$form_desc,
 				$form_items,
-				empty($ajax_rel) ? '' : sprintf(' data-ajaxrel="%1$s"', $ajax_rel)
+				empty($ajax_rel) ? '' : sprintf(' data-ajaxrel="%1$s"', $ajax_rel),
+				empty($spinner) ? '' : '<div class="zu-ajax-progress"></div><div class="zu-spinner"></div>'
 			);
 	}
 	

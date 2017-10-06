@@ -86,11 +86,13 @@
 
 		// Try serialize data
 		var $rel = $("[data-ajaxrel='" + option_name + "']");
+		var $container = $rel.parents('.postbox');
 		if($rel.length) {
-			$.extend(data, zuplus_ajax_data($rel.find('input, textarea, select')));			
+			$.extend(data, zuplus_ajax_data($rel.find('input, textarea, select')));	
 		}
 						
 		// Send an AJAX call to switch the option
+		$container.addClass('now_ajaxed');
 		$.ajax({
 			url: zuplus_custom.ajaxurl,
 			type: 'POST',
@@ -98,14 +100,16 @@
 			async: true,
 			cache: false,
 			data: data,
-			success: function(response) { zuplus_update_UI(option_name, response); },
-			complete: function(/*  $jqXHR, $textStatus  */) { }
+			success: function(response) { zuplus_update_UI(option_name, response, $container); },
+			error: function() { $container.removeClass('now_ajaxed'); }
 		});
 	}
 
-	function zuplus_update_UI(option_name, response) {
+	function zuplus_update_UI(option_name, response, $container) {
 		
 		var result = $.extend({result:''}, response.data).result;
+		var clear_now_ajaxed = true;
+		
 		if(String(result).length) {
 			$('#poststuff').parents('.wrap').find('.notice-after').after(result);
 			zuplus_bind_dismiss_links();
@@ -123,6 +127,8 @@
             default:
 	                break;
         }
+        
+        if(clear_now_ajaxed) $container.removeClass('now_ajaxed');
 	}
 
 })(jQuery);

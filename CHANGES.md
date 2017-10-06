@@ -1,3 +1,9 @@
+#### 0.8.5 / 2017-10-06
+* AJAX spinner added
+* added functions `check_config()` and `get_config()`
+* added `ZUDEBUG` which activate "filetime" for JS and CSS files
+* improvement in css
+
 #### 0.8.3 / 2017-10-04
 * AJAX prefix was changed
 

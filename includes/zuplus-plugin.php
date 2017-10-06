@@ -74,14 +74,16 @@ class zuplus_Plugin {
 	protected function construct_more() {
 	}
 	
-	public function config_addon() {
+	public function config_addon($more_params = []) {
 		
-		return [
+		$params = [
 			'options'			=> $this->options(),
 			'version'			=> $this->version,
 			'prefix'				=> $this->prefix,
 			'plugin_file'		=> $this->plugin_file,
 		];
+		
+		return empty($more_params) ? $params : (is_array($params) ? array_merge($params, $more_params) : $params);
 	}
 	
 	public function defaults() {
@@ -152,9 +154,11 @@ class zuplus_Addon {
 	protected $version;
 	protected $prefix;
 	protected $plugin_file;
+	protected $config;
 	
 	function __construct($config) {
 		
+		$this->config = $config;
 		$this->prefix= isset($config['prefix']) ? $config['prefix'] : 'zuplus';
 		$this->version= isset($config['version']) ? $config['version'] : ZUPLUS_VERSION;
 		$this->plugin_file= isset($config['plugin_file']) ? $config['plugin_file'] : __ZUPLUS_FILE__;
@@ -168,18 +172,34 @@ class zuplus_Addon {
 	protected function check_option($key, $check = true) {
 		return zu()->check_option($this->options, $key, $check);
 	}
+
+	protected function check_config($key, $check = true) {
+		return zu()->check_option($this->config, $key, $check);
+	}
+
+	protected function get_config($key, $def_value = '') {
+		return isset($this->config[$key]) ? $this->config[$key] : $def_value;
+	}
+	
+	private function enqueue_style_or_script($is_style, $file, $deps = [], $bottom = true) {
+		
+		$filename = $is_style ? sprintf('css/%1$s.css', $file) : sprintf('js/%1$s.min.js', $file);
+		$handle = $is_style ? $file.'-style' : $file.'-script';
+		$filepath = plugin_dir_path($this->plugin_file).$filename;
+		$src = plugins_url($filename, $this->plugin_file);
+		if(file_exists($filepath)) {
+			$version = defined('ZUDEBUG') ? filemtime($filepath) : $this->version;
+			if($is_style) wp_enqueue_style($handle, $src, $deps, $version);
+			else wp_enqueue_script($handle, $src, $deps, $version, $bottom);
+		}
+		return $handle;
+	}
 	
 	protected function enqueue_style($file, $deps = []) {
-		
-		$src = plugins_url(sprintf('css/%1$s.css', $file), $this->plugin_file);
-		wp_enqueue_style($file.'-style', $src, $deps, $this->version);
+		return $this->enqueue_style_or_script(true, $file, $deps);
 	}
 
 	protected function enqueue_script($file, $deps = ['jquery'], $bottom = true) {
-		
-		$src = plugins_url(sprintf('js/%1$s.min.js', $file), $this->plugin_file);
-		$handle = $file.'-script';
-		wp_enqueue_script($handle, $src, $deps, $this->version, $bottom);
-		return $handle;
+		return $this->enqueue_style_or_script(false, $file, $deps, $bottom);
 	}
 }
