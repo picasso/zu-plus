@@ -83,7 +83,7 @@ class zuplus_Plugin {
 			'plugin_file'		=> $this->plugin_file,
 		];
 		
-		return empty($more_params) ? $params : (is_array($params) ? array_merge($params, $more_params) : $params);
+		return empty($more_params) ? $params : (is_array($more_params) ? array_merge($params, $more_params) : $params);
 	}
 	
 	public function defaults() {
@@ -181,6 +181,11 @@ class zuplus_Addon {
 		return isset($this->config[$key]) ? $this->config[$key] : $def_value;
 	}
 	
+	public function config_addon($more_params = []) {
+		$params = $this->config;
+		return empty($more_params) ? $params : (is_array($more_params) ? array_merge($params, $more_params) : $params);
+	}
+
 	private function enqueue_style_or_script($is_style, $file, $deps = [], $bottom = true) {
 		
 		$filename = $is_style ? sprintf('css/%1$s.css', $file) : sprintf('js/%1$s.min.js', $file);

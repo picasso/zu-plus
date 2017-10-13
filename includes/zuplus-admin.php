@@ -122,7 +122,8 @@ class zuplus_Admin {
 		add_action('admin_menu', [$this, 'admin_menu']);
 		add_action('wp_ajax_'.$this->prefix.'_option', [$this, 'ajax_turn_option']);
 		add_action('admin_enqueue_scripts', [$this, 'admin_enqueue']);
-		
+		add_action('admin_enqueue_scripts', [$this, 'admin_enqueue_fonts']);
+
 		//
 		// Show errors, if there are ------------------------------------------------]
 		//
@@ -184,6 +185,20 @@ class zuplus_Admin {
 		return false;
 	}
 	
+	public function admin_enqueue_fonts() {
+
+		$font_families = [];
+		$font_families[] = 'Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800';
+		$protocol = is_ssl() ? 'https' : 'http';
+		$query_args = [
+			'family' => implode( '%7C', $font_families ),
+			'subset' =>  'cyrillic',
+		];
+		$fonts_url = add_query_arg($query_args, "$protocol://fonts.googleapis.com/css");
+
+		wp_enqueue_style('open-sans-cyr', esc_url_raw($fonts_url), [], $this->version);
+	}
+
 	public function admin_enqueue() {		
 
 		$data = [

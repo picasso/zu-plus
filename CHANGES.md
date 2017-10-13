@@ -1,3 +1,7 @@
+#### 0.8.7 / 2017-10-14
+* added functions `config_addon()` and `admin_enqueue_fonts()`
+* bug fixing
+
 #### 0.8.6 / 2017-10-07
 * "Dominant Color" now used from `Media+` function
 
