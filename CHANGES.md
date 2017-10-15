@@ -1,3 +1,6 @@
+#### 0.8.8 / 2017-10-16
+* class `ZU_Debug_Sys` added
+
 #### 0.8.7 / 2017-10-14
 * added functions `config_addon()` and `admin_enqueue_fonts()`
 * bug fixing
