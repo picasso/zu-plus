@@ -311,6 +311,17 @@ if(!function_exists('_sdbug_log')) {
 	}
 }
 
+if(!function_exists('_sdbug_dump')) {
+	function _sdbug_dump($msg, $var = 'novar', $bt = false) {
+		global $_sys_debug;
+		if($_sys_debug) {
+			$_sys_debug->use_var_dump(true);
+			$_sys_debug->write_log($msg, $var, $bt);
+			$_sys_debug->use_var_dump(false);
+		}
+	}
+}
+
 if(!function_exists('_sdbug_trace')) {
 	function _sdbug_trace($msg, $full_trace = false) {
 				global $_sys_debug;

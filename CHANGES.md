@@ -1,5 +1,6 @@
 #### 0.8.9 / 2017-10-16
 * option `use_var_dump` was added to all interfaces
+* function `_dbug_dump` added
 * bug fixing
 
 #### 0.8.8 / 2017-10-16

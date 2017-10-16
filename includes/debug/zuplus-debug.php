@@ -361,6 +361,14 @@ if(!function_exists('_dbug_log')) {
 	}
 }
 
+if(!function_exists('_dbug_dump')) {
+	function _dbug_dump($msg, $var = 'novar', $bt = false) {
+		zuplus_instance()->dbug->use_var_dump(true);
+		zuplus_instance()->dbug->write_log($msg, $var, $bt);
+		zuplus_instance()->dbug->use_var_dump(false);
+	}
+}
+
 if(!function_exists('_dbug_trace')) {
 	function _dbug_trace($msg, $full_trace = false) {
 		zuplus_instance()->dbug->write_trace($msg, $full_trace);
