@@ -1,3 +1,7 @@
+#### 0.8.9 / 2017-10-16
+* option `use_var_dump` was added to all interfaces
+* bug fixing
+
 #### 0.8.8 / 2017-10-16
 * class `ZU_Debug_Sys` added
 

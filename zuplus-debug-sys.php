@@ -4,6 +4,7 @@
 	
 class ZU_Debug_Sys {
 
+	private $use_var_dump;
 	private $location;
 	private $location_priority;
 	private $abs_path;
@@ -47,8 +48,9 @@ class ZU_Debug_Sys {
 		'apply_filters'        => 1,
 	];
 	
-	function __construct($config) {
+	function __construct() {
 		
+		$this->use_var_dump = false;
 		$this->location = dirname(__FILE__);
 		$this->location_priority = 0;
 		$this->abs_path = $this->normalize_path(ABSPATH);
@@ -113,8 +115,21 @@ class ZU_Debug_Sys {
 	    return $trace; 
 	} 	
 
-	public function process_var($var) {		
-		return var_export($var, true);
+	public function use_var_dump($dump = true) {
+		$this->use_var_dump = $dump;
+	}
+	
+	public function process_var($var) {
+		
+		if($this->use_var_dump) {
+			ob_start();
+			var_dump($var);
+			$output = ob_get_contents();
+			ob_end_clean();
+		} else {
+			$output = var_export($var, true);
+		}
+		return $output;
 	}
 	
 	public function get_backtrace() {
@@ -274,6 +289,13 @@ function setup_debug() {
 	$_sys_debug = new ZU_Debug_Sys();
 }
 setup_debug();
+
+if(!function_exists('_sdbug_use_var_dump')) {
+	function _sdbug_use_var_dump($dump = true) {
+		global $_sys_debug;
+		if($_sys_debug) $_sys_debug->use_var_dump($dump);
+	}
+}
 
 if(!function_exists('_sdbug_change_log_location')) {
 	function _sdbug_change_log_location($path, $priority = 1) {
