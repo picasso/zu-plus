@@ -1,3 +1,6 @@
+#### 0.9.0 / 2018-01-06
+* added support for  `sys-debug`: see file in `/includes/debug/sys-debug.php` for more instructions 
+
 #### 0.8.9 / 2017-10-16
 * option `use_var_dump` was added to all interfaces
 * function `_dbug_dump` added

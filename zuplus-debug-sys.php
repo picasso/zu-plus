@@ -87,6 +87,14 @@ class ZU_Debug_Sys {
 		}
 	}
 
+	public function change_plugins_log_location($path, $priority = 1) {
+		$this->change_log_location($this->content_path .'/plugins/'. $path, $priority);
+	}
+
+	public function change_themes_log_location($path, $priority = 1) {
+		$this->change_log_location($this->content_path .'/themes/'. $path, $priority);
+	}
+
 	public function string_backtrace() { 
 	    ob_start(); 
 	    debug_print_backtrace(); 
