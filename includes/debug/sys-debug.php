@@ -12,6 +12,10 @@
 // 		_sdbug_location_plugins('zu-plus'); 
 // 		_sdbug_location_themes('drfoto'); 
 // 
+//			EXAMPLE:
+// 
+//  		include_once('/nas/content/live/dmitryrudakov/wp-content/plugins/zu-plus/includes/debug/sys-debug.php');
+//  		_sdbug_location_plugins('media-plus'); 
 
 class ZU_Debug_Sys {
 
