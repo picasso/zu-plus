@@ -417,10 +417,26 @@ class ZU_PlusFunctions {
 			else if(has_post_thumbnail($post_or_attachment_id)) return get_post_thumbnail_id($post_or_attachment_id);
 			return null; 
 		}
+
+	public function get_featured_from_posts($posts) {
+		
+		$ids = [];
+		if(empty($posts)) return $ids;
+	
+		foreach($posts as $post) {
+			$post_id = $post instanceof WP_Post ? $post->ID : $post;
+			$attachment_id = $this->get_attachment_id($post_id);
+			if(!empty($attachment_id)) $ids[] = $attachment_id;
+		}
+		return $ids;
+	}
 		
 	public function get_featured_attachment_id($post_id = null) {
 		// if there is no featured_attachment - use it from $this->random_attachment_id
-	
+		// if $post_id = -1 then simply return 'random_attachment_id'
+		
+		if($post_id == -1) return $this->random_attachment_id;
+		
 		$attachment_id = get_post_thumbnail_id($post_id);
 		$attachment_id = (empty($attachment_id) && !empty($this->random_attachment_id)) ? $this->random_attachment_id : $attachment_id;
 		return $attachment_id;
