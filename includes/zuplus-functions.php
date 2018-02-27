@@ -143,7 +143,7 @@ class ZU_PlusFunctions {
 		return empty($parent_id) ? $post_id : $parent_id;
 	}
 
-	public function get_top_ancestor_slug($post_id = null) { return $this->get_slug($this->get_top_ancestor()); }
+	public function get_top_ancestor_slug($post_id = null) { return $this->get_slug($this->get_top_ancestor($post_id)); }
 	
 	public function get_closing_tag_from_open($html) {
 	    $opened_tag = preg_match('#<(?!meta|img|br|hr|input\b)\b([a-z]+)#iU', $html, $tags) ? $tags[1] : '';

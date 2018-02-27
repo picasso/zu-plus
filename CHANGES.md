@@ -1,3 +1,6 @@
+#### 0.9.3 / 2018-02-27
+* fixed bug in function `get_top_ancestor_slug`
+
 #### 0.9.2 / 2018-02-27
 * added function`get_featured_from_posts`
 * added support for  `-1` in function `get_featured_attachment_id` 
