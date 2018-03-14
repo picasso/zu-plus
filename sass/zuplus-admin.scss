@@ -65,6 +65,10 @@ $primary-font-family: 'Open Sans', Arial, sans-serif;
 	top: 2px;
 }
 
+#wp-admin-bar-site-name {
+	min-width: 160px;
+}
+
 .wp-core-ui {
 
     .zu-ajax-progress, .zu-spinner {
@@ -412,7 +416,8 @@ $primary-font-family: 'Open Sans', Arial, sans-serif;
 #toplevel_page_itsec ul li:nth-child(5),
 a[title*="BBQ Pro"],
 a[title*="BBQ Firewall"],
-a[href*="bbq_settings"]
+a[href*="bbq_settings"],
+.image-watermark-settings .df-credits
 { display: none !important;}
 
 

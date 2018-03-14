@@ -1,3 +1,6 @@
+#### 0.9.5 / 2018-03-14
+* improvement in css
+
 #### 0.9.3 / 2018-02-27
 * fixed bug in function `get_top_ancestor_slug`
 
