@@ -399,7 +399,10 @@ $primary-font-family: 'Open Sans', Arial, sans-serif;
 
 // Media Screens customizations -----------------------------------------------]
 
-.media-modal #addFolder { margin-top: 10px; margin-left: 10px;}
+ #addFolder {
+	.media-modal & { margin-top: 10px; margin-left: 10px;}
+	.upload-php & { margin-left: 8px;}
+}
 
 // Remove advertisements ------------------------------------------------------]
 
