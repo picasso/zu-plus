@@ -1,3 +1,6 @@
+#### 0.9.6 / 2018-03-15
+* updated css for tables
+
 #### 0.9.5 / 2018-03-14
 * improvement in css
 
