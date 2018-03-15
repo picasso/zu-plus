@@ -103,6 +103,7 @@ class zuplus_Admin {
 		register_deactivation_hook($this->plugin_file, function() {
 			delete_option($this->options_id);
 			delete_option($this->errors_id);
+			$this->deactivation_clean();
 // 			wp_clear_scheduled_hook('zuplus_cron');
 		});
 		add_filter('plugin_action_links_'.plugin_basename($this->plugin_file), [$this, 'admin_settings_link']);
@@ -151,6 +152,10 @@ class zuplus_Admin {
 
 	protected function construct_more() {
 	}
+
+	protected function deactivation_clean() {
+	}
+
 
 	public function config_addon($more_params = []) {
 		return $this->plugin->config_addon($more_params);

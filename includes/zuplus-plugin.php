@@ -168,6 +168,9 @@ class zuplus_Addon {
 	
 	protected function construct_more() {
 	}
+
+	protected function clean() {
+	}
 	
 	protected function check_option($key, $check = true) {
 		return zu()->check_option($this->options, $key, $check);

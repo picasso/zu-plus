@@ -1,3 +1,6 @@
+#### 0.9.7 / 2018-03-15
+* added functions `deactivation_clean()` for *zuplus_Admin* and `clean()` for *zuplus_Addon* which should be called in deactivation
+
 #### 0.9.6 / 2018-03-15
 * updated css for tables
 
