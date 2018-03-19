@@ -223,17 +223,30 @@ class zuplus_Admin {
 				}
 		    }
 		}
-		
+
+		if(isset($submenu_modify['separator'])) {
+		    foreach($submenu_modify['separator'] as $menu_item) {
+		    	$submenu_parent = isset($menu_item['parent']) ? $menu_item['parent'] : 'options-general.php';
+		    	$index = $this->get_new_index($menu_item, $submenu_parent);
+		    	if($index > 0 && !isset($submenu[$submenu_parent][$index])) {
+			    	$submenu[$submenu_parent][$index] = ['','read', 'separator'.$index, '', 'wp-menu-separator'];
+					ksort($submenu[$submenu_parent]);
+				}
+		    }
+		}
+	
 	    return $menu_order;
 	}
 
 	private function get_new_index($menu_item, $submenu_parent = '') {
 	    $new_index = isset($menu_item['new_index']) ? $menu_item['new_index'] : -1;	    
 	    if($new_index < 0) {
-		    $base_menu = isset($menu_item['before_index']) ? $menu_item['before_index'] : (isset($menu_item['after_index']) ? $menu_item['after_index'] : '');
+		    $base_key = array_values(array_intersect(array_keys($menu_item), ['before_index', 'before_index2', 'after_index', 'after_index2'])); 
+		    $base_menu = empty($base_key) ? '' : $menu_item[$base_key[0]];
 		    $base_index = empty($submenu_parent) ? $this->get_menu_index($base_menu) : $this->get_submenu_index($base_menu, $submenu_parent);
 		    if($base_index < 0) return (PHP_INT_MAX - 1);
-			$new_index = isset($menu_item['before_index']) ? $base_index - 1 : $base_index + 1;
+		    $index_shift = intval(filter_var($base_key[0], FILTER_SANITIZE_NUMBER_INT)) ? : 1;
+			$new_index = strpos($base_key[0], 'before') === false ? $base_index + $index_shift : $base_index - $index_shift;
 	    }
 		return $new_index;
 	}
@@ -288,6 +301,7 @@ class zuplus_Admin {
 	//
 	// Config & Options ----------------------------------------------------------]
 	//
+	
 	public function config_addon($more_params = []) {
 		return $this->plugin->config_addon($more_params);
 	}
@@ -312,6 +326,10 @@ class zuplus_Admin {
 	protected function update_options() { 
 		update_option($this->options_id, $this->options); 
 	}
+	
+	//
+	// JS & CSS enqueue ----------------------------------------------------------]
+	//
 	
 	protected function should_enqueue_css() {
 		return false;
