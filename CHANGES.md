@@ -1,4 +1,4 @@
-#### 0.9.9 / 2018-03-19
+#### 0.9.11 / 2018-03-19
 * added functions to modify admin menu and submenu items (reorder, rename, remove, separator)
 * modified order for `Media`, `Posts` and `Genesis` menu
 * removed advertising menu for some plugins
