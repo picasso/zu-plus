@@ -4,7 +4,7 @@ Plugin Name: ZU+
 Plugin URI: https://dmitryrudakov.ru/plugins/
 GitHub Plugin URI: https://github.com/picasso/zu-plus
 Description: This plugin encompasses ZU framework functionality.
-Version: 0.9.7
+Version: 0.9.8
 Author: Dmitry Rudakov
 Author URI: https://dmitryrudakov.ru/about/
 Text Domain: zu-plugin
@@ -32,7 +32,7 @@ Domain Path: /lang/
 
 // Prohibit direct script loading
 defined('ABSPATH') || die('No direct script access allowed!');
-define('ZUPLUS_VERSION', '0.9.7');
+define('ZUPLUS_VERSION', '0.9.8');
 define('ZUPLUS_NAME', 'ZU+');
 define('__ZUPLUS_ROOT__', plugin_dir_path(__FILE__)); 
 define('__ZUPLUS_FILE__', __FILE__); 
@@ -73,6 +73,58 @@ class ZU_Admin extends zuplus_Admin {
 	//
 	// Should/Could be Redefined in Child Class ----------------------------------]
 	//
+	
+	// 	To modify menu and submenu you should pass array with optional keys  ['reorder', 'rename', 'remove']
+	//		If presented key should array of array with the following keys
+	//		'menu'				- item-slug
+	//		'new_index'		- new item position
+	//		'after_index'		- item position will be after item with this slug
+	//		'before_index'	- item position will be before item with this slug
+	//		'new_name'		- new item name
+	//		'parent'				- parent menu slug (if absent then  'options-general.php' will be used)
+
+	protected function custom_admin_menu() {
+		return [
+			'reorder'	=>	[
+				[
+					'menu'				=> 	'upload.php',
+					'before_index'	=>	'upload.php',
+				],
+				[
+					'menu'				=> 	'edit.php',
+					'after_index'		=>	'upload.php',
+				],
+				[
+					'menu'				=> 	'genesis',
+					'after_index'		=>	'options-general.php',
+				],
+			],
+		];
+	}
+
+	protected function custom_admin_submenu() {
+		return [
+			'reorder'	=>	[
+				[
+					'menu'				=> 	'options-permalink.php',
+					'before_index'	=>	'options-permalink.php',
+				],
+				[
+					'menu'				=> 	'zuplus-settings',
+					'after_index'		=>	'options-permalink.php',
+				],
+			],
+			'remove'	=>	[
+				[
+					'menu'			=>	'bbq_settings',
+				],
+				[
+					'menu'			=>	'itsec-go-pro',
+					'parent'			=>	'itsec',
+				],				
+			],
+		];
+	}
 
 	protected function options_defaults() { 
 		return [

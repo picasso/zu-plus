@@ -1,3 +1,8 @@
+#### 0.9.8 / 2018-03-19
+* added functions to modify admin menu and submenu items (reorder, rename, remove)
+* modified order for `Media`, `Posts` and `Genesis` menu
+* removed advertising menu for some plugins
+
 #### 0.9.7 / 2018-03-15
 * added functions `deactivation_clean()` for *zuplus_Admin* and `clean()` for *zuplus_Addon* which should be called in deactivation
 

@@ -124,6 +124,7 @@ class zuplus_Admin {
 		add_action('wp_ajax_'.$this->prefix.'_option', [$this, 'ajax_turn_option']);
 		add_action('admin_enqueue_scripts', [$this, 'admin_enqueue']);
 		add_action('admin_enqueue_scripts', [$this, 'admin_enqueue_fonts']);
+		add_filter('custom_menu_order', [$this, 'admin_menu_modify']);
 
 		//
 		// Show errors, if there are ------------------------------------------------]
@@ -156,7 +157,137 @@ class zuplus_Admin {
 	protected function deactivation_clean() {
 	}
 
+	//
+	// Admin menu modify ---------------------------------------------------------]
+	//
+	protected function custom_admin_menu() {
+		return [];
+	}
 
+	protected function custom_admin_submenu() {
+		return [];
+	}
+
+	public function admin_menu_modify($menu_order) {
+	    global $menu, $submenu;
+
+	    $menu_modify = $this->custom_admin_menu();
+  
+		if(isset($menu_modify['reorder'])) {  
+		    foreach($menu_modify['reorder'] as $menu_item) {
+		    	$this->menu_reorder($menu_item['menu'], $this->get_new_index($menu_item));
+		    }
+		}
+
+    	if(isset($menu_modify['rename'])) {
+		    foreach($menu_modify['rename'] as $menu_item) {
+		    	$index = $this->get_menu_index($menu_item['menu']);
+		    	if($index > 0) $menu[$index][0] = $menu_item['new_name'];
+		    }
+		}
+		
+    	if(isset($menu_modify['remove'])) {
+		    foreach($menu_modify['remove'] as $menu_item) {
+		    	$index = $this->get_menu_index($menu_item['menu']);
+		    	if($index > 0) {
+			    	unset($menu[$index]);
+					ksort($menu);
+				}
+		    }
+		}
+	    
+	    $submenu_modify = $this->custom_admin_submenu();
+  
+		if(isset($submenu_modify['reorder'])) {  
+		    foreach($submenu_modify['reorder'] as $menu_item) {
+		    	$submenu_parent = isset($menu_item['parent']) ? $menu_item['parent'] : 'options-general.php';
+		    	$this->submenu_reorder($menu_item['menu'], $this->get_new_index($menu_item, $submenu_parent), $submenu_parent);
+		    }
+		}
+		
+    	if(isset($submenu_modify['rename'])) {
+		    foreach($submenu_modify['rename'] as $menu_item) {
+		    	$submenu_parent = isset($menu_item['parent']) ? $menu_item['parent'] : 'options-general.php';
+		    	$index = $this->get_submenu_index($menu_item['menu'], $submenu_parent);
+		    	if($index > 0) $submenu[$submenu_parent][$index][0] = $menu_item['new_name'];
+		    }
+		}
+		
+    	if(isset($submenu_modify['remove'])) {
+		    foreach($submenu_modify['remove'] as $menu_item) {
+		    	$submenu_parent = isset($menu_item['parent']) ? $menu_item['parent'] : 'options-general.php';
+		    	$index = $this->get_submenu_index($menu_item['menu'], $submenu_parent);
+		    	if($index > 0) {
+			    	unset($submenu[$submenu_parent][$index]);
+					ksort($submenu[$submenu_parent]);
+				}
+		    }
+		}
+		
+	    return $menu_order;
+	}
+
+	private function get_new_index($menu_item, $submenu_parent = '') {
+	    $new_index = isset($menu_item['new_index']) ? $menu_item['new_index'] : -1;	    
+	    if($new_index < 0) {
+		    $base_menu = isset($menu_item['before_index']) ? $menu_item['before_index'] : (isset($menu_item['after_index']) ? $menu_item['after_index'] : '');
+		    $base_index = empty($submenu_parent) ? $this->get_menu_index($base_menu) : $this->get_submenu_index($base_menu, $submenu_parent);
+		    if($base_index < 0) return (PHP_INT_MAX - 1);
+			$new_index = isset($menu_item['before_index']) ? $base_index - 1 : $base_index + 1;
+	    }
+		return $new_index;
+	}
+
+	private function get_menu_index($menu_item) {
+		global $menu;
+		
+		$index = -1;
+	    foreach($menu as $key => $details) {
+	        if($details[2] == $menu_item) {
+	            $index = $key;
+	        }
+	    }
+	    return $index;
+	}
+
+	private function menu_reorder($menu_item, $new_index) {
+		global $menu;
+		
+		$index = $this->get_menu_index($menu_item);
+	    if($index > 0) {
+		    $menu[$new_index] = $menu[$index];
+		    unset($menu[$index]);
+		    ksort($menu);				// Reorder the menu based on the keys in ascending order
+	    }
+	}
+
+	private function get_submenu_index($menu_item, $submenu_parent = 'options-general.php') {
+		global $submenu;
+		
+		$index = -1;
+	    $subitems = $submenu[$submenu_parent];			// Get submenu key location based on slug
+	    foreach($subitems as $key => $details) {
+	        if($details[2] == $menu_item) {
+	            $index = $key;
+	        }
+	    }
+	    return $index;
+	}
+
+	private function submenu_reorder($menu_item, $new_index, $submenu_parent) {
+		global $submenu;
+		
+		$index = $this->get_submenu_index($menu_item, $submenu_parent);
+	    if($index > 0) {
+		    $submenu[$submenu_parent][$new_index] = $submenu[$submenu_parent][$index];
+		    unset($submenu[$submenu_parent][$index]);
+		    ksort($submenu[$submenu_parent]);				// Reorder the menu based on the keys in ascending order
+	    }
+	}
+
+	//
+	// Config & Options ----------------------------------------------------------]
+	//
 	public function config_addon($more_params = []) {
 		return $this->plugin->config_addon($more_params);
 	}
