@@ -265,7 +265,7 @@ class zuplus_Admin {
 		global $submenu;
 		
 		$index = -1;
-	    $subitems = $submenu[$submenu_parent];			// Get submenu key location based on slug
+	    $subitems = isset($submenu[$submenu_parent]) ? $submenu[$submenu_parent] : [];			// Get submenu key location based on slug
 	    foreach($subitems as $key => $details) {
 	        if($details[2] == $menu_item) {
 	            $index = $key;
