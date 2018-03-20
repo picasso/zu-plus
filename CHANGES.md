@@ -1,3 +1,6 @@
+#### 0.9.12 / 2018-03-20
+* added function `submenu_move` to move section of submenu to a new position
+
 #### 0.9.11 / 2018-03-19
 * added functions to modify admin menu and submenu items (reorder, rename, remove, separator)
 * modified order for `Media`, `Posts` and `Genesis` menu
