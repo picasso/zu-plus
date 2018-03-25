@@ -382,7 +382,7 @@ class ZU_PlusFunctions {
 	public function get_copyright() {
 		return $this->copy_string;
 	}
-
+	
 	// Color, Background, Thumbnail, Attachment functions ------------------------]
 	
 	public function get_post_gallery($post_id = null) {

@@ -1,3 +1,11 @@
+#### 1.0.0 / 2018-03-20
+* added function `option_value()` to `zuplus_Addon`
+* class `ZU_DuplicatePage` added (based on Duplicate Page Plugin)
+* added options for Duplicate Page functionality (`dup_page`, `dup_status`, `dup_redirect`, `dup_suffix`)
+* inherited `validate_options()` to bypass validation of select
+* added `print_duplicate_page()` to display Duplicate Page options
+* class `zuplus_Duplicate` was renamed for `ZU_DuplicateMenu` to avoid confusion
+
 #### 0.9.12 / 2018-03-20
 * added function `submenu_move` to move section of submenu to a new position
 

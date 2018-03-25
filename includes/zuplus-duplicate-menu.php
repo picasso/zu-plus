@@ -4,7 +4,7 @@
 // Author: Jonathan Christopher
 // Modified: Dmitry Rudakov on 16.08.2017
 
-class zuplus_Duplicate {
+class ZU_DuplicateMenu {
 
     public function duplicate($id = null, $name = null) {
 
@@ -82,7 +82,7 @@ function zuplus_ajax_duplicate_menu() {
     $source = intval($_POST['source_menu']);
     $destination = sanitize_text_field($_POST['new_menu']);
     // go ahead and duplicate our menu
-    $duplicator = new zuplus_Duplicate();
+    $duplicator = new ZU_DuplicateMenu();
     $new_menu_id = $duplicator->duplicate($source, $destination);
 
 	if($new_menu_id) return ['ok' => sprintf('Menu was duplicated with name <strong>%1$s</strong>', $destination)];

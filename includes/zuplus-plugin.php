@@ -176,6 +176,10 @@ class zuplus_Addon {
 		return zu()->check_option($this->options, $key, $check);
 	}
 
+	protected function option_value($key, $default_value = '') {
+		return isset($this->options[$key]) ? $this->options[$key] : $default_value;
+	}
+
 	protected function check_config($key, $check = true) {
 		return zu()->check_option($this->config, $key, $check);
 	}

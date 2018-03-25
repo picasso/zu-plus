@@ -4,7 +4,7 @@ Plugin Name: ZU+
 Plugin URI: https://dmitryrudakov.ru/plugins/
 GitHub Plugin URI: https://github.com/picasso/zu-plus
 Description: This plugin encompasses ZU framework functionality.
-Version: 0.9.12
+Version: 1.0.0
 Author: Dmitry Rudakov
 Author URI: https://dmitryrudakov.ru/about/
 Text Domain: zu-plugin
@@ -32,7 +32,7 @@ Domain Path: /lang/
 
 // Prohibit direct script loading
 defined('ABSPATH') || die('No direct script access allowed!');
-define('ZUPLUS_VERSION', '0.9.12');
+define('ZUPLUS_VERSION', '1.0.0');
 define('ZUPLUS_NAME', 'ZU+');
 define('__ZUPLUS_ROOT__', plugin_dir_path(__FILE__)); 
 define('__ZUPLUS_FILE__', __FILE__); 
@@ -41,6 +41,7 @@ define('__ZUPLUS_FILE__', __FILE__);
 require_once(__ZUPLUS_ROOT__ . 'includes/zuplus-plugin.php');
 require_once(__ZUPLUS_ROOT__ . 'includes/debug/zuplus-debug.php');
 require_once(__ZUPLUS_ROOT__ . 'includes/zuplus-duplicate-menu.php');
+require_once(__ZUPLUS_ROOT__ . 'includes/zuplus-duplicate-page.php');
 
 define('QM_HIDE_SELF', true);		// Hides the internal actions of Query Monitor in the output info from the plugin itself.
 //
@@ -69,6 +70,13 @@ class ZU_Plugin extends zuplus_Plugin {
 }
 
 class ZU_Admin extends zuplus_Admin {
+
+	private $duppage;
+
+	protected function construct_more() {
+		
+		$this->duppage = new ZU_DuplicatePage($this->config_addon());
+	}
 	
 	//
 	// Should/Could be Redefined in Child Class ----------------------------------]
@@ -136,12 +144,26 @@ class ZU_Admin extends zuplus_Admin {
 
 	protected function options_defaults() { 
 		return [
-			'debug_log' 		=>	true,
-			'ajax_log'			=>	false,
-			'profiler'			=>	false,
-			'debug_bar'		=>	true,
-			'zu_cache'			=>	false,
+			'debug_log' 			=>	true,
+			'ajax_log'				=>	false,
+			'profiler'				=>	false,
+			'debug_bar'			=>	true,
+			'zu_cache'				=>	false,
+			
+			'dup_page'			=>	false,
+			'dup_status'			=>	'draft',
+			'dup_redirect'		=>	'to_page',
+			'dup_suffix'			=>	'copy',
 		]; 
+	}
+
+	public function validate_options($input) {
+		$new_values = parent::validate_options($input);
+		if(isset($input['dup_status'])) $new_values['dup_status'] = $input['dup_status'];							// do not validate 'dup_status' value
+		if(isset($input['dup_redirect'])) $new_values['dup_redirect'] = $input['dup_redirect'];						// do not validate 'dup_redirect' value
+		if(isset($input['dup_suffix'])) $new_values['dup_suffix'] = $input['dup_suffix'];								// do not validate 'dup_suffix' value
+	
+		return $new_values;
 	}
 
 	protected function should_enqueue_css() {
@@ -163,7 +185,11 @@ class ZU_Admin extends zuplus_Admin {
 		// Custom Boxes -------------------------------------------------------------]
 		
 		$this->form->add_meta_box('log', __('Actual Log Location', 'zu-plugin'), [$this, 'print_log_location']);
-		$this->form->add_meta_box('duplicate', __('Duplicate Menu', 'zu-plugin'), [$this, 'print_duplicate_menu']);
+		$this->form->add_meta_box('duplicate_menu', __('Duplicate Menu', 'zu-plugin'), [$this, 'print_duplicate_menu']);
+
+		if($this->check_option('dup_page')) {
+			$this->form->add_meta_box('duplicate_page', __('Duplicate Page', 'zu-plugin'), [$this, 'print_duplicate_page']);
+		}
 	}
 
 	public function status_callback() {
@@ -179,6 +205,8 @@ class ZU_Admin extends zuplus_Admin {
 		$this->form->checkbox('ajax_log', 'Activate AJAX Logging', 'You should make <span>AJAX calls</span> from your JS.');
 		$this->form->checkbox('profiler', 'Activate Profiler', 'You should call <span>_profiler_flag()</span> at each point of interest, passing a descriptive string.');
 		$this->form->checkbox('debug_bar', 'Use Debug Bar', 'Works only if <span>Query Monitor</span> is activated.');
+
+		$this->form->checkbox('dup_page', 'Activate Duplicate Page', 'Allows duplicate Posts, Pages and Custom Posts using single click.');
 		
 	
 		echo $this->form->fields('The plugin encompasses ZU framework functionality.');
@@ -213,6 +241,27 @@ class ZU_Admin extends zuplus_Admin {
 		}
 		
 		echo $this->form->fields($desc, 'zuplus_duplicate_menu', true); // second argument -> data-ajaxrel : used in js to serialize form
+	}
+
+	public function print_duplicate_page($post) {
+
+		$this->form->select(
+			'dup_status', 
+			'Duplicate Post Status:', 
+			$this->duppage->status_values(), 
+			'Select any post status you want to assign for duplicate post.'
+		);
+
+		$this->form->select(
+			'dup_redirect', 
+			'Redirect to after click on link:', 
+			$this->duppage->redirect_values(), 
+			'Select any post redirection after click on <strong>"Duplicate This"</strong> link.'
+		);
+		
+        $this->form->text('dup_suffix', 'Duplicate Post Suffix', 'Add a suffix for duplicate post as Copy, Clone etc. It will show after title.');
+		
+		echo $this->form->fields('Duplicate Page Settings.');
 	}
 	
 	public function ajax_more($option_name) {
