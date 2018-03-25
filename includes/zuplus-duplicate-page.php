@@ -8,50 +8,57 @@
 
 class ZU_DuplicatePage extends zuplus_Addon {
 	
-	private $dup_action = 'dup_post_as_draft';
+	private static $dup_action = 'dup_post_as_draft';
 
-	private 	$status_values = [
+	private 	static $status_values = [
 		'draft'		=>	'Draft',
 		'publish'	=>	'Publish',
 		'private'		=>	'Private',
-		'pending'	=>	'Private',
+		'pending'	=>	'Pending',
 	];	
 
-	private $redirect_values = [
+	private static $redirect_values = [
 		'to_list'		=>	'To All Posts List',
-		'to_page'	=>	'To Duplicate Edit Screen',
+		'to_page'	=>	'To Edit Duplicated Page',
 	];	
+
+	private static $dup_defaults = [
+		'dup_status'		=> 	'draft',
+		'dup_redirect'	=> 	'to_page',
+		'dup_suffix'		=> 	'copy',
+	];
 	
 	protected function construct_more() {
 
-		add_action('admin_action_'.$this->dup_action, [$this, 'duplicate_post_as_draft']); 
+		add_action('admin_action_'.self::$dup_action, [$this, 'duplicate_post_as_draft']); 
 		add_filter('post_row_actions', [$this, 'duplicate_post_link'], 10, 2);
 		add_filter('page_row_actions', [$this, 'duplicate_post_link'], 10, 2);
 		add_action('post_submitbox_misc_actions', [$this, 'duplicate_post_button']);
 	}
 
 	public function status_values() {
-		return $this->status_values;
+		return self::$status_values;
 	}
 
 	public function redirect_values() {
-		return $this->redirect_values;
+		return self::$redirect_values;
 	}
-
+	
 	public function duplicate_post_as_draft() {
 		global $wpdb;
 
-		if(!(isset($_GET['post']) || isset($_POST['post']) || (isset($_REQUEST['action']) && $this->dup_action == $_REQUEST['action']))) 	wp_die('No post to duplicate has been supplied!');
+		if(!(isset($_GET['post']) || isset($_POST['post']) || (isset($_REQUEST['action']) && self::$dup_action == $_REQUEST['action']))) 	wp_die('No post to duplicate has been supplied!');
 
 		$returnpage = '';
 		$post_id = (isset($_GET['post']) ? $_GET['post'] : $_POST['post']);
-		$post_status = $this->option_value('dup_status', 'draft');	
-		$redirectit = $this->option_value('dup_redirect', 'to_list');	 
-		$suffix = $this->option_value('dup_suffix', '');
-		
+		$post_status = $this->get_dup_status();	
+		$redirect_it = $this->get_dup_redirect(false);	 
+		$suffix = $this->get_dup_suffix();
+	
 		$post = get_post($post_id); 
 		$current_user = wp_get_current_user();
 		$new_post_author = $current_user->ID; 
+		$new_post_title = function_exists('tplus_modify_content') ? tplus_modify_content($post->post_title, '', $suffix) : zu()->modify_content($post->post_title, '', $suffix);
 
 		//		if post data exists, create the post duplicate
 		
@@ -66,7 +73,7 @@ class ZU_DuplicatePage extends zuplus_Addon {
 				'post_parent' 				=> $post->post_parent,
 				'post_password' 			=> $post->post_password,
 				'post_status' 				=> $post_status,
-				'post_title' 					=> $post->post_title . (empty($suffix) ? '' : sprintf('--%s', $suffix)),
+				'post_title' 					=> $new_post_title,
 				'post_type' 					=> $post->post_type,
 				'to_ping' 						=> $post->to_ping,
 				'menu_order' 				=> $post->menu_order
@@ -105,9 +112,9 @@ class ZU_DuplicatePage extends zuplus_Addon {
 			//		finally, redirecting to your choice
 
 			if($post->post_type != 'post') $returnpage = '?post_type='.$post->post_type;
-				
-			if(!empty($redirectit) && $redirectit == 'to_list') wp_redirect(admin_url('edit.php'.$returnpage));
-			elseif(!empty($redirectit) && $redirectit == 'to_page') wp_redirect(admin_url('post.php?action=edit&post=' . $new_post_id));
+			
+			if(!empty($redirect_it) && $redirect_it == 'to_list') wp_redirect(admin_url('edit.php'.$returnpage));
+			elseif(!empty($redirect_it) && $redirect_it == 'to_page') wp_redirect(admin_url('post.php?action=edit&post=' . $new_post_id));
 			else wp_redirect(admin_url('edit.php'.$returnpage));
 			exit;
 		
@@ -121,9 +128,9 @@ class ZU_DuplicatePage extends zuplus_Addon {
 		
 		if(current_user_can('edit_posts')) {
 			$actions['duplicate_this'] = sprintf('<a href="admin.php?action=%1$s&amp;post=%2$s" title="Duplicate this as %3$s" rel="permalink">%4$s</a>',
-				$this->dup_action,
+				self::$dup_action,
 				$post->ID,
-				$this->status_values[$this->option_value('dup_status', 'draft')],
+				$this->get_dup_status(),
 				__('Duplicate This', 'zu-plugin')
 			);
 		}
@@ -134,16 +141,47 @@ class ZU_DuplicatePage extends zuplus_Addon {
 	public function duplicate_post_button() {
 		global $post;
 		
+		$icon = 'images-alt2';
+		$color = 'blue';
+		$button_classes = ['button', 'button-primary', 'zu-dashicons', 'zu-button', 'zu-side-button']; // , 'zuplus_ajax_option'
+		
 		printf(
-			'<div id="zuplus-publishing-actions">
-				<div id="zuplus-export-action">
-					<a href="admin.php?action=%1$s&amp;post=%2$s" title="Duplicate this as %3$s" rel="permalink">%4$s</a>
-				</div>
+			'<div id="zuplus-duplicate-this" class="zuplus zu-pub-section">
+				<a class="%6$s zu-button-%5$s" href="admin.php?action=%1$s&amp;post=%2$s" title="Duplicate this as %3$s" rel="permalink">
+					<span class="dashicons dashicons-%4$s"></span>
+					<span class="zu-link-text">%7$s</span>
+				</a>
 			</div>',
-			$this->dup_action,
+			self::$dup_action,
 			$post->ID,
-			$this->status_values[$this->option_value('dup_status', 'draft')],
+			$this->get_dup_status(),
+			$icon,
+			$color,
+			zu()->merge_classes($button_classes),
 			__('Duplicate This', 'zu-plugin')
 		);
+	}
+	
+	public static function dup_defaults($key = '') {
+		return isset(self::$dup_defaults[$key]) ? self::$dup_defaults[$key] : (empty($key)	? self::$dup_defaults : '');
+	}
+	
+	private function get_dup_value($key) {
+		return isset(self::$dup_defaults[$key]) ? $this->option_value($key, self::$dup_defaults[$key]) : ''; 
+	}
+
+	private function get_dup_status($as_value = true) {
+		$status = $this->get_dup_value('dup_status');
+		return isset(self::$status_values[$status]) ? ($as_value ? self::$status_values[$status] : $status) : ''; 
+	}
+
+	private function get_dup_redirect($as_value = true) {
+		$redirect = $this->get_dup_value('dup_redirect');
+		return isset(self::$redirect_values[$redirect]) ? ($as_value ? self::$redirect_values[$redirect] : $redirect) : ''; 
+	}
+
+	private function get_dup_suffix($as_value = true) {
+		$suffix = $this->get_dup_value('dup_suffix');
+		return $as_value ? (empty($suffix) ? '' : sprintf('--%s', $suffix)) : $suffix; 
 	}
 }

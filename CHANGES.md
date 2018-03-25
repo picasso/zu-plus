@@ -1,4 +1,9 @@
-#### 1.0.0 / 2018-03-20
+#### 1.0.2 / 2018-03-25
+* added functions `cut_content()` and `modify_content()`
+* fixed bugs in `ZU_DuplicatePage`
+* improved css
+
+#### 1.0.0 / 2018-03-25
 * added function `option_value()` to `zuplus_Addon`
 * class `ZU_DuplicatePage` added (based on Duplicate Page Plugin)
 * added options for Duplicate Page functionality (`dup_page`, `dup_status`, `dup_redirect`, `dup_suffix`)

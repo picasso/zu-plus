@@ -4,7 +4,7 @@ Plugin Name: ZU+
 Plugin URI: https://dmitryrudakov.ru/plugins/
 GitHub Plugin URI: https://github.com/picasso/zu-plus
 Description: This plugin encompasses ZU framework functionality.
-Version: 1.0.0
+Version: 1.0.2
 Author: Dmitry Rudakov
 Author URI: https://dmitryrudakov.ru/about/
 Text Domain: zu-plugin
@@ -32,7 +32,7 @@ Domain Path: /lang/
 
 // Prohibit direct script loading
 defined('ABSPATH') || die('No direct script access allowed!');
-define('ZUPLUS_VERSION', '1.0.0');
+define('ZUPLUS_VERSION', '1.0.2');
 define('ZUPLUS_NAME', 'ZU+');
 define('__ZUPLUS_ROOT__', plugin_dir_path(__FILE__)); 
 define('__ZUPLUS_FILE__', __FILE__); 
@@ -75,7 +75,9 @@ class ZU_Admin extends zuplus_Admin {
 
 	protected function construct_more() {
 		
-		$this->duppage = new ZU_DuplicatePage($this->config_addon());
+		if($this->check_option('dup_page')) {
+			$this->duppage = new ZU_DuplicatePage($this->config_addon());
+		}
 	}
 	
 	//
@@ -143,7 +145,7 @@ class ZU_Admin extends zuplus_Admin {
 	}
 
 	protected function options_defaults() { 
-		return [
+		$zu_defaults = [
 			'debug_log' 			=>	true,
 			'ajax_log'				=>	false,
 			'profiler'				=>	false,
@@ -151,10 +153,9 @@ class ZU_Admin extends zuplus_Admin {
 			'zu_cache'				=>	false,
 			
 			'dup_page'			=>	false,
-			'dup_status'			=>	'draft',
-			'dup_redirect'		=>	'to_page',
-			'dup_suffix'			=>	'copy',
 		]; 
+		
+		return array_merge($zu_defaults, ZU_DuplicatePage::dup_defaults());
 	}
 
 	public function validate_options($input) {
@@ -237,7 +238,7 @@ class ZU_Admin extends zuplus_Admin {
 			$this->form->add_value('new_menu', '?');
             $this->form->text('new_menu', 'And call it', 'The name will be assigned to duplicated menu.');
         
-			$this->form->button_link('zuplus_duplicate_menu', __('Duplicate', 'tplus-plugin'), 'images-alt2', 'red', true, false);
+			$this->form->button_link('zuplus_duplicate_menu', __('Duplicate', 'zu-plugin'), 'images-alt2', 'red', true, false);
 		}
 		
 		echo $this->form->fields($desc, 'zuplus_duplicate_menu', true); // second argument -> data-ajaxrel : used in js to serialize form

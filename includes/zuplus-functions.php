@@ -383,6 +383,48 @@ class ZU_PlusFunctions {
 		return $this->copy_string;
 	}
 	
+	public function cut_content($content, $amount = 150) {
+
+	    $raw_content = strip_shortcodes($content);
+	    $raw_content = apply_filters('the_content', $raw_content);
+	    $raw_content = preg_replace('/<h\d[^>]+?>.+?<\/h\d>/i', '', $raw_content); 		// remove all headers <h1><h2> etc.
+	    $raw_content = preg_replace('/\s*\[[^\]]+?\]/i', '', $raw_content); 							// remove javascript text translations
+	    
+	    $raw_content = strip_tags($raw_content);
+	    $raw_content = html_entity_decode($raw_content, ENT_QUOTES | ENT_XML1);
+	    
+	    $tokens = [];
+	    $count = 0;
+	    $cut_content = $try_content = '';
+	    
+		preg_match_all('/[^.!?\s][^.!?]*(?:[.!?](?![\'\"]?\s|$)[^.!?]*)*[.!?]?[\'\"]?(?=\s|$)/', $raw_content, $tokens); // split in sentences
+			
+	    foreach($tokens[0] as $token) { 
+	
+			$try_content .= $token.' ';
+	        $count = strlen($try_content);
+	        if($count > $amount) break;
+			$cut_content = $try_content;
+	    }
+	
+		// if the first sentece is longer than the requested amount - anyway better to have one sentece	
+		if(empty($cut_content)) $cut_content = $try_content;	
+		
+	    return trim($cut_content);
+	}
+
+	public function  modify_content($content, $prefix = '', $suffix = '', $replace = []) {
+		
+		foreach($replace as $search => $replace) {
+			$content = str_replace($search, $replace, $content);
+		}
+		
+		if(!empty($prefix)) $content = $prefix . $content;
+		if(!empty($suffix)) $content = $content . $suffix;
+		
+		return $content;
+	}
+
 	// Color, Background, Thumbnail, Attachment functions ------------------------]
 	
 	public function get_post_gallery($post_id = null) {
