@@ -17,6 +17,7 @@ class zuplus_Plugin {
 	protected $plugin_file;
 	protected $version;
 	protected $defaults = [];
+	protected $addons = [];
 
 	final public static function instance() {
 		
@@ -74,6 +75,7 @@ class zuplus_Plugin {
 	protected function construct_more() {
 	}
 	
+	
 	public function config_addon($more_params = []) {
 		
 		$params = [
@@ -86,6 +88,20 @@ class zuplus_Plugin {
 		
 		return empty($more_params) ? $params : (is_array($more_params) ? array_merge($params, $more_params) : $params);
 	}
+
+	public function register_addon($addon) {
+		
+		if(in_array($addon, $this->addons))	return;
+		$this->addons[] = $addon;
+	}	
+	
+	public function clean_addons() {
+		
+		foreach($this->addons as $addon) {
+			$addon->clean();
+		}
+	}
+
 	
 	public function defaults() {
 		
@@ -121,6 +137,7 @@ class zuplus_Plugin {
 		$options = $this->options();
 		return isset($options[$key]) ? $options[$key] : $default_value;
 	}
+
 
 	public function ajax_nonce($create = 'true') { 
 		return $create ? wp_create_nonce($this->nonce) : $this->nonce; 
@@ -228,4 +245,6 @@ class zuplus_Addon {
 	protected function enqueue_script($file, $deps = ['jquery'], $bottom = true) {
 		return $this->enqueue_style_or_script(false, $file, $deps, $bottom);
 	}
+	
+	protected function print_option($option_key = '') {}	
 }

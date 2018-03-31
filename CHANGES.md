@@ -1,4 +1,9 @@
-#### 1.1.2 / 2018-03-31
+#### 1.1.1 / 2018-03-31
+* added functions `register_addon()` and `clean_addons()`
+* addons clean is now supported in `deactivation_hook` of plugin
+* added function `print_option()` to `zuplus_Addon`
+
+#### 1.1.0 / 2018-03-31
 * added functions `update_options()` to `zuplus_Plugin` and `zuplus_Addon`
 
 #### 1.0.2 / 2018-03-25
