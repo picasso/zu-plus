@@ -1,3 +1,6 @@
+#### 1.1.2 / 2018-03-31
+* added functions `update_options()` to `zuplus_Plugin` and `zuplus_Addon`
+
 #### 1.0.2 / 2018-03-25
 * added functions `cut_content()` and `modify_content()`
 * fixed bugs in `ZU_DuplicatePage`

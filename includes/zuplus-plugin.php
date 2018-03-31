@@ -81,6 +81,7 @@ class zuplus_Plugin {
 			'version'			=> $this->version,
 			'prefix'				=> $this->prefix,
 			'plugin_file'		=> $this->plugin_file,
+			'plugin'				=> $this,
 		];
 		
 		return empty($more_params) ? $params : (is_array($more_params) ? array_merge($params, $more_params) : $params);
@@ -106,6 +107,10 @@ class zuplus_Plugin {
 
 	public function options() { 
 		return get_option($this->options_id, []); 
+	}
+
+	public function update_options($options) { 
+		return update_option($this->options_id, $options); 
 	}
 
 	public function check_option($key, $check = true) { 
@@ -155,13 +160,15 @@ class zuplus_Addon {
 	protected $prefix;
 	protected $plugin_file;
 	protected $config;
+	protected $plugin;
 	
 	function __construct($config) {
 		
 		$this->config = $config;
-		$this->prefix= isset($config['prefix']) ? $config['prefix'] : 'zuplus';
-		$this->version= isset($config['version']) ? $config['version'] : ZUPLUS_VERSION;
-		$this->plugin_file= isset($config['plugin_file']) ? $config['plugin_file'] : __ZUPLUS_FILE__;
+		$this->prefix = isset($config['prefix']) ? $config['prefix'] : 'zuplus';
+		$this->version = isset($config['version']) ? $config['version'] : ZUPLUS_VERSION;
+		$this->plugin_file = isset($config['plugin_file']) ? $config['plugin_file'] : __ZUPLUS_FILE__;
+		$this->plugin = isset($config['plugin']) ? $config['plugin'] : null;
 		$this->options = isset($config['options']) ? $config['options'] : [];
 		$this->construct_more();
 	}
@@ -170,6 +177,13 @@ class zuplus_Addon {
 	}
 
 	protected function clean() {
+	}
+	
+	protected function update_options($options) {
+		if(!is_null($this->plugin)) {
+			$this->plugin->update_options($options);
+			$this->options = $this->plugin->options();
+		}
 	}
 	
 	protected function check_option($key, $check = true) {
