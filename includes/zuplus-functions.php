@@ -65,6 +65,27 @@ class ZU_PlusFunctions {
 		return '#'.dechex($red).dechex($green).dechex($blue);
 	}
 
+	// Language functions --------------------------------------------------------]
+	
+	public function is_multilang() {
+		global $_support_multilang;
+		
+		if(is_null($_support_multilang)) $_support_multilang = function_exists('tplus_not_multilang') ? !tplus_not_multilang() : false;
+		return $_support_multilang;
+	}
+	
+	public function get_lang($default_lang = '') {
+		return $this->is_multilang() ? tplus_get_lang() : $default_lang;	
+	}
+	
+	public function convert_lang_url($url, $code = null) {
+		return $this->is_multilang() ? tplus_convert_url($url, $code) : $url;
+	}
+	
+	public function convert_lang_text($text, $code = null) {
+		return $this->is_multilang() ? tplus_convert_text($text, $code) : $text;
+	}
+
 	// Useful functions ----------------------------------------------------------]
 
 	public function check_option($options, $key, $check = true) {

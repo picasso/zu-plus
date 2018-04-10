@@ -1,3 +1,6 @@
+#### 1.1.2 / 2018-04-10
+* added language functions (ported from `zu` theme)
+
 #### 1.1.1 / 2018-03-31
 * added functions `register_addon()` and `clean_addons()`
 * addons clean is now supported in `deactivation_hook` of plugin
