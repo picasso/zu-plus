@@ -78,7 +78,7 @@ class ZU_PlusFunctions {
 		return $this->is_multilang() ? tplus_get_lang() : $default_lang;	
 	}
 	
-	public function get_all_languages($keep_unsorted = false) {
+	public function get_all_languages($keep_unsorted = false, $only_codes = true) {
 	
 		if(!$this->is_multilang()) return [];
 	
@@ -89,7 +89,9 @@ class ZU_PlusFunctions {
 		$sorted_languages = array_values($languages);
 		usort($sorted_languages, function($a, $b) { return $b['active'] <=> $a['active'];});		// sort so active language will be on top
 	
-		return $sorted_languages;
+		$languages = $keep_unsorted ? $languages : $sorted_languages;
+	
+		return $only_codes ? wp_list_pluck($languages, 'code') : $languages;
 	}
 	
 	public function convert_lang_url($url, $code = null) {
