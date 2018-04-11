@@ -78,6 +78,20 @@ class ZU_PlusFunctions {
 		return $this->is_multilang() ? tplus_get_lang() : $default_lang;	
 	}
 	
+	public function get_all_languages($keep_unsorted = false) {
+	
+		if(!$this->is_multilang()) return [];
+	
+		$languages = tplus_all_languages();
+		
+		if($keep_unsorted) return $languages;
+		
+		$sorted_languages = array_values($languages);
+		usort($sorted_languages, function($a, $b) { return $b['active'] <=> $a['active'];});		// sort so active language will be on top
+	
+		return $sorted_languages;
+	}
+	
 	public function convert_lang_url($url, $code = null) {
 		return $this->is_multilang() ? tplus_convert_url($url, $code) : $url;
 	}

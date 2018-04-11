@@ -1,3 +1,6 @@
+#### 1.1.3 / 2018-04-11
+* added function `get_all_languages()`
+
 #### 1.1.2 / 2018-04-10
 * added language functions (ported from `zu` theme)
 
