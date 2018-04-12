@@ -251,9 +251,11 @@ class ZU_DebugBar {
 			$name = preg_replace('/\n+/', '', $row['name']);
 			$name = trim(preg_replace('/=$/', '', $name));
 			
-			$template = (stripos($row['value'], 'array') !== false || stripos($row['value'], '::') !== false) ? '<pre>%1$s</pre>' : '%1$s';
-			$value = sprintf($template, print_r($row['value'], true));
-			
+			$print_value = $row['value'];	
+			$template = (stripos($print_value, 'array') !== false || stripos($print_value, '::') !== false) ? '<pre>%1$s</pre>' : '%1$s';
+			$print_value = sprintf($template, print_r($print_value, true));
+			$print_value = preg_replace('/\[\:([^\]]*)\]/', '{$1}', $print_value);		// to keep RAW translated field in output			
+	_dbug_log_only('$print_value=', $print_value);	
 			printf(
 				'<tr>
 					<td class="qm-ltr qm-false"><strong>%1$s</strong></td>
@@ -266,7 +268,7 @@ class ZU_DebugBar {
 				$row['ip'],
 				$row['refer'],
 				$name,
-				$value,
+				$print_value,
 				$this->get_display_class($row)
 			);
 		}

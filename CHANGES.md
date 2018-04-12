@@ -1,3 +1,6 @@
+#### 1.1.6 / 2018-04-13
+* added `write_to_file` option to disable file logging
+
 #### 1.1.5 / 2018-04-12
 * added `debug_backtrace` option to disable automatic inclusion of backtrace (sometimes leads to memory exhausted)
 

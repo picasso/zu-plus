@@ -10,6 +10,7 @@ class ZU_Debug extends zuplus_Addon {
 	private $alog;
 	private $profiler;
 	private $use_backtrace;
+	private $write_to_file;
 	private $dbug_bar;
 	private $use_var_dump;
 	private $location;
@@ -56,6 +57,7 @@ class ZU_Debug extends zuplus_Addon {
 		$this->alog = $this->check_option('ajax_log');		
 		$this->profiler = $this->check_option('profiler');	
 		$this->use_backtrace = $this->check_option('debug_backtrace');	
+		$this->write_to_file = $this->check_option('write_to_file');
 		
 		$this->location = __ZUPLUS_ROOT__;
 		$this->dbug_bar = null;
@@ -99,7 +101,11 @@ class ZU_Debug extends zuplus_Addon {
 	}
 
 	public function save_log($log_name, $log_value = '', $ip = null, $refer = null) {
-    	if(!empty($this->dbug_bar)) $this->dbug_bar->save_log($log_name, $log_value, $ip, $refer);
+    	if(!empty($this->dbug_bar)) {
+
+	    	$log_value = $log_value !== 'novar' ? $this->process_var($log_value) : '';
+	    	$this->dbug_bar->save_log($log_name, $log_value, $ip, $refer);
+	    }
 	}
 
 	public function string_backtrace() { 
@@ -260,7 +266,7 @@ class ZU_Debug extends zuplus_Addon {
 			PHP_EOL
 		);
 		
-		error_log($msg.PHP_EOL, 3, $f);
+		if($this->write_to_file) error_log($msg.PHP_EOL, 3, $f);
 	}
 	
 	public function write_log($msg, $var = 'novar', $bt = false, $save_debug_bar = true) {
@@ -289,7 +295,7 @@ class ZU_Debug extends zuplus_Addon {
 			
 			$tracelog[] = sprintf('%1$s%4$s<span class="qm-info qm-supplemental">%2$s:%3$s</span>%4$s',  $t_display, $t_file, $t_line, '<br>');	
 		}	
-		$refer_html =  sprintf('%1$s<br><span class=""><strong>from %2$s</strong></span><br>',  implode('', $tracelog), $refer);
+		$refer_html =  ''; //sprintf('%1$s%3$s<span class="qm-info"><strong>from %2$s</strong></span><br>',  implode('', $tracelog), $refer, empty($tracelog) ? '' : '<br>');
 		
 		if($bt) $refer = strip_tags(str_replace('<br>',  PHP_EOL, $refer_html));
 		else {
@@ -297,7 +303,7 @@ class ZU_Debug extends zuplus_Addon {
 			else $refer = sprintf('%1$s%4$s	%2$s:%3$s%4$s		from %5$s%4$s',  $trace[0]['display'], $trace[0]['calling_file'], $trace[0]['calling_line'], PHP_EOL, $refer);
 		}
 		
-		if($save_debug_bar) $this->save_log($msg, ($var !== 'novar' ? $this->process_var($var) : ''), $ip, $refer_html);
+		if($save_debug_bar) $this->save_log($msg, $var, $ip, $refer_html);
 			
 		$msg = sprintf('%6$s[%1$s]		%4$s~%3$s%6$s%5$s-- %2$s -------------------%6$s', 
 			date('d.m H:i:s'), 
@@ -314,7 +320,7 @@ class ZU_Debug extends zuplus_Addon {
 			$msg .= PHP_EOL.'backtrace:'.PHP_EOL.$this->string_backtrace();
 		}
 		
-		error_log($msg.PHP_EOL, 3, $f);
+		if($this->write_to_file) error_log($msg.PHP_EOL, 3, $f);
 	}
 
 	public function write_log_no_save($msg, $var='novar', $bt = false) { 
@@ -338,7 +344,7 @@ class ZU_Debug extends zuplus_Addon {
 		$msg = sprintf('[%1$s] %3$s -------------------[%2$s]%4$s', date('d.m H:i:s'), $ip, $refer, PHP_EOL);
 		$msg .= $this->process_var($data);
 		
-		error_log($msg.PHP_EOL.PHP_EOL, 3, $f);
+		if($this->write_to_file) error_log($msg.PHP_EOL.PHP_EOL, 3, $f);
 	}
 	
 	public function get_request_ip() { return ZU_DebugBar::get_server_value('REMOTE_ADDR'); }
@@ -363,6 +369,12 @@ if(!function_exists('_dbug_change_log_location')) {
 if(!function_exists('_dbug_log')) {
 	function _dbug_log($msg, $var = 'novar', $bt = false) {
 		zuplus_instance()->dbug->write_log($msg, $var, $bt);
+	}
+}
+
+if(!function_exists('_dbug_log_only')) {
+	function _dbug_log_only($msg, $var = 'novar', $bt = false) {
+		zuplus_instance()->dbug->write_log_no_save($msg, $var, $bt);
 	}
 }
 
