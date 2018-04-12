@@ -4,7 +4,7 @@ Plugin Name: ZU+
 Plugin URI: https://dmitryrudakov.ru/plugins/
 GitHub Plugin URI: https://github.com/picasso/zu-plus
 Description: This plugin encompasses ZU framework functionality.
-Version: 1.1.4
+Version: 1.1.5
 Author: Dmitry Rudakov
 Author URI: https://dmitryrudakov.ru/about/
 Text Domain: zu-plugin
@@ -32,7 +32,7 @@ Domain Path: /lang/
 
 // Prohibit direct script loading
 defined('ABSPATH') || die('No direct script access allowed!');
-define('ZUPLUS_VERSION', '1.1.4');
+define('ZUPLUS_VERSION', '1.1.5');
 define('ZUPLUS_NAME', 'ZU+');
 define('__ZUPLUS_ROOT__', plugin_dir_path(__FILE__)); 
 define('__ZUPLUS_FILE__', __FILE__); 
@@ -146,13 +146,14 @@ class ZU_Admin extends zuplus_Admin {
 
 	protected function options_defaults() { 
 		$zu_defaults = [
-			'debug_log' 			=>	true,
-			'ajax_log'				=>	false,
-			'profiler'				=>	false,
-			'debug_bar'			=>	true,
-			'zu_cache'				=>	false,
+			'debug_log' 				=>	true,
+			'ajax_log'					=>	false,
+			'profiler'					=>	false,
+			'debug_backtrace'		=>	true,
+			'debug_bar'				=>	true,
+			'zu_cache'					=>	false,
 			
-			'dup_page'			=>	false,
+			'dup_page'				=>	false,
 		]; 
 		
 		return array_merge($zu_defaults, ZU_DuplicatePage::dup_defaults());
@@ -206,6 +207,7 @@ class ZU_Admin extends zuplus_Admin {
 		$this->form->checkbox('ajax_log', 'Activate AJAX Logging', 'You should make <span>AJAX calls</span> from your JS.');
 		$this->form->checkbox('profiler', 'Activate Profiler', 'You should call <span>_profiler_flag()</span> at each point of interest, passing a descriptive string.');
 		$this->form->checkbox('debug_bar', 'Use Debug Bar', 'Works only if <span>Query Monitor</span> is activated.');
+		$this->form->checkbox('debug_backtrace', 'Always Include Backtrace', 'In some cases, this can <span>greatly slow down</span> the loading of the page and even lead to a fatal error.');
 
 		$this->form->checkbox('dup_page', 'Activate Duplicate Page', 'Allows duplicate Posts, Pages and Custom Posts using single click.');
 		

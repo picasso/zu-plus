@@ -9,6 +9,7 @@ class ZU_Debug extends zuplus_Addon {
 	private $dlog;
 	private $alog;
 	private $profiler;
+	private $use_backtrace;
 	private $dbug_bar;
 	private $use_var_dump;
 	private $location;
@@ -53,7 +54,8 @@ class ZU_Debug extends zuplus_Addon {
 		
 		$this->dlog = $this->check_option('debug_log');
 		$this->alog = $this->check_option('ajax_log');		
-		$this->profiler = $this->check_option('profiler');		
+		$this->profiler = $this->check_option('profiler');	
+		$this->use_backtrace = $this->check_option('debug_backtrace');	
 		
 		$this->location = __ZUPLUS_ROOT__;
 		$this->dbug_bar = null;
@@ -265,7 +267,7 @@ class ZU_Debug extends zuplus_Addon {
 		
 		if(!$this->dlog) return;
 		
-		$trace = $this->get_backtrace();
+		$trace = $this->use_backtrace ? $this->get_backtrace() : [];
 		$f =  $this->log_location();
 
 		if($save_debug_bar) {
@@ -290,7 +292,10 @@ class ZU_Debug extends zuplus_Addon {
 		$refer_html =  sprintf('%1$s<br><span class=""><strong>from %2$s</strong></span><br>',  implode('', $tracelog), $refer);
 		
 		if($bt) $refer = strip_tags(str_replace('<br>',  PHP_EOL, $refer_html));
-		else $refer = sprintf('%1$s%4$s	%2$s:%3$s%4$s		from %5$s%4$s',  $trace[0]['display'], $trace[0]['calling_file'], $trace[0]['calling_line'], PHP_EOL, $refer);
+		else {
+			if(empty($trace)) $refer = sprintf('		from %2$s%1$s', PHP_EOL, $refer);
+			else $refer = sprintf('%1$s%4$s	%2$s:%3$s%4$s		from %5$s%4$s',  $trace[0]['display'], $trace[0]['calling_file'], $trace[0]['calling_line'], PHP_EOL, $refer);
+		}
 		
 		if($save_debug_bar) $this->save_log($msg, ($var !== 'novar' ? $this->process_var($var) : ''), $ip, $refer_html);
 			
@@ -361,7 +366,7 @@ if(!function_exists('_dbug_log')) {
 	}
 }
 
-if(!function_exists('_dbug_dump')) {
+if(!function_exists('_dbug_dump')) {	// Use this function to output structured information. Arrays and objects are explored recursively with values indented to show structure. 
 	function _dbug_dump($msg, $var = 'novar', $bt = false) {
 		zuplus_instance()->dbug->use_var_dump(true);
 		zuplus_instance()->dbug->write_log($msg, $var, $bt);

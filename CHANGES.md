@@ -1,3 +1,6 @@
+#### 1.1.5 / 2018-04-12
+* added `debug_backtrace` option to disable automatic inclusion of backtrace (sometimes leads to memory exhausted)
+
 #### 1.1.4 / 2018-04-11
 * added function `get_all_languages()` (improved)
 
