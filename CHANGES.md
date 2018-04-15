@@ -1,3 +1,6 @@
+#### 1.1.7 / 2018-04-15
+* added `$prefix` argument to `add_body_class()` function
+
 #### 1.1.6 / 2018-04-13
 * added `write_to_file` option to disable file logging
 

@@ -229,8 +229,12 @@ class ZU_PlusFunctions {
 	    return str_replace($rus, $lat, $string);
 	}
 
-	public function add_body_class($my_classes) {
-		add_filter('body_class', function($classes) use ($my_classes) {
+	public function add_body_class($my_classes, $prefix = '') {
+		add_filter('body_class', function($classes) use ($my_classes, $prefix) {
+			if(!empty($prefix)) {
+				$my_classes = $this->merge_classes($my_classes, false);
+				$my_classes = $this->merge_classes(preg_filter('/^/', $prefix, $my_classes));
+			}
 			$classes[] = $my_classes;
 			return $classes;
 		});
