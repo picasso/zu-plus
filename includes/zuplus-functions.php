@@ -148,8 +148,8 @@ class ZU_PlusFunctions {
 		return empty(get_post_ancestors($post_id)) ? false : true;	
 	}
 	
-	public function is_child_of_slug($slug, $post_id = null) {
-		return ($this->is_child($post_id) && $this->get_top_ancestor_slug($post_id) == $slug) ? true : false;
+	public function is_child_of_slug($slug, $post_id = null, $skip_attachments = true) {
+		return ($this->is_child($post_id) && $this->get_top_ancestor_slug($post_id, $skip_attachments) == $slug) ? true : false;
 	}
 
 	public function get_slug($post_id = null) {
@@ -172,15 +172,16 @@ class ZU_PlusFunctions {
 		return empty($posts) ? null : $posts[0]->ID;
 	}
 
-	public function get_top_ancestor($post_id = null) {
+	public function get_top_ancestor($post_id = null, $skip_attachments = true) {
 		
 		if(empty($post_id)) $post_id = get_the_ID();
+		if($skip_attachments && is_attachment()) return $post_id;
 		$parents = get_post_ancestors($post_id);
 		$parent_id = ($parents) ? $parents[count($parents)-1] : null;  		// Get the top Level page->ID count base 1, array base 0 so -1
 		return empty($parent_id) ? $post_id : $parent_id;
 	}
 
-	public function get_top_ancestor_slug($post_id = null) { return $this->get_slug($this->get_top_ancestor($post_id)); }
+	public function get_top_ancestor_slug($post_id = null, $skip_attachments = true) { return $this->get_slug($this->get_top_ancestor($post_id, $skip_attachments)); }
 	
 	public function get_closing_tag_from_open($html) {
 	    $opened_tag = preg_match('#<(?!meta|img|br|hr|input\b)\b([a-z]+)#iU', $html, $tags) ? $tags[1] : '';
