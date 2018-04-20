@@ -255,7 +255,7 @@ class ZU_DebugBar {
 			$template = (stripos($print_value, 'array') !== false || stripos($print_value, '::') !== false) ? '<pre>%1$s</pre>' : '%1$s';
 			$print_value = sprintf($template, print_r($print_value, true));
 			$print_value = preg_replace('/\[\:([^\]]*)\]/', '{$1}', $print_value);		// to keep RAW translated field in output			
-	_dbug_log_only('$print_value=', $print_value);	
+
 			printf(
 				'<tr>
 					<td class="qm-ltr qm-false"><strong>%1$s</strong></td>
