@@ -1,3 +1,10 @@
+#### 1.2.0 / 2018-04-27
+* debug file output improved
+* improvement in css
+* fixed errors with `zuplus_dismiss_error`
+* improved `zuplus_turn_option()` js function to support `ajax_value` and `confirm` options
+* 
+
 #### 1.1.8 / 2018-04-15
 * added `$prefix` argument to `add_body_class()` function
 * added `$skip_attachments` argument to functions which get top ancestor

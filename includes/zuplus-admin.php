@@ -611,13 +611,14 @@ class zuplus_Admin {
 		);
 	}
 	
-	public function ajax_more($option_name) {
+	public function ajax_more($option_name, $ajax_value) {
 		return [];
 	}
 	
 	public function ajax_turn_option() {
 
 		$option_name = (isset($_POST['option_name']) && !empty($_POST['option_name'])) ? $_POST['option_name'] : null;
+		$ajax_value = (isset($_POST['ajax_value']) && !empty($_POST['ajax_value'])) ? $_POST['ajax_value'] : null;
 		$result = [];
 
 		if($option_name) {
@@ -636,7 +637,7 @@ class zuplus_Admin {
 					break;
 					
 				default:
-					$msg = $this->ajax_more($option_name);
+					$msg = $this->ajax_more($option_name, $ajax_value);
 			}
 			
 			if(!empty($msg)) $result['result'] = $this->report_error($msg, true, $option_name);
@@ -683,10 +684,11 @@ class zuplus_Admin {
 		$ajax_template = '<button type="button" class="notice-dismiss ajax-dismiss"><span class="screen-reader-text">Dismiss this notice.</span></button>';
 		$msg_text = is_array($msg) ? array_values($msg)[0] : sprintf($msg_template, $msg);
 		$msg_type = is_array($msg) ? array_keys($msg)[0] : 'error'; 
-		return sprintf('<div class="notice notice-%2$s is-dismissible"><p>%1$s</p>%3$s</div>', 
+		return sprintf('<div class="notice notice-%2$s is-dismissible" data-zuplus_prefix="%4$s"><p>%1$s</p>%3$s</div>', 
 			$msg_text, 
 			str_replace('ok', 'success', $msg_type),
-			$ajax ? $ajax_template : ''
+			$ajax ? $ajax_template : '',
+			$this->prefix
 		);
 	}
 
@@ -697,6 +699,7 @@ class zuplus_Admin {
 	}
 
 	protected function set_or_dismiss_error($value = 0) {
+		
 		$this->get_options();
 		$this->options['error'] = $value;
 		$this->update_options();

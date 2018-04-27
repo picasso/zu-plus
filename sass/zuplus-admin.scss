@@ -43,6 +43,10 @@ $primary-font-family: 'Open Sans', Arial, sans-serif;
 		text-decoration: none; 
 		border-bottom: 1px dotted;
 	}
+	span {
+		color: $admin-magenta-color; 
+		font-weight: 500;
+	}
 	&.notice-error a {
 		font-weight: 600; 
 		color: $admin-error-color; 
@@ -334,13 +338,39 @@ $primary-font-family: 'Open Sans', Arial, sans-serif;
 		                font-weight: 400;
 		            }
 		            
+		            &.small {
+			            font-size: 13px;
+					}
+		            &.left {
+			            text-align: left;
+			            padding-left: 20px;
+					}
+		            &.right {
+			            text-align: right;
+			            padding-right: 20px;
+					}
+		            &.center {
+			            text-align: center;
+					}
+					
 		            &.numeric {
 			            font-size: 110%;
 			            font-weight: 500;
 			            text-align: center;
 		            }            
 
-		            &.colored {
+		            &.actions {
+			            font-size: 13px;
+			            font-weight: 500;
+			            text-align: center;
+			            
+			            a {
+				            text-decoration: none;
+				            color: $admin-red-color;
+			            }
+		            }            
+
+		            &.colored, & span.colored {
 			            font-weight: 600;
 			            text-align: center;
 			            color: $admin-gold-color;

@@ -295,17 +295,20 @@ class ZU_Debug extends zuplus_Addon {
 			
 			$tracelog[] = sprintf('%1$s%4$s<span class="qm-info qm-supplemental">%2$s:%3$s</span>%4$s',  $t_display, $t_file, $t_line, '<br>');	
 		}	
-		$refer_html =  ''; //sprintf('%1$s%3$s<span class="qm-info"><strong>from %2$s</strong></span><br>',  implode('', $tracelog), $refer, empty($tracelog) ? '' : '<br>');
 		
-		if($bt) $refer = strip_tags(str_replace('<br>',  PHP_EOL, $refer_html));
-		else {
+		$refer_html = empty($trace) ? $refer : sprintf('%1$s%3$s<span class="qm-info"><strong>from %2$s</strong></span><br>',  implode('', $tracelog), $refer, empty($tracelog) ? '' : '<br>');
+		
+		if($bt) {
+			$refer = strip_tags(str_replace('<br>',  PHP_EOL, $refer_html));
+		} else {
+			$refer = str_replace('<strong>-ajax-</strong> ', 'ajax:', urldecode($refer));
 			if(empty($trace)) $refer = sprintf('		from %2$s%1$s', PHP_EOL, $refer);
 			else $refer = sprintf('%1$s%4$s	%2$s:%3$s%4$s		from %5$s%4$s',  $trace[0]['display'], $trace[0]['calling_file'], $trace[0]['calling_line'], PHP_EOL, $refer);
 		}
 		
 		if($save_debug_bar) $this->save_log($msg, $var, $ip, $refer_html);
 			
-		$msg = sprintf('%6$s[%1$s]		%4$s~%3$s%6$s%5$s-- %2$s -------------------%6$s', 
+		$msg = sprintf('%6$s[%1$s]	%4$s~%3$s%6$s%5$s		%2$s --------------------------------------------------]%6$s', 
 			date('d.m H:i:s'), 
 			str_replace('\n', PHP_EOL, $msg), 
 			$ip, 

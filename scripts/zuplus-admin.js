@@ -41,7 +41,8 @@
 	function zuplus_bind_dismiss_links() {
 		$('.notice.is-dismissible .notice-dismiss').each(function() {
 			var $link = $(this);
-			$link.click(function() { zuplus_turn_option('zuplus_dismiss_error'); }); 
+			var prefix_name = $link.parent().data('zuplus_prefix');
+			$link.click(function() { zuplus_turn_option('zuplus_dismiss_error', prefix_name); }); 
 			if($link.hasClass('ajax-dismiss')) $link.click(function() { setTimeout(function() { $link.parent().remove(); }, 100); });
 		});
 	}
@@ -56,9 +57,17 @@
 			var prefix_name = $ajax_link.data('zuplus_prefix');
 			
 			if(option_name !== undefined && option_name.length !== 0) {
+				
+				var confirm_msg = $ajax_link.data('zuplus_confirm');
+				var ajax_value = $ajax_link.data('zuplus_ajax_value');
+
 				$ajax_link.unbind().click(function(e) {
 					e.preventDefault();
-					zuplus_turn_option(option_name, prefix_name);
+					if(confirm_msg !== undefined && confirm_msg.length !== 0) {
+						if(window.confirm(confirm_msg)) zuplus_turn_option(option_name, prefix_name, ajax_value);
+					} else {
+						zuplus_turn_option(option_name, prefix_name, ajax_value);
+					}
 				}); 
 			}
 		});
@@ -77,11 +86,14 @@
 	    return data;
 	}
 	
-	function zuplus_turn_option(option_name, prefix_name) {
-
+	function zuplus_turn_option(option_name, prefix_name, ajax_value) {
+		
+		if(prefix_name === undefined || prefix_name.length === 0) prefix_name = 'zuplus';
+		
 		var data = {
 			action: prefix_name + '_option',
-			option_name: option_name
+			option_name: option_name,
+			ajax_value: ajax_value,
 		};
 
 		// Try serialize data
@@ -109,6 +121,7 @@
 		
 		var result = $.extend({result:''}, response.data).result;
 		var clear_now_ajaxed = true;
+		var scroll_top = true;
 		
 		if(String(result).length) {
 			$('#poststuff').parents('.wrap').find('.notice-after').after(result);
@@ -118,6 +131,7 @@
         switch (option_name) {
             case 'zuplus_clear_revisions':
 	                $('.zuplus_revision_info').empty();
+	                scroll_top = false;
 	                break;
                 
             case 'zuplus_clear_errors':
@@ -129,6 +143,8 @@
         }
         
         if(clear_now_ajaxed) $container.removeClass('now_ajaxed');
+		
+		if(scroll_top) $('html, body').stop().animate({scrollTop:0}, 500, 'swing');
 	}
 
 })(jQuery);

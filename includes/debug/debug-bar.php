@@ -24,6 +24,10 @@ class ZU_DebugBar {
 	}
 
 	public static function get_server_value($name) {
+		global $_debug_site_url;
+		
+		if(empty($_debug_site_url)) $_debug_site_url = get_bloginfo('url');
+		
 		
 		$get_ajax = preg_match('/AJAX/i', $name) ? true : false;
 		$request =  isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '';
@@ -42,8 +46,8 @@ class ZU_DebugBar {
 			
 			$value = $is_ajax ? $value : (empty($new_value) ? $request : '');
 			$value = trim(sprintf('%1$s %2$s %3$s',  $value, $is_ajax ? '<strong>-ajax-</strong>' : '', empty($new_value) ? '' : $new_value));
-			$value =  str_replace('https://truewine.ru', '', $value);
-			$value =  str_replace('/wp-admin/', '', $value);
+			$value =  str_replace($_debug_site_url, '', $value);
+// 			$value =  str_replace('/wp-admin/', '', $value);
 		}
 		
 		return $get_ajax ? $is_ajax : $value;
