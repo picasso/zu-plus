@@ -658,6 +658,7 @@ class zuplus_Admin {
 	public function report_error($msg, $ajax = false, $function = '', $class = '') {
 
 		$errors = get_option($this->errors_id, []);
+		
 		$message = is_array($msg) ? (isset($msg['error']) ? $msg['error'] : '') :  $msg;
 		
 		if(!empty($message)) {
@@ -682,7 +683,7 @@ class zuplus_Admin {
 
 		$msg_template = 'Something went wrong. Please look at <a href="#zuplus-errors-mb">ERRORS (%1$s)</a> section for more information.';
 		$ajax_template = '<button type="button" class="notice-dismiss ajax-dismiss"><span class="screen-reader-text">Dismiss this notice.</span></button>';
-		$msg_text = is_array($msg) ? array_values($msg)[0] : sprintf($msg_template, $msg);
+		$msg_text = is_array($msg) ? array_values($msg)[0] : sprintf($msg_template, count(get_option($this->errors_id, [])));
 		$msg_type = is_array($msg) ? array_keys($msg)[0] : 'error'; 
 		return sprintf('<div class="notice notice-%2$s is-dismissible" data-zuplus_prefix="%4$s"><p>%1$s</p>%3$s</div>', 
 			$msg_text, 
@@ -830,10 +831,14 @@ class zuplus_Form {
 	public function button_side($label, $icon, $color = 'blue') {
 		return $this->button($label, $icon, $color, false, 'zu-side-button');
 	}
+
+	public function button_link_with_help($button_option, $label, $icon, $color = 'blue', $text = '') {
+		return $this->button_link($button_option, $label, $icon, $color, true, true, $text);
+	}
 	
-	public function button_link($button_option, $label, $icon, $color = 'blue', $in_table = false, $side_button = true) {
+	public function button_link($button_option, $label, $icon, $color = 'blue', $in_table = false, $side_button = true, $text = '') {
 	
-		$tr = '<tr valign="top"><td class="field_label"></td><td class="zu-field">%1$s</td></tr>';
+		$tr = '<tr valign="top"%3$s><td class="field_label"><span>%2$s</span></td><td class="zu-field">%1$s</td></tr>';
 		$basic_classes = ['button', 'button-primary', 'zu-dashicons', 'zu-button', 'zuplus_ajax_option'];
 		$output =	sprintf(
 			'<a href="%1$s" class="%5$s zu-button-%4$s" data-zuplus_option="%6$s" data-zuplus_prefix="%7$s">
@@ -849,7 +854,7 @@ class zuplus_Form {
 			$this->prefix
 		);
 		
-		$output = $in_table ? sprintf($tr, $output) : $output;
+		$output = $in_table ? sprintf($tr, $output, $text, empty($text) ? '' : ' class="zu-button-with-help"') : $output;
 		if($in_table) $this->items[] = $output;
 		return $output;
 	}

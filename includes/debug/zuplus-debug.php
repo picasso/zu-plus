@@ -276,13 +276,10 @@ class ZU_Debug extends zuplus_Addon {
 		$trace = $this->use_backtrace ? $this->get_backtrace() : [];
 		$f =  $this->log_location();
 
-		if($save_debug_bar) {
-			$ip = $this->get_request_ip();
-			$ajax = $this->get_request_ajax();
-			$refer = zu()->translit(urldecode($this->get_request_refer()));
-		} else {
-			$ip = $ajax = $refer = '';
-		}
+		$ip = $ajax = $refer = '';
+		$ip = $this->get_request_ip();
+		$ajax = $this->get_request_ajax();
+		$refer = zu()->translit(urldecode($this->get_request_refer()));
 		
 		$tracelog = [];
 		foreach($trace as $traceline) {
@@ -301,14 +298,14 @@ class ZU_Debug extends zuplus_Addon {
 		if($bt) {
 			$refer = strip_tags(str_replace('<br>',  PHP_EOL, $refer_html));
 		} else {
-			$refer = str_replace('<strong>-ajax-</strong> ', 'ajax:', urldecode($refer));
+			$refer = str_replace('<strong>-ajax-</strong> ', 'AJAX:', urldecode($refer));
 			if(empty($trace)) $refer = sprintf('		from %2$s%1$s', PHP_EOL, $refer);
 			else $refer = sprintf('%1$s%4$s	%2$s:%3$s%4$s		from %5$s%4$s',  $trace[0]['display'], $trace[0]['calling_file'], $trace[0]['calling_line'], PHP_EOL, $refer);
 		}
 		
 		if($save_debug_bar) $this->save_log($msg, $var, $ip, $refer_html);
 			
-		$msg = sprintf('%6$s[%1$s]	%4$s~%3$s%6$s%5$s		%2$s --------------------------------------------------]%6$s', 
+		$msg = sprintf('%6$s[%1$s]	%4$s~%3$s%6$s%5$s			%2$s --------------------------------------------------]%6$s', 
 			date('d.m H:i:s'), 
 			str_replace('\n', PHP_EOL, $msg), 
 			$ip, 

@@ -225,7 +225,7 @@ $primary-font-family: 'Open Sans', Arial, sans-serif;
 	    .zu-side-button {
 	        width: 100%;
 	    }
-    
+	    
 	    .plugin-mb {
 			// Inside area of meta boxes
 		    .inside {
@@ -266,6 +266,34 @@ $primary-font-family: 'Open Sans', Arial, sans-serif;
 		        }
 		    }
 		}
+
+	    .zu-button-with-help {
+		    .field_label {
+			    width: 70% !important;
+			    padding: 10px !important;
+			    @include breakpoint-width(850px) { width: 1%; display: none; }
+
+				span {
+			        display: block;
+			        position: relative;
+			        left: 0;
+			        top: 0;
+			        right: 0;
+			        bottom: 0;
+			        padding: 10px;
+			        border-radius: 3px;
+					background-color: rgba($admin-gold-color, 0.1);
+				}
+		    }
+		    .zu-field {
+			    width: 30% !important;
+			    padding: 10px !important;
+			    @include breakpoint-width(850px) { width: 99%; }
+			    a {
+				    margin: 0 !important;
+			    }
+		    }
+	    }
 
 		table {
 		    // Base for all tables
@@ -367,6 +395,10 @@ $primary-font-family: 'Open Sans', Arial, sans-serif;
 			            a {
 				            text-decoration: none;
 				            color: $admin-red-color;
+				            cursor: pointer;
+				            &:hover {
+					            text-decoration: underline;
+				            }
 			            }
 		            }            
 
