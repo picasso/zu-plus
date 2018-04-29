@@ -146,5 +146,16 @@
 		
 		if(scroll_top) $('html, body').stop().animate({scrollTop:0}, 500, 'swing');
 	}
+	
+	// Process Filetree if presented
+	// Hide all subfolders at startup
+	$('.zu-file-tree').find('ul').hide();
+	
+	// Expand/collapse on click
+	$('.zu-directory a').click( function() {
+		$(this).parent().find('ul:first').slideToggle('medium');
+		if($(this).parent().hasClass('zu-directory')) return false;
+	});
+
 
 })(jQuery);

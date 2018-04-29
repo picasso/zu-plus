@@ -170,14 +170,22 @@ class zuplus_Admin {
 	}
 
 	public function admin_menu_modify($menu_order) {
-	    global $menu, $submenu;
+	    global $menu, $submenu, $_split_index;
 
-		// clean positions from 41 to 49
+		if(empty($_split_index)) {
+			$menu_id = 'options-general.php';
+			$menu_split_id = 'options-permalink.php';
+			
+			$submenu_items = count($submenu[$menu_id]);
+			$_split_index = $this->get_submenu_index($menu_split_id);
+			$split_position = array_search($_split_index, array_keys($submenu[$menu_id]));
+			$moved_items = $submenu_items - $split_position - 1;
+			
+			// clean positions from $split_index + 1
+			$this->submenu_move($_split_index + 1, $_split_index + $moved_items + 11, $moved_items);
+		}
 		
-		$this->submenu_move(41, 61, 9);
-
 		// modify main menu items
-		
 	    $menu_modify = $this->custom_admin_menu();
   
 		if(isset($menu_modify['reorder'])) {  
@@ -204,7 +212,6 @@ class zuplus_Admin {
 		}
 	    
 		// modify submenu items
-		
 	    $submenu_modify = $this->custom_admin_submenu();
   
 		if(isset($submenu_modify['reorder'])) {  
@@ -249,7 +256,7 @@ class zuplus_Admin {
 	    return $menu_order;
 	}
 
-	private function get_new_index($menu_item, $submenu_parent = '') {
+	protected function get_new_index($menu_item, $submenu_parent = '') {
 	    $new_index = isset($menu_item['new_index']) ? $menu_item['new_index'] : -1;	    
 	    if($new_index < 0) {
 		    $base_key = array_values(array_intersect(array_keys($menu_item), ['before_index', 'before_index2', 'after_index', 'after_index2'])); 
@@ -262,7 +269,7 @@ class zuplus_Admin {
 		return $new_index;
 	}
 
-	private function get_menu_index($menu_item) {
+	protected function get_menu_index($menu_item) {
 		global $menu;
 		
 		$index = -1;
@@ -274,7 +281,7 @@ class zuplus_Admin {
 	    return $index;
 	}
 
-	private function menu_reorder($menu_item, $new_index) {
+	protected function menu_reorder($menu_item, $new_index) {
 		global $menu;
 		
 		$index = $this->get_menu_index($menu_item);
@@ -285,7 +292,7 @@ class zuplus_Admin {
 	    }
 	}
 
-	private function get_submenu_index($menu_item, $submenu_parent = 'options-general.php') {
+	protected function get_submenu_index($menu_item, $submenu_parent = 'options-general.php') {
 		global $submenu;
 		
 		$index = -1;
@@ -298,7 +305,7 @@ class zuplus_Admin {
 	    return $index;
 	}
 
-	private function submenu_reorder($menu_item, $new_index, $submenu_parent) {
+	protected function submenu_reorder($menu_item, $new_index, $submenu_parent) {
 		global $submenu;
 		
 		$index = $this->get_submenu_index($menu_item, $submenu_parent);
@@ -309,11 +316,10 @@ class zuplus_Admin {
 	    }
 	}
 
-	private function submenu_move($from_index, $to_index, $count = 1, $submenu_parent = 'options-general.php') {
+	protected function submenu_move($from_index, $to_index, $count = 1, $add_separator = true, $submenu_parent = 'options-general.php') {
 		global $submenu;
 		
 		$total_index_break = 220;	// maybe max items count in submenu
-		$is_separator = true;
 		
 		while($count-- > 0) {
 			if($to_index >= $total_index_break) break;
@@ -326,9 +332,9 @@ class zuplus_Admin {
 						$to_index++;
 						continue;
 					}
-					if($is_separator) {
+					if($add_separator) {
 						$submenu[$submenu_parent][$to_index++] = ['','read', 'separator_moved', '', 'wp-menu-separator'];
-						$is_separator = false;
+						$add_separator = false;
 						continue;
 					}
 					$submenu[$submenu_parent][$to_index++] = $move_item;

@@ -21,7 +21,8 @@ class ZU_PlusFunctions {
 		$this->fonts = [];
 		$this->copy_string = '';
 		
-		add_action('wp_footer', [$this, 'maybe_add_advanced_styles']);
+		if(is_admin()) add_action('admin_footer', [$this, 'maybe_add_advanced_styles']);
+		else add_action('wp_footer', [$this, 'maybe_add_advanced_styles']);
 	}
 	
 	public static function instance() {
@@ -193,7 +194,7 @@ class ZU_PlusFunctions {
 		if(!is_array($classes))	 $classes = preg_split('/[\s,]+/', $classes);
 		$classes = array_map('trim', $classes);
 	
-		return $implode ? implode(' ', array_filter($classes)) : $classes;
+		return $implode ? implode(' ', array_unique(array_filter($classes))) : $classes;
 	}	
 
 	public function remove_classes($classes, $remove = [], $implode = true) {
@@ -233,7 +234,7 @@ class ZU_PlusFunctions {
 	public function add_body_class($my_classes, $prefix = '') {
 		add_filter('body_class', function($classes) use ($my_classes, $prefix) {
 			if(!empty($prefix)) {
-				$my_classes = $this->merge_classes($my_classes, false);
+				$my_classes = $this->remove_classes($my_classes, $classes, false);
 				$my_classes = $this->merge_classes(preg_filter('/^/', $prefix, $my_classes));
 			}
 			$classes[] = $my_classes;
@@ -243,8 +244,10 @@ class ZU_PlusFunctions {
 
 	public function add_admin_body_class($my_classes) {
 		add_filter('admin_body_class', function($classes) use ($my_classes) {
-		    $classes .= ' ' . $my_classes;
-		    return $classes;
+			$classes = $this->merge_classes($classes, false);
+			$my_classes = $this->remove_classes($my_classes, $classes, false);
+		    $classes = array_merge($classes, $my_classes);
+		    return $this->merge_classes($classes);
 		});
 	}
 
@@ -595,7 +598,8 @@ class ZU_PlusFunctions {
 	}	
 	
 	public function add_style_from_file($css_file) { 
-	
+	_dbug_log('$css_file=', $css_file);
+	_dbug_log('file_exists($css_file)=', file_exists($css_file));
 		if(!file_exists($css_file)) return;
 		$style = file_get_contents($css_file);
 	
