@@ -1,4 +1,4 @@
-<div class="wrap <?php echo $_wrap_class; ?>">
+<div class="<?php echo $_wrap_class; ?>">
 	<h2 class="notice-after"><?php do_action($_prefix.'_print_title'); ?></h2>
 	<?php
 		// Show error messages

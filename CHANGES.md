@@ -1,9 +1,10 @@
-#### 1.2.3 / 2018-04-29
+#### 1.2.4 / 2018-04-29
 * fixed bug in custom menu order
 * added `$_split_index` global var to indicate split position in submenu
 * changed access for custom menu order functions (`protected` from `private`)
 * improved `add_body_class()`, `add_admin_body_class()` and `merge_classes()` functions to avoid class duplicates
 * added suport for `.zu-file-tree` in JS
+* added `current_timestamp()` function to `zuplus_Plugin` and `zuplus_Addon`
 
 #### 1.2.1 / 2018-04-28
 * css improvements

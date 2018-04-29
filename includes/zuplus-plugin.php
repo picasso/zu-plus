@@ -138,6 +138,9 @@ class zuplus_Plugin {
 		return isset($options[$key]) ? $options[$key] : $default_value;
 	}
 
+	public function current_timestamp() { 
+		return intval(current_time('timestamp')); 
+	}
 
 	public function ajax_nonce($create = 'true') { 
 		return $create ? wp_create_nonce($this->nonce) : $this->nonce; 
@@ -196,13 +199,17 @@ class zuplus_Addon {
 	protected function clean() {
 	}
 	
+	protected function current_timestamp() {
+		return is_null($this->plugin) ? time() : $this->plugin->current_timestamp();
+	}
+	
 	protected function update_options($options) {
 		if(!is_null($this->plugin)) {
 			$this->plugin->update_options($options);
 			$this->options = $this->plugin->options();
 		}
 	}
-	
+
 	protected function check_option($key, $check = true) {
 		return zu()->check_option($this->options, $key, $check);
 	}
