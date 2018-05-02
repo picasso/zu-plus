@@ -1,3 +1,6 @@
+#### 1.2.5 / 2018-05-30
+* fixed bug with `use_backtrace` option
+
 #### 1.2.4 / 2018-04-29
 * fixed bug in custom menu order
 * added `$_split_index` global var to indicate split position in submenu

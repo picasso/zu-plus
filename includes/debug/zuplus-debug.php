@@ -273,7 +273,7 @@ class ZU_Debug extends zuplus_Addon {
 		
 		if(!$this->dlog) return;
 		
-		$trace = $this->use_backtrace ? $this->get_backtrace() : [];
+		$trace = ($this->use_backtrace || $bt)  ? $this->get_backtrace() : [];
 		$f =  $this->log_location();
 
 		$ip = $ajax = $refer = '';

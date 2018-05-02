@@ -598,8 +598,7 @@ class ZU_PlusFunctions {
 	}	
 	
 	public function add_style_from_file($css_file) { 
-	_dbug_log('$css_file=', $css_file);
-	_dbug_log('file_exists($css_file)=', file_exists($css_file));
+
 		if(!file_exists($css_file)) return;
 		$style = file_get_contents($css_file);
 	
