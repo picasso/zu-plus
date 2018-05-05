@@ -1,5 +1,6 @@
-#### 1.2.7 / 2018-05-05
+#### 1.2.8 / 2018-05-05
 * added basic cache functions
+* added `minify_html()` function
 
 #### 1.2.5 / 2018-04-30
 * fixed bug with `use_backtrace` option

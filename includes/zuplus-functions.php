@@ -55,7 +55,10 @@ class ZU_PlusFunctions {
 		return $cached === false ? '' : $cached;
 	}
 
-	public function set_cached($cache_id, $data) {
+	public function set_cached($cache_id, $data, $format = false) {
+		
+		if($format == 'html') $data =  $this->minify_html($data);
+		if($format == 'css') $data =  $this->minify_css($data);
 		
 		set_transient($cache_id, $data, $this->cache_time);
 	}
