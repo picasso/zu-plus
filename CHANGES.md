@@ -1,4 +1,7 @@
-#### 1.2.5 / 2018-05-30
+#### 1.2.7 / 2018-05-05
+* added basic cache functions
+
+#### 1.2.5 / 2018-04-30
 * fixed bug with `use_backtrace` option
 
 #### 1.2.4 / 2018-04-29

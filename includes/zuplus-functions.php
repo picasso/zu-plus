@@ -7,19 +7,14 @@ class ZU_PlusFunctions {
 
 	private static $_zufunc_instance;
 	
-	private $random_attachment_id;
-	private 	$advanced_style;
-	private $admin_style;
-	private $fonts;
-	private $copy_string;
+	private $random_attachment_id = null;
+	private 	$advanced_style = [];
+	private $admin_style = [];
+	private $fonts = [];
+	private $copy_string = '';
+	private $cache_time = DAY_IN_SECONDS;
 	
 	function __construct() {
-		
-		$this->random_attachment_id = null;
-		$this->advanced_style = [];
-		$this->admin_style = [];
-		$this->fonts = [];
-		$this->copy_string = '';
 		
 		if(is_admin()) add_action('admin_footer', [$this, 'maybe_add_advanced_styles']);
 		else add_action('wp_footer', [$this, 'maybe_add_advanced_styles']);
@@ -34,6 +29,36 @@ class ZU_PlusFunctions {
 	}
 
 	use ZU_DateTrait, ZU_LoaderTrait, ZU_StackoverflowTrait;
+	
+	// Cache functions -----------------------------------------------------------]
+	
+	public function array_md5($array, $only_json = false) {
+		
+		// https://stackoverflow.com/questions/2254220/php-best-way-to-md5-multi-dimensional-array
+	    // since we're inside a function (which uses a copied array, not 
+	    // a referenced array), you shouldn't need to copy the array
+	    array_multisort($array);
+	    return $only_json ? json_encode($array) : md5(json_encode($array));
+	}
+
+	public function create_cachekey($prefix, $array = [], $string = '') {
+
+		$string = explode(' ', $string);
+		$array = is_array($array) ? $array : [];
+		if(!empty($string)) $array[$prefix.'_md5_strings'] = $string;
+		return empty($array) ? $prefix : $prefix .'_'. $this->array_md5($array);
+	}
+
+	public function get_cached($cache_id) {
+
+		$cached = get_transient($cache_id);
+		return $cached === false ? '' : $cached;
+	}
+
+	public function set_cached($cache_id, $data) {
+		
+		set_transient($cache_id, $data, $this->cache_time);
+	}
 	
 	// Color functions -----------------------------------------------------------]
 	
