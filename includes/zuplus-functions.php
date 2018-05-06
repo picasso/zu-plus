@@ -565,12 +565,8 @@ class ZU_PlusFunctions {
 		$this->random_attachment_id = null;
 		
 		if(!empty($ids) && is_array($ids)) {
-			if($only_landscape) {
-				$landscaped = [];
-				foreach($ids as $attachment_id) {
-					$image = wp_get_attachment_image_src($attachment_id, 'full'); // Returns an array (url, width, height, is_intermediate)
-					if($image !== false && ($image[1] >= intval($image[2] * 1.5))) $landscaped[] = $attachment_id;		// minimum ratio - 3/2
-				}
+			if($only_landscape && function_exists('mplus_instance')) {
+				$landscaped = array_values(array_intersect($ids, mplus_instance()->get_all_landscaped()));
 				if(empty($landscaped)) $landscaped = $ids;
 				$this->random_attachment_id = (int)$landscaped[rand(0, count($landscaped) - 1)];
 			} else { 
