@@ -269,7 +269,7 @@ class ZU_Debug extends zuplus_Addon {
 		if($this->write_to_file) error_log($msg.PHP_EOL, 3, $f);
 	}
 	
-	public function write_log($msg, $var = 'novar', $bt = false, $save_debug_bar = true) {
+	public function write_log($msg, $var = 'novar', $bt = false, $save_debug_bar = true, $forced_write_file = false) {
 		
 		if(!$this->dlog) return;
 		
@@ -320,11 +320,11 @@ class ZU_Debug extends zuplus_Addon {
 			$msg .= PHP_EOL.'backtrace:'.PHP_EOL.$this->string_backtrace();
 		}
 		
-		if($this->write_to_file) error_log($msg.PHP_EOL, 3, $f);
+		if($this->write_to_file || $forced_write_file) error_log($msg.PHP_EOL, 3, $f);
 	}
 
-	public function write_log_no_save($msg, $var='novar', $bt = false) { 
-		$this->write_log($msg, $var, $bt, false); 
+	public function write_log_no_debug_bar($msg, $var='novar', $bt = false) { 
+		$this->write_log($msg, $var, $bt, false, true); 
 	}
 
 	public function write_log_if($condition, $msg, $var = 'novar', $bt = false, $save_debug_bar = true) {
@@ -374,7 +374,7 @@ if(!function_exists('_dbug_log')) {
 
 if(!function_exists('_dbug_log_only')) {
 	function _dbug_log_only($msg, $var = 'novar', $bt = false) {
-		zuplus_instance()->dbug->write_log_no_save($msg, $var, $bt);
+		zuplus_instance()->dbug->write_log_no_debug_bar($msg, $var, $bt);
 	}
 }
 
