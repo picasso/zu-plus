@@ -1,3 +1,7 @@
+#### 1.3.1 / 2018-05-10
+* moved `enqueue_style_or_script()` function to `zuplus_Plugin` from `zuplus_Addon`
+* added some wrapper functions to support these changes
+
 #### 1.2.9 / 2018-05-05
 * added basic cache functions
 * added `minify_html()` function

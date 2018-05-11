@@ -171,6 +171,30 @@ class zuplus_Plugin {
 			wp_localize_script($this->prefix.'-script', $this->prefix.'_custom', $this->defaults());
 		}
 	}
+	
+	
+	private function enqueue_style_or_script($is_style, $file, $deps = [], $bottom = true) {
+		
+		$filename = $is_style ? sprintf('css/%1$s.css', $file) : sprintf('js/%1$s.min.js', $file);
+		$handle = $is_style ? $file.'-style' : $file.'-script';
+		$filepath = plugin_dir_path($this->plugin_file).$filename;
+		$src = plugins_url($filename, $this->plugin_file);
+		if(file_exists($filepath)) {
+			$version = defined('ZUDEBUG') ? filemtime($filepath) : $this->version;
+			if($is_style) wp_enqueue_style($handle, $src, $deps, $version);
+			else wp_enqueue_script($handle, $src, $deps, $version, $bottom);
+		}
+		return $handle;
+	}
+
+	public function enqueue_style($file, $deps = []) {
+		return $this->enqueue_style_or_script(true, $file, $deps);
+	}
+
+	public function enqueue_script($file, $deps = ['jquery'], $bottom = true) {
+		return $this->enqueue_style_or_script(false, $file, $deps, $bottom);
+	}
+
 }
 
 class zuplus_Addon {
@@ -200,7 +224,7 @@ class zuplus_Addon {
 	}
 	
 	protected function current_timestamp() {
-		return is_null($this->plugin) ? time() : $this->plugin->current_timestamp();
+		return intval(current_time('timestamp')); 
 	}
 	
 	protected function update_options($options) {
@@ -231,26 +255,12 @@ class zuplus_Addon {
 		return empty($more_params) ? $params : (is_array($more_params) ? array_merge($params, $more_params) : $params);
 	}
 
-	private function enqueue_style_or_script($is_style, $file, $deps = [], $bottom = true) {
-		
-		$filename = $is_style ? sprintf('css/%1$s.css', $file) : sprintf('js/%1$s.min.js', $file);
-		$handle = $is_style ? $file.'-style' : $file.'-script';
-		$filepath = plugin_dir_path($this->plugin_file).$filename;
-		$src = plugins_url($filename, $this->plugin_file);
-		if(file_exists($filepath)) {
-			$version = defined('ZUDEBUG') ? filemtime($filepath) : $this->version;
-			if($is_style) wp_enqueue_style($handle, $src, $deps, $version);
-			else wp_enqueue_script($handle, $src, $deps, $version, $bottom);
-		}
-		return $handle;
-	}
-	
 	protected function enqueue_style($file, $deps = []) {
-		return $this->enqueue_style_or_script(true, $file, $deps);
+		return is_null($this->plugin) ? null : $this->plugin->enqueue_style($file, $deps);
 	}
 
 	protected function enqueue_script($file, $deps = ['jquery'], $bottom = true) {
-		return $this->enqueue_style_or_script(false, $file, $deps, $bottom);
+		return is_null($this->plugin) ? null : $this->plugin->enqueue_script($file, $deps, $bottom);
 	}
 	
 	protected function print_option($option_key = '') {}	
