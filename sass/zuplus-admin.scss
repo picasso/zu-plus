@@ -15,6 +15,7 @@ $some-red: #ff4136;
 
 $admin-grey-color: #e5e5e5;
 $admin-light-yellow: #ffffa5;
+$admin-light-brown: #d5b464;
 
 $admin-magenta-color: #e01765;
 $admin-error-color: #cc2027;
@@ -292,7 +293,7 @@ $primary-font-family: 'Open Sans', Arial, sans-serif;
 			        bottom: 0;
 			        padding: 10px;
 			        border-radius: 3px;
-					background-color: rgba($admin-gold-color, 0.1);
+					background-color: rgba($admin-light-brown, 0.1);
 				}
 		    }
 		    .zu-field {
