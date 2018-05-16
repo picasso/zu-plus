@@ -1,3 +1,7 @@
+#### 1.3.2 / 2018-05-16
+* changed cache time for 12 hours (recommended)
+* improved css
+
 #### 1.3.1 / 2018-05-10
 * moved `enqueue_style_or_script()` function to `zuplus_Plugin` from `zuplus_Addon`
 * added some wrapper functions to support these changes

@@ -12,7 +12,7 @@ class ZU_PlusFunctions {
 	private $admin_style = [];
 	private $fonts = [];
 	private $copy_string = '';
-	private $cache_time = DAY_IN_SECONDS;
+	private $cache_time = HOUR_IN_SECONDS * 12; 	// cache them for 12 hours (recommended)
 	
 	function __construct() {
 		

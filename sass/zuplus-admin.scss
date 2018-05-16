@@ -221,6 +221,14 @@ $primary-font-family: 'Open Sans', Arial, sans-serif;
 		            border-color: darken($admin-red-color, $hover-shadow) !important;
 	            }
 	        }
+	        &.zu-button-magenta {
+	            background-color: $admin-magenta-color;
+	            &:hover {
+	                background-color: darken($admin-magenta-color, $hover-darken);
+		            box-shadow: 0 1px 0 darken($admin-magenta-color, $hover-shadow) !important;
+		            border-color: darken($admin-magenta-color, $hover-shadow) !important;
+	            }
+	        }
 	    }
 	
 	    .zu-side-button {
