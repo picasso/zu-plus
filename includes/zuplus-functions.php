@@ -63,6 +63,28 @@ class ZU_PlusFunctions {
 		set_transient($cache_id, $data, $this->cache_time);
 	}
 	
+	
+	public function purge_transients($prefix) {			
+		global $wpdb;
+	
+		// Purge all the transients associated with our prefix
+	
+		$prefix = esc_sql($prefix);
+		$options = $wpdb -> options;
+		
+		$t  = esc_sql("_transient_timeout_$prefix%");
+		$sql = $wpdb->prepare("SELECT option_name FROM $options WHERE option_name LIKE '%s'", $t);
+		
+		$transients = $wpdb->get_col($sql);
+		
+		foreach($transients as $transient) {
+			$key = str_replace('_transient_timeout_', '', $transient);  		// Strip away the WordPress prefix in order to arrive at the transient key.
+			delete_transient( $key );														// Now that we have the key, use WordPress core to the delete the transient.
+		}
+		
+		wp_cache_flush();																		// Sometimes transients are not in the DB, so we have to do this too
+	}
+
 	// Color functions -----------------------------------------------------------]
 	
 	public function get_color_contrast($color) {

@@ -171,10 +171,14 @@ class zuplus_Admin {
 
 	public function admin_menu_modify($menu_order) {
 	    global $menu, $submenu, $_split_index;
-
+		
+		$default_menu_id = 'options-general.php';
+		$menu_split_id = 'options-permalink.php';
+		
 		if(empty($_split_index)) {
-			$menu_id = 'options-general.php';
-			$menu_split_id = 'options-permalink.php';
+			$menu_id = $default_menu_id;
+			
+			if(!isset($submenu[$menu_id]))	 return $menu_order;
 			
 			$submenu_items = count($submenu[$menu_id]);
 			$_split_index = $this->get_submenu_index($menu_split_id);
@@ -216,14 +220,14 @@ class zuplus_Admin {
   
 		if(isset($submenu_modify['reorder'])) {  
 		    foreach($submenu_modify['reorder'] as $menu_item) {
-		    	$submenu_parent = isset($menu_item['parent']) ? $menu_item['parent'] : 'options-general.php';
+		    	$submenu_parent = isset($menu_item['parent']) ? $menu_item['parent'] : $default_menu_id;
 		    	$this->submenu_reorder($menu_item['menu'], $this->get_new_index($menu_item, $submenu_parent), $submenu_parent);
 		    }
 		}
 		
     	if(isset($submenu_modify['rename'])) {
 		    foreach($submenu_modify['rename'] as $menu_item) {
-		    	$submenu_parent = isset($menu_item['parent']) ? $menu_item['parent'] : 'options-general.php';
+		    	$submenu_parent = isset($menu_item['parent']) ? $menu_item['parent'] : $default_menu_id;
 		    	$index = $this->get_submenu_index($menu_item['menu'], $submenu_parent);
 		    	if($index > 0) $submenu[$submenu_parent][$index][0] = $menu_item['new_name'];
 		    }
@@ -231,7 +235,7 @@ class zuplus_Admin {
 		
     	if(isset($submenu_modify['remove'])) {
 		    foreach($submenu_modify['remove'] as $menu_item) {
-		    	$submenu_parent = isset($menu_item['parent']) ? $menu_item['parent'] : 'options-general.php';
+		    	$submenu_parent = isset($menu_item['parent']) ? $menu_item['parent'] : $default_menu_id;
 		    	$index = $this->get_submenu_index($menu_item['menu'], $submenu_parent);
 		    	if($index > 0) {
 			    	unset($submenu[$submenu_parent][$index]);
@@ -244,7 +248,7 @@ class zuplus_Admin {
 
 		if(isset($submenu_modify['separator'])) {
 		    foreach($submenu_modify['separator'] as $menu_item) {
-		    	$submenu_parent = isset($menu_item['parent']) ? $menu_item['parent'] : 'options-general.php';
+		    	$submenu_parent = isset($menu_item['parent']) ? $menu_item['parent'] : $default_menu_id;
 		    	$index = $this->get_new_index($menu_item, $submenu_parent);
 		    	if($index > 0 && !isset($submenu[$submenu_parent][$index])) {
 			    	$submenu[$submenu_parent][$index] = ['','read', 'separator'.$index, '', 'wp-menu-separator'];
@@ -344,7 +348,7 @@ class zuplus_Admin {
 			$from_index++;
 		}
 				
-	    ksort($submenu[$submenu_parent]);				// Reorder the menu based on the keys in ascending order
+	    if(isset($submenu[$submenu_parent])) ksort($submenu[$submenu_parent]);				// Reorder the menu based on the keys in ascending order
 	}
 
 	//

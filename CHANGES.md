@@ -1,3 +1,6 @@
+#### 1.3.3 / 2018-05-16
+* fixed some bugs in submenu custom order
+
 #### 1.3.2 / 2018-05-16
 * changed cache time for 12 hours (recommended)
 * improved css
