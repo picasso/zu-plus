@@ -1,3 +1,6 @@
+#### 1.3.4 / 2018-05-23
+* improved css
+
 #### 1.3.3 / 2018-05-16
 * fixed some bugs in submenu custom order
 
