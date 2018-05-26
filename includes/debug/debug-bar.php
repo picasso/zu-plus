@@ -12,6 +12,8 @@ class ZU_DebugBar {
 	private $_current_ip = '';
 	private $profiler_active;
 	
+	private $convert_html_from_string = false;
+	
 	private $_dlogs = [];
 	private $_all_users = [];
 
@@ -56,11 +58,12 @@ class ZU_DebugBar {
 	private function __clone() {} 														// Method to keep our instance from being cloned.
 	private function __wakeup() {} 													// Method to keep our instance from being unserialized.
 
-	function __construct($activate_profiler = true) {
+	function __construct($activate_profiler = true, $convert_html = true) {
 		
 		self::$_debug_bar_instance = $this;
 		$this->_profiler_start = microtime(true);
 		$this->profiler_active = $activate_profiler;
+		$this->convert_html_from_string = $convert_html;
 		add_filter('debug_bar_panels', [$this, 'debug_bar_panels'], 9000);
 	}
 
@@ -256,6 +259,10 @@ class ZU_DebugBar {
 			$name = trim(preg_replace('/=$/', '', $name));
 			
 			$print_value = $row['value'];	
+		
+			// if contains HTML - convert all applicable characters
+			if($this->convert_html_from_string) $print_value = (is_string($print_value) && $print_value != strip_tags($print_value)) ? htmlentities($print_value) : $print_value;  //zu()->beautify_html($print_value)
+
 			$template = (stripos($print_value, 'array') !== false || stripos($print_value, '::') !== false) ? '<pre>%1$s</pre>' : '%1$s';
 			$print_value = sprintf($template, print_r($print_value, true));
 			$print_value = preg_replace('/\[\:([^\]]*)\]/', '{$1}', $print_value);		// to keep RAW translated field in output			
@@ -324,7 +331,7 @@ class ZU_DebugBar {
 		
 		$values = get_transient('zu_debug_bar_'.$cache_id);
 		$values = empty($values) ? [] : $values;
-		$values[] = $value;
+		$values[] = $value; 
 		set_transient('zu_debug_bar_'.$cache_id, $values, HOUR_IN_SECONDS);
 	}
 

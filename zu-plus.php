@@ -4,7 +4,7 @@ Plugin Name: ZU+
 Plugin URI: https://dmitryrudakov.ru/plugins/
 GitHub Plugin URI: https://github.com/picasso/zu-plus
 Description: This plugin encompasses ZU framework functionality.
-Version: 1.3.4
+Version: 1.3.5
 Author: Dmitry Rudakov
 Author URI: https://dmitryrudakov.ru/about/
 Text Domain: zu-plugin
@@ -32,7 +32,7 @@ Domain Path: /lang/
 
 // Prohibit direct script loading
 defined('ABSPATH') || die('No direct script access allowed!');
-define('ZUPLUS_VERSION', '1.3.4');
+define('ZUPLUS_VERSION', '1.3.5');
 define('ZUPLUS_NAME', 'ZU+');
 define('__ZUPLUS_ROOT__', plugin_dir_path(__FILE__)); 
 define('__ZUPLUS_FILE__', __FILE__); 
@@ -66,6 +66,7 @@ class ZU_Plugin extends zuplus_Plugin {
 	protected function construct_more() {
 		
 		$this->dbug = new ZU_Debug($this->config_addon()); 
+		zu()->set_debug_cache($this->check_option('debug_cache'));
 	}
 }
 
@@ -162,8 +163,10 @@ class ZU_Admin extends zuplus_Admin {
 			'profiler'					=>	false,
 			'debug_backtrace'		=>	false,
 			'write_to_file'			=>	false,
+			'beautify_html'			=>	true,
+			'output_html'			=>	true,
 			'debug_bar'				=>	true,
-			'zu_cache'					=>	false,
+			'debug_cache'			=>	false,
 			
 			'dup_page'				=>	false,
 		]; 
@@ -213,14 +216,18 @@ class ZU_Admin extends zuplus_Admin {
 	
 	public function print_options($post) {
 
-		$this->form->checkbox('debug_log', 'Activate Debug Logging', 'All calls to <span>_dbug_log()</span> functions will written to logfile.');
 
-		$this->form->checkbox('zu_cache', 'Activate ZU Caching', 'You should include calls to cache functions to use it.');
 		$this->form->checkbox('ajax_log', 'Activate AJAX Logging', 'You should make <span>AJAX calls</span> from your JS.');
 		$this->form->checkbox('profiler', 'Activate Profiler', 'You should call <span>_profiler_flag()</span> at each point of interest, passing a descriptive string.');
+
+		$this->form->checkbox('debug_log', 'Activate Debug Logging', 'All calls to <span>_dbug_log()</span> functions will written to logfile.');
+
+		$this->form->checkbox('debug_cache', 'Debug Caching', 'If checked, all calls to cache functions will be logged.');
 		$this->form->checkbox('debug_bar', 'Use Debug Bar', 'Works only if <span>Query Monitor</span> is activated.');
 		$this->form->checkbox('debug_backtrace', 'Always Include Backtrace', 'In some cases, this can <span>greatly slow down</span> the loading of the page and even lead to a fatal error.');
 		$this->form->checkbox('write_to_file', 'Write log to file', 'If unchecked, only the information for <span>Debug Bar</span> will be saved.');
+		$this->form->checkbox('output_html', 'Display HTML entities in Debug Bar', 'If checked, all characters which have HTML character entity equivalents are translated into these entities.');
+		$this->form->checkbox('beautify_html', 'Beautify HTML in output', 'If unchecked, all HTML values will be saved without any modifications. Otherwise HTML beautifier will be used.');
 		
 		$this->form->checkbox('dup_page', 'Activate Duplicate Page', 'Allows duplicate Posts, Pages and Custom Posts using single click.');
 		

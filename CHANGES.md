@@ -1,3 +1,10 @@
+#### 1.3.5 / 2018-05-26
+* changed `$_split_index` global var value to `privacy.php` index (before was `options-permalink.php`)
+* added `HTML beautifier`
+* added `debug_cache` option to log calls of `cache` functions
+* added `output_html` option to convert HTML entity equivalents into these entities
+* added `beautify_html` option to HTML beautifier if logged var contains HTML
+
 #### 1.3.4 / 2018-05-23
 * improved css
 

@@ -173,8 +173,8 @@ class zuplus_Admin {
 	    global $menu, $submenu, $_split_index;
 		
 		$default_menu_id = 'options-general.php';
-		$menu_split_id = 'options-permalink.php';
-		
+		$menu_split_id = 'privacy.php';
+// _dbug_log('$submenu=', $submenu[$default_menu_id]);		
 		if(empty($_split_index)) {
 			$menu_id = $default_menu_id;
 			

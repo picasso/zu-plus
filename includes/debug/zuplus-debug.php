@@ -9,8 +9,12 @@ class ZU_Debug extends zuplus_Addon {
 	private $dlog;
 	private $alog;
 	private $profiler;
+	
 	private $use_backtrace;
 	private $write_to_file;
+	private $beautify_html;
+	private $output_html;
+	
 	private $dbug_bar;
 	private $use_var_dump;
 	private $location;
@@ -33,12 +37,17 @@ class ZU_Debug extends zuplus_Addon {
 		'call_user_func'       		=> true,
 	];
 	protected static $ignore_myself = [
-		'_dbug_log'           => true,
-		'_dbug_log_if'		=> true,
-		'_tbug_log'           	=> true,
-		'_dbug_trace'		=> true,
-		'_profiler_flag'      	=> true,
-		'_ajax_log'           	=> true,
+		'zu_write_log'   							=> true,
+		'_dbug_change_log_location'		=> true,
+		'_dbug_log'           					=> true,
+		'_dbug_log_only'   					=> true,
+		'_dbug_dump'   						=> true,
+		'_dbug_use_var_dump'  			=> true,
+		'_dbug_log_if'							=> true,
+		'_tbug_log'           						=> true,
+		'_dbug_trace'							=> true,
+		'_profiler_flag'      						=> true,
+		'_ajax_log'           						=> true,
 	];
 	protected static $ignore_includes = [
 		'include_once'       => true,
@@ -58,6 +67,8 @@ class ZU_Debug extends zuplus_Addon {
 		$this->profiler = $this->check_option('profiler');	
 		$this->use_backtrace = $this->check_option('debug_backtrace');	
 		$this->write_to_file = $this->check_option('write_to_file');
+		$this->beautify_html = $this->check_option('beautify_html');
+		$this->output_html = $this->check_option('output_html');
 		
 		$this->location = __ZUPLUS_ROOT__;
 		$this->dbug_bar = null;
@@ -67,7 +78,7 @@ class ZU_Debug extends zuplus_Addon {
 		$this->abs_path = wp_normalize_path(ABSPATH);
 		$this->content_path = wp_normalize_path(dirname(WP_CONTENT_DIR) . '/wp-content/');
 		
-		if($this->check_option('debug_bar')) $this->dbug_bar = new ZU_DebugBar($this->profiler);
+		if($this->check_option('debug_bar')) $this->dbug_bar = new ZU_DebugBar($this->profiler, $this->output_html); 
 	}
 
 	public function clear_log($filename = 'debug.log') {
@@ -103,7 +114,7 @@ class ZU_Debug extends zuplus_Addon {
 	public function save_log($log_name, $log_value = '', $ip = null, $refer = null) {
     	if(!empty($this->dbug_bar)) {
 
-	    	$log_value = $log_value !== 'novar' ? $this->process_var($log_value) : '';
+	    	$log_value = $log_value !== 'novar' ? $this->process_var($log_value, $this->output_html) : '';
 	    	$this->dbug_bar->save_log($log_name, $log_value, $ip, $refer);
 	    }
 	}
@@ -140,7 +151,7 @@ class ZU_Debug extends zuplus_Addon {
 		$this->use_var_dump = $dump;
 	}
 	
-	public function process_var($var) {
+	public function process_var($var, $try_beautify_html = true) {
 		
 		if($this->use_var_dump) {
 			ob_start();
@@ -148,6 +159,14 @@ class ZU_Debug extends zuplus_Addon {
 			$output = ob_get_contents();
 			ob_end_clean();
 		} else {
+			if($try_beautify_html && $this->beautify_html) {
+				if(is_string($var) && $var != strip_tags($var)) $var = zu()->beautify_html($var, true);
+				else if(is_array($var)) {
+					foreach($var as $key => $value) {
+						if(is_string($value) && $value != strip_tags($value)) $var[$key] = zu()->beautify_html($value, true);
+					}	
+				}
+			}
 			$output = var_export($var, true);
 		}
 		return $output;
@@ -353,6 +372,12 @@ class ZU_Debug extends zuplus_Addon {
 } 
 
 // Functions for use in code --------------------------------------------------]
+
+if(!function_exists('zu_write_log')) {
+	function zu_write_log($msg, $var = 'novar') {
+		zuplus_instance()->dbug->write_log($msg, $var);
+	}
+}
 
 if(!function_exists('_dbug_use_var_dump')) {
 	function _dbug_use_var_dump($dump = true) {
