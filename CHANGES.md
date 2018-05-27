@@ -1,3 +1,6 @@
+#### 1.3.6 / 2018-05-27
+* added `Reset All Cached Shortcodes` action
+
 #### 1.3.5 / 2018-05-26
 * changed `$_split_index` global var value to `privacy.php` index (before was `options-permalink.php`)
 * added `HTML beautifier`

@@ -107,14 +107,17 @@ class ZU_PlusFunctions {
 		$sql = $wpdb->prepare("SELECT option_name FROM $options WHERE option_name LIKE '%s'", $t);
 		
 		$transients = $wpdb->get_col($sql);
-		
+		$count = 0;
 		foreach($transients as $transient) {
 			$key = str_replace('_transient_timeout_', '', $transient);  		// Strip away the WordPress prefix in order to arrive at the transient key.
-			delete_transient($key);															// Now that we have the key, use WordPress core to the delete the transient.
-			if($this->debug_cache) zu_write_log('Deleted Cached=', $key);
+			if(delete_transient($key)) {													// Now that we have the key, use WordPress core to the delete the transient.
+				$count++;
+				if($this->debug_cache) zu_write_log('Deleted Cached=', $key);
+			}
 		}
 		
 		wp_cache_flush();																		// Sometimes transients are not in the DB, so we have to do this too
+		return $count;
 	}
 
 	// Color functions -----------------------------------------------------------]

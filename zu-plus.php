@@ -4,7 +4,7 @@ Plugin Name: ZU+
 Plugin URI: https://dmitryrudakov.ru/plugins/
 GitHub Plugin URI: https://github.com/picasso/zu-plus
 Description: This plugin encompasses ZU framework functionality.
-Version: 1.3.5
+Version: 1.3.6
 Author: Dmitry Rudakov
 Author URI: https://dmitryrudakov.ru/about/
 Text Domain: zu-plugin
@@ -32,7 +32,7 @@ Domain Path: /lang/
 
 // Prohibit direct script loading
 defined('ABSPATH') || die('No direct script access allowed!');
-define('ZUPLUS_VERSION', '1.3.5');
+define('ZUPLUS_VERSION', '1.3.6');
 define('ZUPLUS_NAME', 'ZU+');
 define('__ZUPLUS_ROOT__', plugin_dir_path(__FILE__)); 
 define('__ZUPLUS_FILE__', __FILE__); 
@@ -207,6 +207,8 @@ class ZU_Admin extends zuplus_Admin {
 		if($this->check_option('dup_page')) {
 			$this->form->add_meta_box('duplicate_page', __('Duplicate Page', 'zu-plugin'), [$this, 'print_duplicate_page']);
 		}
+
+		$this->form->add_meta_box('all_actions', __('Theme Actions', 'zu-plugin'), [$this, 'print_all_actions'], 'advanced');
 	}
 
 	public function status_callback() {
@@ -287,11 +289,30 @@ class ZU_Admin extends zuplus_Admin {
 		echo $this->form->fields('Duplicate Page Settings.');
 	}
 	
+	public function print_all_actions($post) {
+
+		$this->form->button_link_with_help('zuplus_reset_cached', 
+			__('Reset All Cached Shortcodes', 'zu-plugin'), 
+			'dismiss', 
+			'magenta', 
+			'Clear all cached data referenced to shortcodes (<strong>gallery</strong> and <strong>select</strong>). Needs if something went wrong.'
+		);
+
+		echo $this->form->fields('Actions available for ZU Theme.', 'zuplus_all_actions', true); // second argument -> data-ajaxrel : used in js to serialize form
+	}
+	
 	public function ajax_more($option_name, $ajax_value) {
 		if($option_name === 'zuplus_clear_log') return $this->plugin->dbug->clear_log();
 		if($option_name === 'zuplus_duplicate_menu') return zuplus_ajax_duplicate_menu();
 
+		if($option_name === 'zuplus_reset_cached') return $this->reset_cached();
+
 		return [];					
+	}
+	
+	public function reset_cached() {
+		$count = zu()->purge_transients();		
+		return ['info'	=> $count ? sprintf('All cached shortcodes (<span class="_bold">%1$s %2$s</span>) were reset.', $count, $count > 1 ? 'transients' : 'transient') : 'No cached shortcodes was found.'];
 	}
 }
 
