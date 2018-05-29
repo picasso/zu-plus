@@ -4,7 +4,7 @@ Plugin Name: ZU+
 Plugin URI: https://dmitryrudakov.ru/plugins/
 GitHub Plugin URI: https://github.com/picasso/zu-plus
 Description: This plugin encompasses ZU framework functionality.
-Version: 1.3.6
+Version: 1.3.7
 Author: Dmitry Rudakov
 Author URI: https://dmitryrudakov.ru/about/
 Text Domain: zu-plugin
@@ -32,7 +32,7 @@ Domain Path: /lang/
 
 // Prohibit direct script loading
 defined('ABSPATH') || die('No direct script access allowed!');
-define('ZUPLUS_VERSION', '1.3.6');
+define('ZUPLUS_VERSION', '1.3.7');
 define('ZUPLUS_NAME', 'ZU+');
 define('__ZUPLUS_ROOT__', plugin_dir_path(__FILE__)); 
 define('__ZUPLUS_FILE__', __FILE__); 
@@ -298,7 +298,7 @@ class ZU_Admin extends zuplus_Admin {
 			'Clear all cached data referenced to shortcodes (<strong>gallery</strong> and <strong>select</strong>). Needs if something went wrong.'
 		);
 
-		echo $this->form->fields('Actions available for ZU Theme.', 'zuplus_all_actions', true); // second argument -> data-ajaxrel : used in js to serialize form
+		echo $this->form->fields('Actions available for ZU Theme.', 'zuplus_reset_cached', true); // second argument -> data-ajaxrel : used in js to serialize form
 	}
 	
 	public function ajax_more($option_name, $ajax_value) {

@@ -97,11 +97,12 @@
 		};
 
 		// Try serialize data
-		var $rel = $("[data-ajaxrel='" + option_name + "']");
-		var $container = $rel.parents('.postbox');
+		var $rel = $("[data-ajaxrel*='" +option_name+ "']");
 		if($rel.length) {
 			$.extend(data, zuplus_ajax_data($rel.find('input, textarea, select')));	
 		}
+
+		var $container = $rel.length ? $rel.parents('.postbox') : $('#' +prefix_name+'-options-mb');
 						
 		// Send an AJAX call to switch the option
 		$container.addClass('now_ajaxed');

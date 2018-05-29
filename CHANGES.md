@@ -1,3 +1,6 @@
+#### 1.3.7 / 2018-05-27
+* improved JS to add spinner for all AJAX actions
+
 #### 1.3.6 / 2018-05-27
 * added `Reset All Cached Shortcodes` action
 
