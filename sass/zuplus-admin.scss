@@ -486,10 +486,15 @@ $primary-font-family: 'Open Sans', Arial, sans-serif;
 		            &.disabled {
 		                background: $admin-red-color;
 		            }
+		            &.warning {
+		                background: $admin-gold-color;
+		            }
+		            &.system {
+		                background: $admin-magenta-color;
+		            }
 		            &.active, &.enabled {
 		                background: $admin-green-color;
 		            }
-		
 		        }
 		
 		        tr:nth-child(even) > td {

@@ -10,7 +10,7 @@
 // 	2. then call one of functions: _sdbug_location_plugins or _sdbug_location_themes
 // 
 // 		_sdbug_location_plugins('zu-plus'); 
-// 		_sdbug_location_themes('drfoto'); 
+// 		_sdbug_location_themes('zu'); 
 // 
 //			EXAMPLE:
 // 
@@ -355,7 +355,7 @@ if(!function_exists('_sdbug_dump')) {
 
 if(!function_exists('_sdbug_trace')) {
 	function _sdbug_trace($msg, $full_trace = false) {
-				global $_sys_debug;
+		global $_sys_debug;
 		if($_sys_debug) $_sys_debug->write_trace($msg, $full_trace);
 	}
 }

@@ -1,3 +1,7 @@
+#### 1.3.8 / 2018-06-09
+* improved css
+* fixed some bugs
+
 #### 1.3.7 / 2018-05-27
 * improved JS to add spinner for all AJAX actions
 
