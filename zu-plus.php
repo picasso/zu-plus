@@ -40,8 +40,9 @@ define('__ZUPLUS_FILE__', __FILE__);
 // Do not include it in your file! --------------------------------------------]
 require_once(__ZUPLUS_ROOT__ . 'includes/zuplus-plugin.php');
 require_once(__ZUPLUS_ROOT__ . 'includes/debug/zuplus-debug.php');
-require_once(__ZUPLUS_ROOT__ . 'includes/zuplus-duplicate-menu.php');
-require_once(__ZUPLUS_ROOT__ . 'includes/zuplus-duplicate-page.php');
+require_once(__ZUPLUS_ROOT__ . 'includes/addons/zuplus-cookie-notice.php');
+require_once(__ZUPLUS_ROOT__ . 'includes/addons/zuplus-duplicate-menu.php');
+require_once(__ZUPLUS_ROOT__ . 'includes/addons/zuplus-duplicate-page.php');
 
 define('QM_HIDE_SELF', true);		// Hides the internal actions of Query Monitor in the output info from the plugin itself.
 //
@@ -51,6 +52,7 @@ define('QM_HIDE_SELF', true);		// Hides the internal actions of Query Monitor in
 class ZU_Plugin extends zuplus_Plugin {
 
 	public $dbug;
+	public $cnotice;
 
 	protected function extend_config() {
 		return  [
@@ -67,6 +69,22 @@ class ZU_Plugin extends zuplus_Plugin {
 		
 		$this->dbug = new ZU_Debug($this->config_addon()); 
 		zu()->set_debug_cache($this->check_option('debug_cache'));
+
+		if($this->check_option('cookie_notice')) {
+			$this->cnotice = new ZU_CookieNotice($this->config_addon());
+		}
+		
+		add_filter('zu_update_defaults', function($zu_defaults, $key = null) {
+			
+			if(empty($key)) {
+				$options = $this->options();
+				zu()->set_option($zu_defaults, 'refresh_mode', $this->check_option('debug_log'));
+				zu()->set_option($zu_defaults, 'cookie_notice', $this->check_option('cookie_notice'));
+			}
+			
+			return $zu_defaults;
+			
+		}, 10, 2);
 	}
 }
 
@@ -169,6 +187,7 @@ class ZU_Admin extends zuplus_Admin {
 			'debug_cache'			=>	false,
 			
 			'dup_page'				=>	false,
+			'cookie_notice'			=>	false,
 		]; 
 		
 		return array_merge($zu_defaults, ZU_DuplicatePage::dup_defaults());
@@ -208,6 +227,10 @@ class ZU_Admin extends zuplus_Admin {
 			$this->form->add_meta_box('duplicate_page', __('Duplicate Page', 'zu-plugin'), [$this, 'print_duplicate_page']);
 		}
 
+		if($this->check_option('cookie_notice')) {
+			$this->form->add_meta_box('cookie_notice', __('Cookie Notice', 'zu-plugin'), [$this, 'print_cookie_notice']);
+		}
+
 		$this->form->add_meta_box('all_actions', __('Theme Actions', 'zu-plugin'), [$this, 'print_all_actions'], 'advanced');
 	}
 
@@ -215,9 +238,8 @@ class ZU_Admin extends zuplus_Admin {
 		$stats = $this->plugin->dbug->log_stats();
 		return sprintf('<p>Log size: <span>%1$s</span></p><p>Log priority: <span>%2$s</span></p>', $stats['size'], $stats['priority']);		
 	}
-	
-	public function print_options($post) {
 
+	public function print_options($post) {
 
 		$this->form->checkbox('ajax_log', 'Activate AJAX Logging', 'You should make <span>AJAX calls</span> from your JS.');
 		$this->form->checkbox('profiler', 'Activate Profiler', 'You should call <span>_profiler_flag()</span> at each point of interest, passing a descriptive string.');
@@ -232,7 +254,8 @@ class ZU_Admin extends zuplus_Admin {
 		$this->form->checkbox('beautify_html', 'Beautify HTML in output', 'If unchecked, all HTML values will be saved without any modifications. Otherwise HTML beautifier will be used.');
 		
 		$this->form->checkbox('dup_page', 'Activate Duplicate Page', 'Allows duplicate Posts, Pages and Custom Posts using single click.');
-		
+
+		$this->form->checkbox('cookie_notice', 'Activate Cookie Notice', 'Allows you to inform users that the site uses cookies and to comply with the EU GDPR regulations.');
 	
 		echo $this->form->fields('The plugin encompasses ZU framework functionality.');
 		echo $this->form->print_save_mobile();
@@ -288,6 +311,20 @@ class ZU_Admin extends zuplus_Admin {
 		
 		echo $this->form->fields('Duplicate Page Settings.');
 	}
+
+	public function print_cookie_notice($post) {
+
+        $this->form->text('cookie_message', 'Notice Message', 'Enter the cookie notice message.');
+		echo $this->form->fields('Cookie Notice Settings.');
+	}
+
+/*
+__('Enter the cookie notice message.', 'cookie-notice')
+__('The text of the option to accept the usage of the cookies and make the notification disappear.', 'cookie-notice')
+__('Synchronize with WordPress Privacy Policy page.', 'cookie-notice')
+__('Enter the full URL starting with http(s)://', 'cookie-notice')
+__('Select the privacy policy link target.', 'cookie-notice')
+*/
 	
 	public function print_all_actions($post) {
 

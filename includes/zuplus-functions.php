@@ -190,6 +190,13 @@ class ZU_PlusFunctions {
 
 	// Useful functions ----------------------------------------------------------]
 
+	public function set_option(&$options, $key, $value) {
+		
+		if(!isset($options[$key])) return false;
+		$options[$key] = $value;
+		return true;
+	}
+
 	public function check_option($options, $key, $check = true) {
 		
 		if(!isset($options[$key])) return false;
