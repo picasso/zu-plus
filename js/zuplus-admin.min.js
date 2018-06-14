@@ -103,6 +103,10 @@
 		}
 
 		var $container = $rel.length ? $rel.parents('.postbox') : $('#' +prefix_name+'-options-mb');
+		
+		if(data.option_name === 'zuplus_revoke_cookie') {
+			document.cookie = data.ajax_value+'=;Max-Age=-99999999;expires=Thu, 01 Jan 1970 00:00:01 GMT;path=/;';
+		}
 						
 		// Send an AJAX call to switch the option
 		$container.addClass('now_ajaxed');

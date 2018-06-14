@@ -9,7 +9,7 @@ require_once(__ZUPLUS_ROOT__ . 'includes/zuplus-admin.php');
 
 class zuplus_Plugin {
 
-	protected $admin;
+	public $admin;
 
 	protected $prefix;
 	protected $nonce;
@@ -75,7 +75,13 @@ class zuplus_Plugin {
 	protected function construct_more() {
 	}
 	
-	
+	public function create_addon($classname, $more_params = []) {
+		
+		$addon = new $classname($this->config_addon($more_params));
+		$this->register_addon($addon);
+		return $addon;
+	}
+		
 	public function config_addon($more_params = []) {
 		
 		$params = [
@@ -205,6 +211,9 @@ class zuplus_Addon {
 	protected $plugin_file;
 	protected $config;
 	protected $plugin;
+	protected $form;
+
+    public static $_defaults = [];
 	
 	function __construct($config) {
 		
@@ -214,7 +223,36 @@ class zuplus_Addon {
 		$this->plugin_file = isset($config['plugin_file']) ? $config['plugin_file'] : __ZUPLUS_FILE__;
 		$this->plugin = isset($config['plugin']) ? $config['plugin'] : null;
 		$this->options = isset($config['options']) ? $config['options'] : [];
+		$this->form = null;
 		$this->construct_more();
+	}
+
+	static function defaults() {
+		
+		$class = get_called_class();
+		return isset($class::$_defaults) ? $class::$_defaults : [];
+	}
+	
+	static function novalidate() {
+		return array_keys(array_filter(self::defaults(), function($val) { return !is_bool($val); }));
+	}
+
+	public function keys_values() {
+		return [];
+	}
+
+	public function get_form() {
+		if(empty($this->form)) $this->form = isset($this->plugin->admin) ? $this->plugin->admin->form : null;
+		return $this->form;
+	}
+
+	public function get_form_value($key, $as_value = true) {
+
+		$form_defaults = self::defaults();
+		$form_values = $this->keys_values();
+
+		$value = isset($form_defaults[$key]) ? $this->option_value($key, $form_defaults[$key]) : '';
+		return $as_value ? $value : (isset($form_values[$key]) ? $form_values[$key] : ''); 
 	}
 	
 	protected function construct_more() {

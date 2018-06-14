@@ -10,9 +10,17 @@ class ZU_CookieNotice extends zuplus_Addon {
 	
 	private $message; 
 	private $accept;
+	
 	private $refuse_code = '';
 	private $refuse_code_head = '';
-	
+
+    public static $_defaults = [
+		'cookie_options'		=>	[ 'cname' => 'zu_notice_accepted', 'anim' => 'fade' ],
+		'cookie_title'				=>	'',
+		'cookie_message'		=>	'',
+		'cookie_accept'			=>	'',
+    ];
+
 	protected function construct_more() {
 
 		$this->message = __('We use cookies for performance and analytics purposes. To find out more, review our @privacy policy@. Once you press the button, the dialogue box will disappear.', 'zu-plugin');
@@ -23,6 +31,20 @@ class ZU_CookieNotice extends zuplus_Addon {
 		add_action('wp_footer', [$this, 'print_cookie_notice'], 1000);
 
 		add_filter('body_class', [$this, 'body_class']);
+	}
+
+	public static function cookie_name() {
+		return isset(self::$_defaults['cookie_options']['cname']) ? self::$_defaults['cookie_options']['cname'] : 'zu_unknown';
+	}
+
+	public function keys_values() {
+		return [
+			'anim'			=> 	[
+				'slide'		=>	'Slide Down',
+				'fade'		=>	'Fade Out',
+				'none'		=>	'None',
+			],
+		];
 	}
 
 	public function body_class($classes) {
@@ -56,10 +78,9 @@ class ZU_CookieNotice extends zuplus_Addon {
 			$output = sprintf('
 				<div id="zu-cookie-notice" role="banner" class="cookie-notice">
 					<div class="cookie-notice-container">
-						%2$s
-						<h2 class="cookie-notice-title">Cookie Management</h2>
+						<h2 class="cookie-notice-title">%2$sCookie Management</h2>
 						<p class="cookie-notice-message">%1$s</p>
-						<button id="zu-accept-cookie" data-cookie-set="accept" class="button set-cookie">%3$s</button>
+						<button id="zu-accept-cookie" data-cookie-set="accept" class="zu-button">%3$s</button>
 					</div>
 				</div>',
 				$message,
@@ -72,12 +93,11 @@ class ZU_CookieNotice extends zuplus_Addon {
 	}
 
 	public static function cookies_accepted() {
-		return zu()->check_option($_COOKIE, 'cookie_notice_accepted');
+		return zu()->check_option($_COOKIE, self::cookie_name());
 	}
 
 	public static function cookies_set() {
-		_dbug_log('$_COOKIE=', $_COOKIE);
-		return isset($_COOKIE['cookie_notice_accepted']);
+		return isset($_COOKIE[self::cookie_name()]);
 	}
 
 	public function get_allowed_html() {
@@ -102,5 +122,32 @@ class ZU_CookieNotice extends zuplus_Addon {
 			$scripts = html_entity_decode(trim(wp_kses($this->refuse_code_head, $this->get_allowed_html())));
 			if(!empty($scripts)) echo $scripts;
 		}
+	}
+	
+/*
+__('Enter the cookie notice message.', 'cookie-notice')
+__('The text of the option to accept the usage of the cookies and make the notification disappear.', 'cookie-notice')
+__('Synchronize with WordPress Privacy Policy page.', 'cookie-notice')
+__('Enter the full URL starting with http(s)://', 'cookie-notice')
+__('Select the privacy policy link target.', 'cookie-notice')
+*/
+	public function print_cookie_metabox($post) {
+
+		$form = $this->get_form();
+		if(empty($form)) return;
+
+		$form->select(
+			'cookie_options:anim', 
+			'Notice Animations:', 
+			$this->get_form_value('anim', false), 
+			'Select animation type for hiding Cookie Notice.'
+		);
+
+		$form->checkbox('cookie_options:redirect', 'Redirect After Accept', 'If checked, after acceptence of notice the user will be redirected.');
+
+		$form->hidden('cookie_options:cname', self::cookie_name());
+
+        $form->text('cookie_message', 'Notice Message', 'Enter the cookie notice message.');
+		echo $form->fields('Cookie Notice Settings.');
 	}
 }

@@ -1,3 +1,23 @@
+#### 1.4.1 / 2018-06-14
+* refactored `zuplus_Addon` to provide `defaults` and `novalidate` (and support metabox printing)
+* added `keys_values()`, `get_form()` and `get_form_value()` functions to `zuplus_Addon`
+* refactored `zuplus_Admin` to support `novalidate` options
+* added `create_addon()` function to create and register addons (`zuplus_Plugin` and `zuplus_Admin` classes)
+* added `options_restore` option to restore defaults after meta box was switched off
+* added `maybe_restore_defaults()` function to implement check and restore if needed
+* added `preprocess_defaults()` function which include processing defaults, novalidate and restored options
+* refactored `options_defaults()` function
+* fixed bug for `hidden` filed type
+* added `$ajax_value` to all `button_link` functions
+* refactored `ZU_Debug`, `ZU_CookieNotice` and `ZU_DuplicatePage` to support defaults and metabox printing
+* created `Debug Options` metabox
+* supported `zu_update_defaults` filter to modify theme options
+* added `is_debug()` function
+* added `zuplus_revoke_cookie` ajax call
+* added `Revoke Cookie` button to theme actions
+* refactored `set_option()` function in `zu()` namespace
+* improved JS
+
 #### 1.3.8 / 2018-06-09
 * improved css
 * fixed some bugs

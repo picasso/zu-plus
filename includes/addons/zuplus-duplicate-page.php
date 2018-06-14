@@ -10,19 +10,7 @@ class ZU_DuplicatePage extends zuplus_Addon {
 	
 	private static $dup_action = 'dup_post_as_draft';
 
-	private 	static $status_values = [
-		'draft'		=>	'Draft',
-		'publish'	=>	'Publish',
-		'private'		=>	'Private',
-		'pending'	=>	'Pending',
-	];	
-
-	private static $redirect_values = [
-		'to_list'		=>	'To All Posts List',
-		'to_page'	=>	'To Edit Duplicated Page',
-	];	
-
-	private static $dup_defaults = [
+	public static $_defaults = [
 		'dup_status'		=> 	'draft',
 		'dup_redirect'	=> 	'to_page',
 		'dup_suffix'		=> 	'copy',
@@ -36,14 +24,21 @@ class ZU_DuplicatePage extends zuplus_Addon {
 		add_action('post_submitbox_misc_actions', [$this, 'duplicate_post_button']);
 	}
 
-	public function status_values() {
-		return self::$status_values;
+	public function keys_values() {
+		return [
+			'dup_status'			=> 	[
+				'draft'		=>	'Draft',
+				'publish'	=>	'Publish',
+				'private'		=>	'Private',
+				'pending'	=>	'Pending',
+			],
+			'dup_redirect'		=>	[
+				'to_list'		=>	'To All Posts List',
+				'to_page'	=>	'To Edit Duplicated Page',
+			],
+		];
 	}
 
-	public function redirect_values() {
-		return self::$redirect_values;
-	}
-	
 	public function duplicate_post_as_draft() {
 		global $wpdb;
 
@@ -51,9 +46,10 @@ class ZU_DuplicatePage extends zuplus_Addon {
 
 		$returnpage = '';
 		$post_id = (isset($_GET['post']) ? $_GET['post'] : $_POST['post']);
-		$post_status = $this->get_dup_status();	
-		$redirect_it = $this->get_dup_redirect(false);	 
-		$suffix = $this->get_dup_suffix();
+		$post_status = $this->get_form_value('dup_status');	
+		$redirect_it = $this->get_form_value('dup_redirect');	 
+		$suffix = $this->get_form_value('dup_suffix');
+		$suffix = empty($suffix) ? '' : sprintf('--%s', $suffix);
 	
 		$post = get_post($post_id); 
 		$current_user = wp_get_current_user();
@@ -123,22 +119,20 @@ class ZU_DuplicatePage extends zuplus_Addon {
 		}
 	}
 	
-	// Add the duplicate link to action list for post_row_actions
-	public function duplicate_post_link($actions, $post) {
+	public function duplicate_post_link($actions, $post) {				// Add the duplicate link to action list for post_row_actions
 		
 		if(current_user_can('edit_posts')) {
 			$actions['duplicate_this'] = sprintf('<a href="admin.php?action=%1$s&amp;post=%2$s" title="Duplicate this as %3$s" rel="permalink">%4$s</a>',
 				self::$dup_action,
 				$post->ID,
-				$this->get_dup_status(),
+				$this->get_form_value('dup_status'),
 				__('Duplicate This', 'zu-plugin')
 			);
 		}
 		return $actions;
 	}
-	 
-	// Add the duplicate link to edit screen
-	public function duplicate_post_button() {
+	
+	public function duplicate_post_button() {									// Add the duplicate link to edit screen
 		global $post;
 		
 		$icon = 'images-alt2';
@@ -154,34 +148,35 @@ class ZU_DuplicatePage extends zuplus_Addon {
 			</div>',
 			self::$dup_action,
 			$post->ID,
-			$this->get_dup_status(),
+			$this->get_form_value('dup_status'),
 			$icon,
 			$color,
 			zu()->merge_classes($button_classes),
 			__('Duplicate This', 'zu-plugin')
 		);
 	}
-	
-	public static function dup_defaults($key = '') {
-		return isset(self::$dup_defaults[$key]) ? self::$dup_defaults[$key] : (empty($key)	? self::$dup_defaults : '');
-	}
-	
-	private function get_dup_value($key) {
-		return isset(self::$dup_defaults[$key]) ? $this->option_value($key, self::$dup_defaults[$key]) : ''; 
-	}
 
-	private function get_dup_status($as_value = true) {
-		$status = $this->get_dup_value('dup_status');
-		return isset(self::$status_values[$status]) ? ($as_value ? self::$status_values[$status] : $status) : ''; 
-	}
+	public function print_duplicate_page($post) {
 
-	private function get_dup_redirect($as_value = true) {
-		$redirect = $this->get_dup_value('dup_redirect');
-		return isset(self::$redirect_values[$redirect]) ? ($as_value ? self::$redirect_values[$redirect] : $redirect) : ''; 
-	}
+		$form = $this->get_form();
+		if(empty($form)) return;
 
-	private function get_dup_suffix($as_value = true) {
-		$suffix = $this->get_dup_value('dup_suffix');
-		return $as_value ? (empty($suffix) ? '' : sprintf('--%s', $suffix)) : $suffix; 
-	}
+		$form->select(
+			'dup_status', 
+			'Duplicate Post Status:', 
+			$this->get_form_value('dup_status', false), 
+			'Select any post status you want to assign for duplicate post.'
+		);
+
+		$form->select(
+			'dup_redirect', 
+			'Redirect to after click on link:', 
+			$this->get_form_value('dup_redirect', false), 
+			'Select any post redirection after click on <strong>"Duplicate This"</strong> link.'
+		);
+		
+        $form->text('dup_suffix', 'Duplicate Post Suffix', 'Add a suffix for duplicate post as Copy, Clone etc. It will show after title.');
+		
+		echo $form->fields('Duplicate Page Settings.');
+	}	
 }

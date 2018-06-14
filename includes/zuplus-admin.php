@@ -5,6 +5,10 @@
 // * * $permissions - the capability a user requires to see the page
 // * * $slug - a slug identifier for this page
 
+// Uncomment to debug plugin constructor (which is earlier than creation of ZU Debug)
+// include_once('/nas/content/live/dmitryrudakov/wp-content/plugins/zu-plus/includes/debug/sys-debug.php');
+// _sdbug_location_plugins('zu-plus'); 
+
 class zuplus_Admin {
 
 	protected $plugin;	
@@ -25,6 +29,8 @@ class zuplus_Admin {
 	protected $options;
 	protected $options_defaults;
 	protected $options_nosave;
+	protected $options_novalidate;
+	protected $options_restore;
 
 	public $errors_id;
 	public $options_id;
@@ -37,20 +43,22 @@ class zuplus_Admin {
 	public function __construct($options, $plugin) {
 		
 		$defaults = [
-			'prefix' 					=>	'zuplus',
-			'version' 				=>	'',
-			'plugin_name' 		=> 	'',
-			'plugin_file' 			=> 	'',
-			'hook' 					=>	'options-general.php',
-			'title' 					=>	'',
-			'menu' 					=>	'',
-			'permissions' 		=>	'manage_options',
-			'slug' 					=>	'',
-			'template' 				=>	'',
+			'prefix' 						=>	'zuplus',
+			'version' 					=>	'',
+			'plugin_name' 			=> 	'',
+			'plugin_file' 				=> 	'',
+			'hook' 						=>	'options-general.php',
+			'title' 						=>	'',
+			'menu' 						=>	'',
+			'permissions' 			=>	'manage_options',
+			'slug' 						=>	'',
+			'template' 					=>	'',
 		
-			'errors_id' 			=>	'',
-			'options_id'			=>	'',
-			'options_nosave'	=>	[],			
+			'errors_id' 				=>	'',
+			'options_id'				=>	'',
+			'options_nosave'		=>	[],			
+			'options_novalidate'	=>	['error'],			
+			'options_restore'		=>	[],			
 		];
 		
 		$options = array_merge($defaults, empty($options) ? [] : $options);
@@ -74,7 +82,9 @@ class zuplus_Admin {
 		$this->errors_id = empty($options['errors_id']) ? $this->prefix . '_errors' : $options['errors_id'];
 
 		$this->options_defaults = array_merge($this->options_defaults(), ['error' => 0]);
-		$this->options_nosave = $options['options_nosave'];			// temporary fields which we do not want to save
+		$this->options_novalidate = empty($this->options_novalidate) ? $options['options_novalidate'] : $this->options_novalidate;	// fields which we do not validate
+		$this->options_nosave = $options['options_nosave'];																													// temporary fields which we do not want to save
+		$this->options_restore = empty($this->options_restore) ? $options['options_restore'] : $this->options_restore;						// keys which will be used to restore addon defaults
 
 		$option_value = function($name, $default = false) { return isset($_GET[$name]) && !empty($_GET[$name]) ? $_GET[$name] : $default; };
 		
@@ -153,6 +163,10 @@ class zuplus_Admin {
 	}
 
 	protected function construct_more() {
+	}
+	
+	protected function create_addon($classname, $more_params = []) {
+		return $this->plugin->create_addon($classname, $more_params);
 	}
 
 	protected function deactivation_clean() {
@@ -384,6 +398,22 @@ class zuplus_Admin {
 		update_option($this->options_id, $this->options); 
 	}
 	
+	public function novalidate_options($skip_options = [], $options = []) {
+		
+		$options = empty($options) ? $this->options : $options;
+		if(empty($options) || empty($skip_options) || !is_array($skip_options)) return;
+		
+		$this->options_novalidate = ['error'];
+		foreach($skip_options as $skip) {
+			if(isset($options[$skip])) $this->options_novalidate[] = $skip;
+		}
+	}
+
+	public function restored_options($restored_options) {
+		
+		if(!empty($restored_options) && is_array($restored_options)) $this->options_restore = $restored_options;
+	}
+	
 	//
 	// JS & CSS enqueue ----------------------------------------------------------]
 	//
@@ -465,6 +495,34 @@ class zuplus_Admin {
 		return implode(',', array_filter($mails));
 	}
 	
+	protected function preprocess_defaults($defaults, $addons, $novalidate = []) {
+
+		foreach($addons as $class) {
+			$defaults = array_merge($defaults, $class::defaults());
+			$novalidate = array_merge($novalidate, $class::novalidate());
+		}
+
+		if(!empty($novalidate)) $this->novalidate_options($novalidate, $defaults);
+		if(!empty($addons)) $this->restored_options($addons);
+		
+		return $defaults;
+	}
+
+	protected function maybe_restore_defaults($new_options) {
+
+		$old_options = $this->get_options();
+		foreach($this->options_restore as $restore => $class) {
+			
+			if(isset($new_options[$restore]) && !isset($old_options[$restore]))	{
+				$class_defaults = $class::defaults();
+				foreach($class_defaults as $key => $value) {
+					if(!isset($new_options[$key])) $new_options[$key] = $value;
+				}
+			}
+		}
+		return $new_options;
+	}
+
 	//
 	// Should/Could be Redefined in Child Class ----------------------------------]
 	//
@@ -474,8 +532,9 @@ class zuplus_Admin {
 	}
 
 	public function validate_options($input) {
-		
+	
 		$new_values = array_diff_key($input, array_flip($this->options_nosave));		// remove unwanted values
+		$new_values = $this->maybe_restore_defaults($new_values);
 		
 		//		if INT				- intval($input['?']);
 		//		if BOOL 			- filter_var($input['?'], FILTER_VALIDATE_BOOLEAN);
@@ -484,11 +543,11 @@ class zuplus_Admin {
 		
 		// Suppose that all are BOOLEAN
 		foreach($new_values as $key => $value) {
-			$new_values[$key] = filter_var($value, FILTER_VALIDATE_BOOLEAN);
+			if(in_array($key, $this->options_novalidate)) $new_values[$key] = $value;
+			else $new_values[$key] = filter_var($value, FILTER_VALIDATE_BOOLEAN);
 		}		
 		
 		if(isset($input['error'])) $new_values['error'] = $input['error'];							// do not validate error value
-		
 		return $new_values;
 	}
 	
@@ -745,12 +804,19 @@ class zuplus_Form {
 		$this->items = [];
 	}
 
+	public function maybe_array($options_name) {
+		$array_names = explode(':', $options_name);
+		return count($array_names) == 2 ? $array_names : $options_name;
+	}
+	
 	public function name($options_name) {
-		return sprintf('%1$s[%2$s]', $this->options_id, $options_name);
+		return sprintf('%1$s[%2$s]', $this->options_id, str_replace(':', '][', $options_name));
 	}
 
 	public function value($name, $default = false) {
-		return isset($this->options[$name]) ? $this->options[$name] : $default;
+		$names = $this->maybe_array($name);
+		if(is_array($names)) return isset($this->options[$names[0]][$names[1]]) ? $this->options[$names[0]][$names[1]] : $default;
+		else return isset($this->options[$name]) ? $this->options[$name] : $default;
 	}
 
 	public function add_value($name, $value) {
@@ -764,17 +830,22 @@ class zuplus_Form {
 	}
 			
 	public function form_item($name, $label, $option_desc = '', $option_type = 'checkbox', $option_array = null, $readonly = false) {
-	
+
 		$option_name = $this->name($name);
-		$option_value = $this->value($name, $option_type == 'checkbox' ? false : '');
-		
+		$option_value = $option_type == 'hidden' ? $label : $this->value($name, $option_type == 'checkbox' ? false : '');
+
+		$name = str_replace(':', '-', $name);		// if name is array index	
 		$tr = '<tr valign="top"><td class="field_label%3$s"><laber for="">%1$s</label></td><td class="zu-field">%2$s</td></tr>';
 		$option_check = '<input type="checkbox" name="%1$s" value="1" %2$s class="zu-input zu-checkbox %4$s" /><span class="field_desc desc-checkbox">%3$s</span>';
 		$option_text = '<input type="text" name="%1$s" value="%2$s" class="zu-input zu-text %4$s" /><span class="field_desc desc-text">%3$s</span>';
 		$option_text_readonly = '<input type="text" name="%1$s" value="%2$s" class="zu-input zu-text %4$s readonly" readonly /><span class="field_desc desc-text">%3$s</span>';
 		$option_select = '<select name="%1$s" class="zu-input zu-select %4$s">%2$s</select><span class="field_desc desc-select">%3$s</span>';
 		
-		if($option_type == 'hidden') return sprintf('<input type="hidden" name="%1$s" value="%2$s" class="zu-input zu-hidden %3$s" />', $option_name, $option_value, $name);
+		if($option_type == 'hidden') {
+			$output = sprintf('<input type="hidden" name="%1$s" value="%2$s" class="zu-input zu-hidden %3$s" />', $option_name, $option_value, $name);
+			$this->items[] = $output;
+			return $output;
+		}
 		
 		if($option_type == 'select') {
 			$option_template = $option_select;
@@ -812,8 +883,8 @@ class zuplus_Form {
 		return $this->form_item($name, $label, $option_desc, 'select', $option_array); 
 	}
 	
-	public function hidden($name) { 
-		return $this->form_item($name, '', '', 'hidden'); 
+	public function hidden($name, $value) { 
+		return $this->form_item($name, $value, '', 'hidden'); 
 	}
 	
 	public function button($label, $icon, $color = 'blue', $in_table = true, $class = '') {
@@ -842,16 +913,16 @@ class zuplus_Form {
 		return $this->button($label, $icon, $color, false, 'zu-side-button');
 	}
 
-	public function button_link_with_help($button_option, $label, $icon, $color = 'blue', $text = '') {
-		return $this->button_link($button_option, $label, $icon, $color, true, true, $text);
+	public function button_link_with_help($button_option, $label, $icon, $color = 'blue', $text = '', $ajax_value = 0) {
+		return $this->button_link($button_option, $label, $icon, $color, true, true, $text, $ajax_value);
 	}
 	
-	public function button_link($button_option, $label, $icon, $color = 'blue', $in_table = false, $side_button = true, $text = '') {
+	public function button_link($button_option, $label, $icon, $color = 'blue', $in_table = false, $side_button = true, $text = '', $ajax_value = 0) {
 	
 		$tr = '<tr valign="top"%3$s><td class="field_label"><span>%2$s</span></td><td class="zu-field">%1$s</td></tr>';
 		$basic_classes = ['button', 'button-primary', 'zu-dashicons', 'zu-button', 'zuplus_ajax_option'];
 		$output =	sprintf(
-			'<a href="%1$s" class="%5$s zu-button-%4$s" data-zuplus_option="%6$s" data-zuplus_prefix="%7$s">
+			'<a href="%1$s" class="%5$s zu-button-%4$s" data-zuplus_option="%6$s" data-zuplus_prefix="%7$s" data-zuplus_ajax_value="%8$s">
 				<span class="dashicons dashicons-%3$s"></span> 
 				<span class="zu-link-text">%2$s</span>
 			</a>',
@@ -861,7 +932,8 @@ class zuplus_Form {
 			$color,
 			zu()->merge_classes(array_merge($basic_classes, [$in_table ? 'zu-button-right' : '', $side_button ? 'zu-side-button' : ''])),
 			$button_option,
-			$this->prefix
+			$this->prefix,
+			$ajax_value
 		);
 		
 		$output = $in_table ? sprintf($tr, $output, $text, empty($text) ? '' : ' class="zu-button-with-help"') : $output;
@@ -893,7 +965,7 @@ class zuplus_Form {
 	
 	// Meta Box Configuration -----------------------------------------------------]
 
-	public function add_meta_box($name, $title, $callback, $context = 'normal', $priority = 'high') {
+	public function add_meta_box($name, $title, $callback, $context = 'normal', $priority = 'default') {
 		
 		if(empty($this->settings_id)) return;
 		
@@ -910,13 +982,12 @@ class zuplus_Form {
 	public function add_admin_meta_boxes($settings_page, $admin, $no_default_boxes = false) {
 		
 		if(is_null($admin) || $admin->hook_suffix == false) return;
-		
+
 		$this->settings_page = $settings_page;
 		$this->settings_id = $admin->hook_suffix;
 		$this->options_id = $admin->options_id;
 		$this->errors_id = $admin->errors_id;
-		$this->options = $admin->get_options();
-		
+		$this->options = $admin->get_options();		
 		$this->prefix = $admin->plugin_prefix();
 		$this->parent_prefix = $admin->plugin_prefix(true);
 		$this->args = [$this->options_id, $this->options, $this->errors_id];
@@ -927,7 +998,7 @@ class zuplus_Form {
 
 		// Normal Boxes --------------------------------------------------------------]
 		
-		$this->add_meta_box('options', __('Options', 'zu-plugin'), [$admin, 'print_options']);
+		$this->add_meta_box('options', __('General Options', 'zu-plugin'), [$admin, 'print_options']);
 		
 		// Advanced & Side Boxes -----------------------------------------------------]
 		

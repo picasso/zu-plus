@@ -190,11 +190,17 @@ class ZU_PlusFunctions {
 
 	// Useful functions ----------------------------------------------------------]
 
-	public function set_option(&$options, $key, $value) {
+	public function set_option(&$options, $key, $value, $rewrite = true) {
 		
-		if(!isset($options[$key])) return false;
-		$options[$key] = $value;
-		return true;
+		if(empty($value)) return;
+		if(!$rewrite && is_array($value)) $options[$key] = array_replace_recursive(isset($options[$key]) ? $options[$key] : [], $value);
+		else $options[$key] = $value;
+	}
+
+	public function get_option($options, $key, $default = '') {
+
+		if(!isset($options[$key])) return $default;
+		return $options[$key];
 	}
 
 	public function check_option($options, $key, $check = true) {
