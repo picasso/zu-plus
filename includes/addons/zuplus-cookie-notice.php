@@ -8,9 +8,6 @@
 
 class ZU_CookieNotice extends zuplus_Addon {
 	
-	private $message; 
-	private $accept;
-	
 	private $refuse_code = '';
 	private $refuse_code_head = '';
 
@@ -23,11 +20,12 @@ class ZU_CookieNotice extends zuplus_Addon {
 
 	protected function construct_more() {
 
-		$this->message = __('We use cookies for performance and analytics purposes. To find out more, review our @privacy policy@. Once you press the button, the dialogue box will disappear.', 'zu-plugin');
-		$this->accept = __('Got It', 'zu-plugin');
+		self::$_defaults['cookie_title'] = __('Cookie Policy', 'zu-plugin');
+		self::$_defaults['cookie_message'] = __('We use cookies for performance and analytics purposes. To find out more, review our @privacy policy@. Once you press the button, the dialogue box will disappear.', 'zu-plugin');
+		self::$_defaults['cookie_accept'] = __('Got It', 'zu-plugin');
 		
-		add_action('wp_head', [$this, 'print_header_scripts']);
-		add_action('wp_print_footer_scripts', [$this, 'print_footer_scripts']);
+// 		add_action('wp_head', [$this, 'print_header_scripts']);
+// 		add_action('wp_print_footer_scripts', [$this, 'print_footer_scripts']);
 		add_action('wp_footer', [$this, 'print_cookie_notice'], 1000);
 
 		add_filter('body_class', [$this, 'body_class']);
@@ -64,28 +62,35 @@ class ZU_CookieNotice extends zuplus_Addon {
 		
 		if(!$this->cookies_set()) {
 			
-			$message = $this->message;
-			
+			$title = $this->option_value('cookie_title', self::$_defaults['cookie_title']);
+			$message = $this->option_value('cookie_message', self::$_defaults['cookie_message']);
+			$accept = $this->option_value('cookie_accept', self::$_defaults['cookie_accept']);
+				
 			if(function_exists('get_privacy_policy_url')) {
 				
-				$privacy = preg_match('/(@[^@]+?@)/i', $this->message, $privacy_place) ? $privacy_place[1] : '';
+				$privacy = preg_match('/(@[^@]+?@)/i', $message, $privacy_place) ? $privacy_place[1] : '';
 				$privacy_link = empty($privacy) ? '' : sprintf('<a href="%1$s">%2$s</a>', get_privacy_policy_url(), str_replace('@', '', $privacy));
 				$message = str_replace($privacy, $privacy_link, $message);							
 			}
-
-// <div class="privacy-basic">  <div class="privacy-basic-body">    <img alt="Notification Icon" class="privacy-basic-icon" src="https://www.xe.com/themes/xe/images/icon-notification.svg">    <div class="privacy-basic-text">      <h1 class="privacy-basic-title">        Cookie Management      </h1>      <p class="privacy-basic-message">        XE.com uses cookies and tags for performance, analytics and tracking purposes.  To find out more, review our <a class="privacy-basic-link" href="/privacy.php">privacy policy</a> and <a class="privacy-basic-link" href="/cookiepolicy.php">cookie policy</a>.  If you want to customise your cookies, <a class="privacy-basic-link privacy-customize-cookies">click here</a>.  Once you press the “Got It” button, the dialogue box will disappear.      </p>    </div>    <div class="privacy-button-container">      <button class="privacy-basic-button privacy-basic-button-submit" type="submit">			  GOT IT			</button>    </div>  </div></div>
 			
+			$add_icon = function_exists('zu_get_icon') ? true : false;
+
 			$output = sprintf('
 				<div id="zu-cookie-notice" role="banner" class="cookie-notice">
 					<div class="cookie-notice-container">
-						<h2 class="cookie-notice-title">%2$sCookie Management</h2>
-						<p class="cookie-notice-message">%1$s</p>
+						<div class="cookie-left">%2$s</div>
+						<div class="cookie-right"> 
+							<h2 class="cookie-notice-title">%5$s%4$s</h2>
+							<p class="cookie-notice-message">%1$s</p>
+						</div>
 						<button id="zu-accept-cookie" data-cookie-set="accept" class="zu-button">%3$s</button>
 					</div>
 				</div>',
 				$message,
-				function_exists('zu_get_icon') ? zu_get_icon('bookmark') : '',
-				$this->accept
+				$add_icon ? zu_get_icon('bookmark') : '',
+				$accept,
+				$title,
+				$add_icon  ? zu_get_icon('bookmark', true, 'cookie-header-icon') : ''
 			);
 
 			echo $output;
@@ -124,13 +129,6 @@ class ZU_CookieNotice extends zuplus_Addon {
 		}
 	}
 	
-/*
-__('Enter the cookie notice message.', 'cookie-notice')
-__('The text of the option to accept the usage of the cookies and make the notification disappear.', 'cookie-notice')
-__('Synchronize with WordPress Privacy Policy page.', 'cookie-notice')
-__('Enter the full URL starting with http(s)://', 'cookie-notice')
-__('Select the privacy policy link target.', 'cookie-notice')
-*/
 	public function print_cookie_metabox($post) {
 
 		$form = $this->get_form();
@@ -143,11 +141,16 @@ __('Select the privacy policy link target.', 'cookie-notice')
 			'Select animation type for hiding Cookie Notice.'
 		);
 
-		$form->checkbox('cookie_options:redirect', 'Redirect After Accept', 'If checked, after acceptence of notice the user will be redirected.');
+		$form->checkbox('cookie_options:redirect', 'Redirect After Accept', 'If checked, after acceptence of notice the user will be redirected to the same page.');
 
 		$form->hidden('cookie_options:cname', self::cookie_name());
 
-        $form->text('cookie_message', 'Notice Message', 'Enter the cookie notice message.');
+		$form->set_if_empty('cookie_title', self::$_defaults['cookie_title']);
+        $form->text('cookie_title', 'Notice Title', 'Enter the notice title.');
+		$form->set_if_empty('cookie_message', self::$_defaults['cookie_message']);
+        $form->textarea('cookie_message', 'Notice Message', 'Enter the notice message to accept the usage of the cookies and make the notification disappear. Any text <span>@</span>between<span>@</span> will be replaced with <strong>Privacy Policy URL</strong>.', 2);
+		$form->set_if_empty('cookie_accept', self::$_defaults['cookie_accept']);
+        $form->text('cookie_accept', 'Notice Button', 'Enter the text for the accept button.');
 		echo $form->fields('Cookie Notice Settings.');
 	}
 }

@@ -1,3 +1,8 @@
+#### 1.4.2 / 2018-06-16
+* finished `ZU_CookieNotice` addon
+* added `textarea()` and `set_if_empty()` functions to `zuplus_Form`
+* improved css
+
 #### 1.4.1 / 2018-06-14
 * refactored `zuplus_Addon` to provide `defaults` and `novalidate` (and support metabox printing)
 * added `keys_values()`, `get_form()` and `get_form_value()` functions to `zuplus_Addon`

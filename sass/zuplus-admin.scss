@@ -325,9 +325,10 @@ $primary-font-family: 'Open Sans', Arial, sans-serif;
 		        }
 	        }
 	
-	        input[type="text"] {
+	        input[type="text"], textarea {
 	            width: calc(100% - 20px);
 	            box-sizing: border-box;
+	            background-color: rgba($admin-blue-color, 0.03);
 	            &.readonly {
 		            color: rgba(black, 0.6);
 	            }

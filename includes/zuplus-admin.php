@@ -823,6 +823,10 @@ class zuplus_Form {
 		$this->options[$name] = $value;
 	}
 
+	public function set_if_empty($name, $value) {
+		if(empty($this->options[$name])) $this->options[$name] = $value;
+	}
+
 	// Helpers --------------------------------------------------------------------]
 	
 	public function svg_from_file($name, $preserve_ratio = false) {
@@ -877,6 +881,36 @@ class zuplus_Form {
 	
 	public function text($name, $label, $option_desc = '', $readonly = false) { 
 		return $this->form_item($name, $label, $option_desc, 'text', null, $readonly); 
+	}
+
+	public function textarea($name, $label, $option_desc = '', $rows = 4) { 
+
+		$option_name = $this->name($name);
+		$option_value = $this->value($name, '');
+
+		$name = str_replace(':', '-', $name);		// if name is array index	
+		$label_class = !empty($option_desc) ? ' top' : '';
+
+		$output = sprintf(
+			'<tr valign="top">
+				<td class="field_label%6$s">
+					<laber for="">%5$s</label>
+				</td>
+				<td class="zu-field">
+					<textarea name="%1$s" class="zu-input zu-textarea %4$s" rows="%7$s">%2$s</textarea><span class="field_desc desc-text">%3$s</span>
+				</td>
+			</tr>',
+			$option_name,
+			$option_value,
+			$option_desc,
+			$name,
+			$label,
+			$label_class,
+			$rows
+		);
+		
+		$this->items[] = $output;
+		return $output;
 	}
 	
 	public function select($name, $label, $option_array, $option_desc = '') { 
