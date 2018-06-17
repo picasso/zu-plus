@@ -1,3 +1,7 @@
+#### 1.4.3 / 2018-06-16
+* basic language functionality was ported from `Translate+` plugin to avoid plugins loading dependency
+* to prevent dependency on plugins loading `zuplus_loaded` action is initiated after `plugins_loaded`
+
 #### 1.4.2 / 2018-06-16
 * finished `ZU_CookieNotice` addon
 * added `textarea()` and `set_if_empty()` functions to `zuplus_Form`

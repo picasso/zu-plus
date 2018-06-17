@@ -154,21 +154,32 @@ class ZU_PlusFunctions {
 	// Language functions --------------------------------------------------------]
 	
 	public function is_multilang() {
-		global $_support_multilang;
-		
-		if(is_null($_support_multilang)) $_support_multilang = function_exists('tplus_not_multilang') ? !tplus_not_multilang() : false;
+		global $_support_multilang, $q_config;
+
+		if(is_null($_support_multilang)) $_support_multilang = defined('QTRANSLATE_FILE') && isset($q_config) ? true : false;
 		return $_support_multilang;
 	}
 	
 	public function get_lang($default_lang = '') {
-		return $this->is_multilang() ? tplus_get_lang() : $default_lang;	
+		global $q_config;
+
+		return $this->is_multilang() ? $q_config['language'] : $default_lang;	
 	}
 	
 	public function get_all_languages($keep_unsorted = false, $only_codes = true) {
+		global $q_config;
 	
 		if(!$this->is_multilang()) return [];
 	
-		$languages = tplus_all_languages();
+		$languages = [];
+		$language = $q_config['language'];
+	
+		foreach($q_config['enabled_languages'] as $lang) {
+		
+			$languages[$lang]['name'] = $q_config['language_name'][$lang];
+			$languages[$lang]['code'] = $lang;
+			$languages[$lang]['active'] = ($lang == $language) ? true : false;
+		}
 		
 		if($keep_unsorted) return $languages;
 		
@@ -181,11 +192,11 @@ class ZU_PlusFunctions {
 	}
 	
 	public function convert_lang_url($url, $code = null) {
-		return $this->is_multilang() ? tplus_convert_url($url, $code) : $url;
+		return $this->is_multilang() ? apply_filters('translate_url', $url, $code) : $url;
 	}
 	
 	public function convert_lang_text($text, $code = null) {
-		return $this->is_multilang() ? tplus_convert_text($text, $code) : $text;
+		return $this->is_multilang() ? apply_filters('translate_text', $text, $code, 0) : $text;
 	}
 
 	// Useful functions ----------------------------------------------------------]
