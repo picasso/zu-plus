@@ -1,3 +1,6 @@
+#### 1.4.4 / 2018-07-03
+* improved check for `$attachment_id` in `get_attachment_id()` function
+
 #### 1.4.3 / 2018-06-16
 * basic language functionality was ported from `Translate+` plugin to avoid plugins loading dependency
 * to prevent dependency on plugins loading `zuplus_loaded` action is initiated after `plugins_loaded`

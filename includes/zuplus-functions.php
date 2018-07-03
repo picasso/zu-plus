@@ -609,10 +609,13 @@ class ZU_PlusFunctions {
 	}
 
 	public function get_attachment_id($post_or_attachment_id = null) {
-			if(get_post_type($post_or_attachment_id) == 'attachment') return $post_or_attachment_id;
-			else if(has_post_thumbnail($post_or_attachment_id)) return get_post_thumbnail_id($post_or_attachment_id);
-			return null; 
+		if(get_post_type($post_or_attachment_id) == 'attachment') return $post_or_attachment_id;
+		else if(has_post_thumbnail($post_or_attachment_id)) {
+			$attachment_id = get_post_thumbnail_id($post_or_attachment_id);
+			return get_post_type($attachment_id) == 'attachment' ? absint($attachment_id) : null;
 		}
+		return null; 
+	}
 
 	public function get_featured_from_posts($posts) {
 		
