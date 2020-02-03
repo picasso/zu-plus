@@ -348,7 +348,7 @@ class ZU_Admin extends zuplus_Admin {
 
 	public function reset_cached() {
 		$count = zu()->purge_transients();
-		return ['info'	=> $count ? sprintf('All cached shortcodes (<span class="_bold">%1$s %2$s</span>) were reset.', $count, $count > 1 ? 'transients' : 'transient') : 'No cached shortcodes was found.'];
+		return ['info'	=> $count ? sprintf('All cached shortcodes (<span class="_bold">%1$s %2$s</span>) were reset.', $count, $count > 1 ? 'transients' : 'transient') : 'No cached shortcodes found.'];
 	}
 }
 
