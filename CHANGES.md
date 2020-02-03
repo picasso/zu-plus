@@ -1,3 +1,10 @@
+#### 1.4.5 / 2020-02-03
+* fixed compatibility with Wordpress 5.3
+* added `KINT` support & integration with `Query Monitor`
+* added Kint theme for Query QueryMonitor
+* added `_dbug` function to use with KINT
+* small fixes
+
 #### 1.4.4 / 2018-07-03
 * improved check for `$attachment_id` in `get_attachment_id()` function
 
@@ -148,10 +155,10 @@
 
 #### 0.9.2 / 2018-02-27
 * added function`get_featured_from_posts`
-* added support for  `-1` in function `get_featured_attachment_id` 
+* added support for  `-1` in function `get_featured_attachment_id`
 
 #### 0.9.1 / 2018-01-06
-* added support for  `sys-debug`: see file in `/includes/debug/sys-debug.php` for more instructions 
+* added support for  `sys-debug`: see file in `/includes/debug/sys-debug.php` for more instructions
 
 #### 0.8.9 / 2017-10-16
 * option `use_var_dump` was added to all interfaces
@@ -235,7 +242,7 @@
 
 #### 0.4.0 / 2017-09-05
 * added trace location for all `_dbug*()` calls
-* added `write_trace()` function 
+* added `write_trace()` function
 
 #### 0.3.2 / 2017-09-04
 * added support for `zuplus-debug`
