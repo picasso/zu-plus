@@ -3,9 +3,9 @@
 	'use strict';
 
 	$(window).on('load', function() {
+		zuplus_repair_kint_tabs();
 		setTimeout(function() {
 			$('body').addClass('ready');
-			zuplus_repair_kint_tabs();
 		}, 200);
 	});
 
@@ -94,6 +94,20 @@
 			   // style = style.replace('none;', 'none !important;').replace('block;', 'block !important;');
 			   // $value.attr('style', style);
 		   });
+	   });
+
+	   // replace stardard output with 'error' message for 'ZU_LOG:'
+	   $('.kint-rich dt').each(function() {
+
+		   let $dt = $(this);
+		   if($dt.text().indexOf('ZU_LOG:') !== -1) {
+			   $dt.find('dfn').remove();
+			   $dt.find('var').remove();
+			   let msg = $dt.text().replace(/\s*\(\d+\)\s*/g, '').replace(/\"/g, '').replace('ZU_LOG:', '<span>ZU_LOG:</span>');
+			   let matches = /\[\s*([^\]]+)]/i.exec(msg);
+			   if(matches && matches.length > 1) msg = msg.replace(matches[0], '[ <b>'+matches[1]+'</b> ]');
+			   $dt.html(msg);
+		   }
 	   });
     }
 

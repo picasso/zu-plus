@@ -34,7 +34,8 @@ class ZU_Debug extends zuplus_Addon {
 		'write_to_file'				=>	false,
 		'output_html'				=>	true,
 		'beautify_html'				=>	true,
-		'use_kint'					=>  true,
+		'use_kint'					=>  false,
+		'debug_frontend'			=> 	false,
     ];
 
 	protected static $ignore_class = [
@@ -416,6 +417,7 @@ class ZU_Debug extends zuplus_Addon {
 
 		$form->checkbox('debug_bar', 'Use Debug Bar', 'Works only if <span>Query Monitor</span> is activated.');
 		$form->checkbox('use_kint', 'Use KINT', '<span>Kint for PHP</span> is a tool designed to present debugging data in the best way possible graphically.');
+		$form->checkbox('debug_frontend', 'Support on Front End', 'Enable debugging JS & CSS on the front side. Commonly used with KINT.');
 		$form->checkbox('debug_js', 'Activate Responsive JS Debug info', 'Adds class <span>debug</span> to BODY and displays debug info for responsive elements.');
 
 		$form->checkbox('debug_cache', 'Debug Caching', 'If checked, all calls to cache functions will be logged.');
@@ -476,7 +478,12 @@ if(!function_exists('_dbug')) {
 if(!function_exists('zu_write_log')) {
 	function zu_write_log($msg, $var = 'novar') {
 		if(zuplus_nodebug()) return;
-		zuplus_instance()->dbug->write_log($msg, $var);
+		if(zuplus_instance()->dbug->use_kint) {
+			$info = $var;
+			_dbug('ZU_LOG: '.$msg, $info);
+		} else {
+			zuplus_instance()->dbug->write_log($msg, $var);
+		}
 	}
 }
 

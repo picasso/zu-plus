@@ -102,6 +102,23 @@ class ZU_Plugin extends zuplus_Plugin {
 	public function is_debug() {
 		return empty($this->dbug) ? false : true;
 	}
+
+	// sometimes we need enqueue js & css on frontend
+	private function should_load_frontend() {
+		return !is_admin() && $this->is_debug() && $this->check_option('debug_frontend');
+	}
+
+	public function init() {
+		if($this->should_load_frontend()) {
+			$this->ready();
+		}
+	}
+
+	protected function enqueue_more() {
+		$this->dbug->enqueue_kint_css($this);
+		$handle = $this->enqueue_script('zuplus-admin');
+		// wp_localize_script($handle, 'zuplus_custom', $this->defaults());
+	}
 }
 
 class ZU_Admin extends zuplus_Admin {

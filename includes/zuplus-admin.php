@@ -472,11 +472,12 @@ class zuplus_Admin {
 
 		if($this->should_enqueue_js()) {
 
-			$filename = 'js/'.$this->prefix.'-admin.min.js';
+			$debug_ver = defined('ZUDEBUG') ? true : false;
+			$filename = $debug_ver ? 'scripts/'.$this->prefix.'-admin.js' : 'js/'.$this->prefix.'-admin.min.js';
 			$filepath = plugin_dir_path($this->plugin_file).$filename;
 			if(file_exists($filepath)) {
 				$version = filemtime($filepath);
-				wp_enqueue_script($this->prefix.'-script', plugins_url($filename, $this->plugin_file), ['jquery'], defined('ZUDEBUG') ? $version : $this->version, true);
+				wp_enqueue_script($this->prefix.'-script', plugins_url($filename, $this->plugin_file), ['jquery'], $debug_ver ? $version : $this->version, true);
 				wp_localize_script($this->prefix.'-script', $this->prefix.'_custom', $data);
 			}
 		}

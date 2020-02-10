@@ -15,11 +15,13 @@ $secondary-background: #CCAA61;
 $variable-type-color: #B24512; //#8C4600; //A75809;
 $variable-type-color-hover: #FF0020; //#0433FF;
 $tab-inactive-color-hover: #FFF7BE;
+$error-color: #FF0020;
 
 $border-color: #9A8049;
 $border-color-hover: #043396;
 
 $footer-color: #4C3D1E; //#7F6732;
+$footer-bg-color: #FFF7E6;
 
 // <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 30 150"><defs><path stroke-linejoin="round" d="M4 3a24 32 0 0 1 0 24 40 20-10 0 1 23-12A40 20 10 0 1 4 3z" id="a"/></defs><g fill="#93a1a1" stroke="#93a1a1"><use xlink:href="#a"/><use xlink:href="#a" transform="rotate(90 -15 45)"/></g><g fill="#586e75" stroke="#586e75" transform="translate(0 30)"><use xlink:href="#a"/><use xlink:href="#a" transform="rotate(90 -15 45)"/></g><path d="M6 126l18 18m-18 0l18-18" stroke-width="2" stroke="#586e75"/></svg>
 // $caret-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2aWV3Qm94PSIwIDAgMzAgMTUwIj48ZGVmcz48cGF0aCBzdHJva2UtbGluZWpvaW49InJvdW5kIiBkPSJNNCAzYTI0IDMyIDAgMCAxIDAgMjQgNDAgMjAtMTAgMCAxIDIzLTEyQTQwIDIwIDEwIDAgMSA0IDN6IiBpZD0iYSIvPjwvZGVmcz48ZyBmaWxsPSIjOTNhMWExIiBzdHJva2U9IiM5M2ExYTEiPjx1c2UgeGxpbms6aHJlZj0iI2EiLz48dXNlIHhsaW5rOmhyZWY9IiNhIiB0cmFuc2Zvcm09InJvdGF0ZSg5MCAtMTUgNDUpIi8+PC9nPjxnIGZpbGw9IiM1ODZlNzUiIHN0cm9rZT0iIzU4NmU3NSIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCAzMCkiPjx1c2UgeGxpbms6aHJlZj0iI2EiLz48dXNlIHhsaW5rOmhyZWY9IiNhIiB0cmFuc2Zvcm09InJvdGF0ZSg5MCAtMTUgNDUpIi8+PC9nPjxwYXRoIGQ9Ik02IDEyNmwxOCAxOG0tMTggMGwxOC0xOCIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2U9IiM1ODZlNzUiLz48L3N2Zz4=");
@@ -44,7 +46,16 @@ $caret-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5
       var {
           font-weight: 500 !important;
       }
-
+      dt {
+          span {
+              color: $error-color !important;
+              font-weight: 700;
+          }
+          b {
+              color: $variable-type-color !important;
+              font-weight: 500 !important;
+          }
+      }
       dfn {
           color: #a0a !important;
           letter-spacing: 1px;
@@ -56,8 +67,10 @@ $caret-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5
           dfn {
              color: #222 !important;
           }
+          pre {
+              background-color: white !important;
+          }
       }
-
 
       > dl > dt,
       ul.kint-tabs {
@@ -78,9 +91,12 @@ $caret-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5
       footer {
           ol {
               margin-top: 10px !important;
+              padding: 10px !important;
+              background-color: $footer-bg-color !important;
               li {
                 color: $footer-color !important;
                 letter-spacing: 1px !important;
+                margin-bottom: 5px !important;
               }
           }
       }

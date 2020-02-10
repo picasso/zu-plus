@@ -110,7 +110,6 @@ class zuplus_Plugin {
 		}
 	}
 
-
 	public function defaults() {
 
 		if(empty($this->defaults)) {
@@ -158,7 +157,6 @@ class zuplus_Plugin {
 	}
 
 	public function ready() {
-
 		$this->frontend_enqueue();
 	}
 
@@ -170,6 +168,9 @@ class zuplus_Plugin {
 		return false;
 	}
 
+	protected function enqueue_more() {
+	}
+
 	public function frontend_enqueue() {
 
 		if($this->should_load_css()) zu()->add_style_from_file(plugin_dir_path($this->plugin_file) . 'css/'.$this->prefix.'.css');
@@ -178,17 +179,21 @@ class zuplus_Plugin {
 			wp_enqueue_script($this->prefix.'-script', plugins_url('js/'.$this->prefix.'.min.js', $this->plugin_file), ['jquery'], $this->version, true);
 			wp_localize_script($this->prefix.'-script', $this->prefix.'_custom', $this->defaults());
 		}
-	}
 
+		$this->enqueue_more();
+	}
 
 	private function enqueue_style_or_script($is_style, $file, $deps = [], $bottom = true) {
 
-		$filename = $is_style ? sprintf('css/%1$s.css', $file) : sprintf('js/%1$s.min.js', $file);
+		$debug_ver = defined('ZUDEBUG') ? true : false;
+		$js_pattern = $debug_ver ? 'scripts/%1$s.js' : 'js/%1$s.min.js';
+
+		$filename = $is_style ? sprintf('css/%1$s.css', $file) : sprintf($js_pattern, $file);
 		$handle = $is_style ? $file.'-style' : $file.'-script';
 		$filepath = plugin_dir_path($this->plugin_file).$filename;
 		$src = plugins_url($filename, $this->plugin_file);
 		if(file_exists($filepath)) {
-			$version = defined('ZUDEBUG') ? filemtime($filepath) : $this->version;
+			$version = $debug_ver ? filemtime($filepath) : $this->version;
 			if($is_style) wp_enqueue_style($handle, $src, $deps, $version);
 			else wp_enqueue_script($handle, $src, $deps, $version, $bottom);
 		}
