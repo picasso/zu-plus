@@ -1,3 +1,7 @@
+#### 1.4.6 / 2020-02-28
+* added `get_post_gallery_blocks()` function to check `gallery` blocks in posts and pages
+* improved `get_post_gallery()` function to checks blocks as well (before were only shortcodes)
+
 #### 1.4.5 / 2020-02-03
 * fixed compatibility with Wordpress 5.3
 * added `KINT` support & integration with `Query Monitor`

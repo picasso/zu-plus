@@ -581,12 +581,38 @@ class ZU_PlusFunctions {
 
 	// Color, Background, Thumbnail, Attachment functions ------------------------]
 
+	public function get_post_gallery_blocks($post_id_or_content = null, $core_gallery = true) {
+
+		if(!function_exists('has_blocks')) return [];
+		if(!is_string($post_id_or_content)) {
+			if(!$post = get_post($post_id_or_content)) return [];
+			$post_id_or_content = $post->post_content;
+		}
+
+		$galleries = [];
+		if(has_block('zu/gallery', $post_id_or_content) || ($core_gallery && has_block('gallery', $post_id_or_content))) {
+
+			$blocks = parse_blocks($post_id_or_content);
+			foreach($blocks as $block) {
+				if($block['blockName'] === 'zu/gallery' || ($core_gallery && $block['blockName'] === 'core/gallery')) {
+					$block['attrs']['_block'] = $block['blockName'];
+					$galleries[] = $block['attrs'];
+				}
+			}
+		}
+
+		return isset($galleries[0]) ? $galleries[0] : [];
+	}
+
 	public function get_post_gallery($post_id = null) {
 
 		// Replace of WP 'get_post_gallery' to avoid multiple resolving of shortcodes
 
+		$check_for_blocks = function_exists('has_blocks');
 		if(!$post = get_post($post_id)) return [];
-		if(!has_shortcode($post->post_content, 'gallery')) return [];
+
+		// if we do not have shortcodes -> checks for blocks
+		if(!has_shortcode($post->post_content, 'gallery')) return $this->get_post_gallery_blocks($post->post_content);
 
 		$galleries = [];
 		if(preg_match_all('/'.get_shortcode_regex().'/s', $post->post_content, $matches, PREG_SET_ORDER)) {
@@ -601,7 +627,8 @@ class ZU_PlusFunctions {
 			}
 		}
 
-		return isset($galleries[0]) ? $galleries[0] : [];
+		// if we have not found galleries in shortcodes -> checks in blocks
+		return isset($galleries[0]) ? $galleries[0] : get_post_gallery_blocks($post->post_content);
 	}
 
 	public function get_dominant($post_or_attachment_id = null) {
