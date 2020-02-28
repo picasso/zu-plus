@@ -186,7 +186,7 @@ class zuplus_Plugin {
 	private function enqueue_style_or_script($is_style, $file, $deps = [], $bottom = true) {
 
 		$debug_ver = defined('ZUDEBUG') ? true : false;
-		$js_pattern = $debug_ver ? 'scripts/%1$s.js' : 'js/%1$s.min.js';
+		$js_pattern = 'js/%1$s.min.js'; // $debug_ver ? 'scripts/%1$s.js' : 
 
 		$filename = $is_style ? sprintf('css/%1$s.css', $file) : sprintf($js_pattern, $file);
 		$handle = $is_style ? $file.'-style' : $file.'-script';
