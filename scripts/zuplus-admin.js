@@ -1,18 +1,27 @@
-/* global zuplus_custom */
+/* global zuplus_custom, lodash, console */
 (function($) {
 	'use strict';
 
+	var zuplus_data = zuplus_custom.data || {};
+
 	$(window).on('load', function() {
 		zuplus_repair_kint_tabs();
+
 		setTimeout(function() {
 			$('body').addClass('ready');
 		}, 200);
+
+		if(zuplus_data.remove_autosave)  {
+			zuplus_click_autosave_notice();
+			setTimeout(zuplus_click_autosave_notice, 100);
+		}
+
 	});
 
 	// When the document is ready...
 	$(document).ready(function() {
 
-		if($('body').hasClass('zuplus')) {			// only for plugin screen  if($('body').hasClass(zuplus_custom.screen_id)) {
+		if($('body').hasClass('zuplus')) {			// only for plugin screen  if($('body').hasClass(zuplus_data.screen_id)) {
 			// Bind action links
 			zuplus_bind_links();
 
@@ -134,6 +143,28 @@
 	   });
     }
 
+	function zuplus_click_autosave_notice() {
+
+		var messages = {
+			backup: 'The backup of this post in your browser is different from the version below',
+			autosave: 'There is an autosave of this post that is more recent than the version below',
+		};
+
+		$('.components-notice.is-dismissible').each(function() {
+			$(this).each(function() {
+				let $notice = $(this);
+				let text = $notice.find('.components-notice__content').text();
+
+				lodash.forEach(messages, function(value) {
+					if(lodash.includes(text, value)) {
+						$notice.find('.components-notice__dismiss').click();
+						console.info('REMOVED: ' + value);
+					}
+				});
+			});
+		});
+	 }
+
 	function zuplus_ajax_data($selector) {
 	    var form_data = $selector.serialize().split('&');
 	    var data = {};
@@ -172,7 +203,7 @@
 		// Send an AJAX call to switch the option
 		$container.addClass('now_ajaxed');
 		$.ajax({
-			url: zuplus_custom.ajaxurl,
+			url: zuplus_data.ajaxurl,
 			type: 'POST',
 			dataType: 'json',
 			async: true,
