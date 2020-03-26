@@ -138,7 +138,7 @@ class zuplus_Admin {
 		add_action('wp_ajax_'.$this->prefix.'_option', [$this, 'ajax_turn_option']);
 		add_action('admin_enqueue_scripts', [$this, 'admin_enqueue']);
 		add_action('admin_enqueue_scripts', [$this, 'admin_enqueue_fonts']);
-		add_action('admin_enqueue_scripts', [$this, 'admin_enqueue_more']);
+		add_action('admin_enqueue_scripts', [$this, 'admin_enqueue_more_assets']);
 		add_filter('custom_menu_order', [$this, 'admin_menu_modify']);
 
 		//
@@ -431,11 +431,15 @@ class zuplus_Admin {
 		return false;
 	}
 
-	protected function enqueue_more() {
+	protected function admin_extend_localize_data() {
+		return [];
 	}
 
-	public function admin_enqueue_more() {
-		$this->enqueue_more();
+	protected function admin_enqueue_more() {
+	}
+
+	public function admin_enqueue_more_assets() {
+		$this->admin_enqueue_more();
 	}
 
 	public function admin_enqueue_fonts() {
@@ -460,6 +464,8 @@ class zuplus_Admin {
 			'screen_id'			=> $this->hook_suffix,
 		];
 
+		$data = array_merge($data, $this->admin_extend_localize_data());
+
 		if($this->should_enqueue_css()) {
 
 			$filename = 'css/'.$this->prefix.'-admin.css';
@@ -478,7 +484,9 @@ class zuplus_Admin {
 			if(file_exists($filepath)) {
 				$version = filemtime($filepath);
 				wp_enqueue_script($this->prefix.'-script', plugins_url($filename, $this->plugin_file), ['jquery'], $debug_ver ? $version : $this->version, true);
-				wp_localize_script($this->prefix.'-script', $this->prefix.'_custom', $data);
+				// by wrapping our $data values inside an inner array we prevent integer and boolean values to be interpreted as strings
+				// https://wpbeaches.com/using-wp_localize_script-and-jquery-values-including-strings-booleans-and-integers/
+				wp_localize_script($this->prefix.'-script', $this->prefix.'_custom', ['data' => $data]);
 			}
 		}
 	}
@@ -545,6 +553,9 @@ class zuplus_Admin {
 	}
 
 	public function validate_options($input) {
+
+		// inform plugins that options were updated
+		do_action('zuplus_options_updated');
 
 		$new_values = array_diff_key($input, array_flip($this->options_nosave));		// remove unwanted values
 		$new_values = $this->maybe_restore_defaults($new_values);
