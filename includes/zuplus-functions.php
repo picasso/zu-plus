@@ -9,7 +9,7 @@ class ZU_PlusFunctions {
 
 	private $theme_version = null;
 	private $random_attachment_id = null;
-	private 	$advanced_style = [];
+	private $advanced_style = [];
 	private $admin_style = [];
 	private $fonts = [];
 	private $copy_string = '';
@@ -441,12 +441,14 @@ class ZU_PlusFunctions {
 			$raw_excerpt = empty($post->post_content) ? '' : $post->post_content;
 		}
 
+		// we need remove shortcodes before apply_filters('the_content'...) otherwise it will lead to infinitive recursion
+		// for Gutenberg block we could use add_filter('pre_render_block', ...) and return not null
         $raw_excerpt = strip_shortcodes($raw_excerpt);
         $raw_excerpt = apply_filters('the_content', $raw_excerpt);
-        $raw_excerpt = preg_replace('/\s*\[[^\]]+?\]/i', '', $raw_excerpt); 				// remove javascript text translations
-          $raw_excerpt = preg_replace('/^(?:<p>\s*<\/p>\s*)?<h.?[^<]+<\/h.?>/i', '', $raw_excerpt); 		// remove first <h*> tag if text starts with it
+        $raw_excerpt = preg_replace('/\s*\[[^\]]+?\]/i', '', $raw_excerpt); 						// remove javascript text translations
+		$raw_excerpt = preg_replace('/^(?:<p>\s*<\/p>\s*)?<h.?[^<]+<\/h.?>/i', '', $raw_excerpt); 	// remove first <h*> tag if text starts with it
         $raw_excerpt = strip_tags($raw_excerpt);
-        $raw_excerpt = str_replace('&#8230;', '&.', $raw_excerpt);							// replace HTML '...' (&#8230;)  with '&.' - and restore later
+        $raw_excerpt = str_replace('&#8230;', '&.', $raw_excerpt);									// replace HTML '...' (&#8230;)  with '&.' - and restore later
         $tokens = array();
         $count = 0;
         $post_excerpt = '';

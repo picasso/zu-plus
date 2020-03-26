@@ -1,3 +1,7 @@
+#### 1.4.7 / 2020-03-26
+* added `admin_extend_localize_data` function and now the localized data wrapped inside an array
+* added support for `remove_autosave` option
+
 #### 1.4.6 / 2020-02-28
 * added `get_post_gallery_blocks()` function to check `gallery` blocks in posts and pages
 * improved `get_post_gallery()` function to checks blocks as well (before were only shortcodes)

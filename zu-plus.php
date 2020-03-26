@@ -4,7 +4,7 @@ Plugin Name: ZU+
 Plugin URI: https://dmitryrudakov.ru/plugins/
 GitHub Plugin URI: https://github.com/picasso/zu-plus
 Description: This plugin encompasses ZU framework functionality.
-Version: 1.4.6
+Version: 1.4.7
 Author: Dmitry Rudakov
 Author URI: https://dmitryrudakov.ru/about/
 Text Domain: zu-plugin
@@ -32,7 +32,7 @@ Domain Path: /lang/
 
 // Prohibit direct script loading
 defined('ABSPATH') || die('No direct script access allowed!');
-define('ZUPLUS_VERSION', '1.4.6');
+define('ZUPLUS_VERSION', '1.4.7');
 define('ZUPLUS_NAME', 'ZU+');
 define('__ZUPLUS_ROOT__', plugin_dir_path(__FILE__));
 define('__ZUPLUS_FILE__', __FILE__);
@@ -85,6 +85,7 @@ class ZU_Plugin extends zuplus_Plugin {
 			if(empty($key)) {
 				$options = $this->options();
 				zu()->set_option($zu_defaults, 'refresh_mode', $this->check_option('debug_mode'));
+				zu()->set_option($zu_defaults, 'remove_autosave', $this->check_option('remove_autosave'));
 				zu()->set_option($zu_defaults, 'ajax_log', $this->check_option('ajax_log'));
 				zu()->set_option($zu_defaults, 'debug_mode', $this->check_option('debug_js'));
 
@@ -225,6 +226,7 @@ class ZU_Admin extends zuplus_Admin {
 
 		$zu_defaults = [
 			'debug_mode'			=>	false,
+			'remove_autosave'		=> 	false,
 			'cookie_notice'			=>	false,
 			'dup_page'				=>	false,
 		];
@@ -255,7 +257,11 @@ class ZU_Admin extends zuplus_Admin {
 		return true;
 	}
 
-	protected function enqueue_more() {
+	protected function admin_extend_localize_data() {
+		return ['remove_autosave' => $this->check_option('remove_autosave')];
+	}
+
+	protected function admin_enqueue_more() {
 		if($this->is_debug()) {
 			$this->plugin->dbug->enqueue_kint_css($this->plugin);
 		}
@@ -297,6 +303,7 @@ class ZU_Admin extends zuplus_Admin {
 	public function print_options($post) {
 
 		$this->form->checkbox('debug_mode', 'Activate Debug Mode', 'All debug functions like <span>_dbug_*()</span> will be activated. Otherwise all calls will be muted.');
+		$this->form->checkbox('remove_autosave', 'Remove Autosave Notices', 'Removes Wordpress <span>autosave</span> and <span>backup</span> notices which could be very annoying. You should understand what you are doing.');
 		$this->form->checkbox('dup_page', 'Activate Duplicate Page & Menu', 'Allows duplicate Menu, Posts, Pages and Custom Posts using single click.');
 		$this->form->checkbox('cookie_notice', 'Activate Cookie Notice', 'Allows you to inform users that the site uses cookies and to comply with the EU GDPR regulations.');
 
@@ -323,8 +330,6 @@ class ZU_Admin extends zuplus_Admin {
 
 		echo $this->form->fields('Actions available for ZU Theme.', 'zuplus_reset_cached', true); // second argument -> data-ajaxrel : used in js to serialize form
 	}
-
-
 
 	public function print_duplicate_menu($post) {
 
