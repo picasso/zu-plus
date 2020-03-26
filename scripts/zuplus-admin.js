@@ -13,7 +13,7 @@
 
 		if(zuplus_data.remove_autosave)  {
 			zuplus_click_autosave_notice();
-			setTimeout(zuplus_click_autosave_notice, 100);
+			setTimeout(zuplus_click_autosave_notice, 500);
 		}
 
 	});
