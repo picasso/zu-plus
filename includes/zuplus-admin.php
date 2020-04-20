@@ -466,29 +466,9 @@ class zuplus_Admin {
 
 		$data = array_merge($data, $this->admin_extend_localize_data());
 
-		if($this->should_enqueue_css()) {
+		if($this->should_enqueue_css()) $this->plugin->enqueue_style($this->prefix.'-admin');
 
-			$filename = 'css/'.$this->prefix.'-admin.css';
-			$filepath = plugin_dir_path($this->plugin_file).$filename;
-			if(file_exists($filepath)) {
-				$version = filemtime($filepath);
-				wp_enqueue_style($this->prefix.'-style', plugins_url($filename, $this->plugin_file), [], defined('ZUDEBUG') ? $version : $this->version);
-			}
-		}
-
-		if($this->should_enqueue_js()) {
-
-			$debug_ver = defined('ZUDEBUG') ? true : false;
-			$filename = $debug_ver ? 'scripts/'.$this->prefix.'-admin.js' : 'js/'.$this->prefix.'-admin.min.js';
-			$filepath = plugin_dir_path($this->plugin_file).$filename;
-			if(file_exists($filepath)) {
-				$version = filemtime($filepath);
-				wp_enqueue_script($this->prefix.'-script', plugins_url($filename, $this->plugin_file), ['jquery'], $debug_ver ? $version : $this->version, true);
-				// by wrapping our $data values inside an inner array we prevent integer and boolean values to be interpreted as strings
-				// https://wpbeaches.com/using-wp_localize_script-and-jquery-values-including-strings-booleans-and-integers/
-				wp_localize_script($this->prefix.'-script', $this->prefix.'_custom', ['data' => $data]);
-			}
-		}
+		if($this->should_enqueue_js()) $this->plugin->enqueue_script($this->prefix.'-admin', $data);
 	}
 
 	public function admin_settings_link($links) {
