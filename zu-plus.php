@@ -4,7 +4,7 @@ Plugin Name: ZU+
 Plugin URI: https://dmitryrudakov.ru/plugins/
 GitHub Plugin URI: https://github.com/picasso/zu-plus
 Description: This plugin encompasses ZU framework functionality.
-Version: 1.4.7
+Version: 1.4.8
 Author: Dmitry Rudakov
 Author URI: https://dmitryrudakov.ru/about/
 Text Domain: zu-plugin
@@ -32,7 +32,7 @@ Domain Path: /lang/
 
 // Prohibit direct script loading
 defined('ABSPATH') || die('No direct script access allowed!');
-define('ZUPLUS_VERSION', '1.4.7');
+define('ZUPLUS_VERSION', '1.4.8');
 define('ZUPLUS_NAME', 'ZU+');
 define('__ZUPLUS_ROOT__', plugin_dir_path(__FILE__));
 define('__ZUPLUS_FILE__', __FILE__);
@@ -117,8 +117,7 @@ class ZU_Plugin extends zuplus_Plugin {
 
 	protected function enqueue_more() {
 		$this->dbug->enqueue_kint_css($this);
-		$handle = $this->enqueue_script('zuplus-admin');
-		// wp_localize_script($handle, 'zuplus_custom', $this->defaults());
+		$this->enqueue_script($this->prefix.'-admin', [true]);
 	}
 }
 

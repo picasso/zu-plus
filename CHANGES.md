@@ -1,3 +1,8 @@
+#### 1.4.8 / 2020-04-20
+* refactoring `enqueue_style` and `enqueue_script` for Admin
+* !!changed order of args for `enqueue_script` to support `wp_localize_script`
+* bug fixing and minor improvements
+
 #### 1.4.7 / 2020-03-26
 * added `admin_extend_localize_data` function and now the localized data wrapped inside an array
 * added support for `remove_autosave` option

@@ -442,9 +442,22 @@ class ZU_PlusFunctions {
 		}
 
 		// we need remove shortcodes before apply_filters('the_content'...) otherwise it will lead to infinitive recursion
-		// for Gutenberg block we could use add_filter('pre_render_block', ...) and return not null
         $raw_excerpt = strip_shortcodes($raw_excerpt);
+
+		// we need remove any Gutenberg block which use 'get_excerpt' before apply_filters('the_content'...) otherwise it will lead to infinitive recursion
+		// check if there were added blocks which we should avoid during apply_filters('the_content'...)
+		$skip_blocks = apply_filters('zu_no_excerpt_blocks', []);
+		// for avoided Gutenberg block we shoud use add_filter('pre_render_block', ...) and return not null
+		$prevent_recursion = function($pre_render, $block) use($skip_blocks) {
+			return in_array($block['blockName'], $skip_blocks) ? '' : $pre_render;
+		};
+		add_filter('pre_render_block', $prevent_recursion, 10, 2);
+
         $raw_excerpt = apply_filters('the_content', $raw_excerpt);
+		// and remove filter after 'the_content' is processed
+		remove_filter('pre_render_block', $prevent_recursion, 10, 2);
+
+
         $raw_excerpt = preg_replace('/\s*\[[^\]]+?\]/i', '', $raw_excerpt); 						// remove javascript text translations
 		$raw_excerpt = preg_replace('/^(?:<p>\s*<\/p>\s*)?<h.?[^<]+<\/h.?>/i', '', $raw_excerpt); 	// remove first <h*> tag if text starts with it
         $raw_excerpt = strip_tags($raw_excerpt);
