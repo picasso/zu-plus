@@ -185,10 +185,10 @@ class zuplus_Plugin {
 	private function enqueue_style_or_script($is_style, $file, $deps = [], $bottom = true) {
 
 		$debug_ver = defined('ZUDEBUG') ? true : false;
-		$js_pattern = 'js/%1$s.min.js'; // $debug_ver ? 'scripts/%1$s.js' :
-
-		$filename = $is_style ? sprintf('css/%1$s.css', $file) : sprintf($js_pattern, $file);
+		$path_pattern = $is_style ? 'css/%1$s.css' : 'js/%1$s.min.js';
 		$handle = $is_style ? $file.'-style' : $file.'-script';
+
+		$filename = sprintf($path_pattern, $file);
 		$filepath = plugin_dir_path($this->plugin_file).$filename;
 		$src = plugins_url($filename, $this->plugin_file);
 		if(file_exists($filepath)) {
@@ -203,10 +203,14 @@ class zuplus_Plugin {
 		return $this->enqueue_style_or_script(true, $file, $deps);
 	}
 
-	public function enqueue_script($file, $deps = ['jquery'], $bottom = true) {
-		return $this->enqueue_style_or_script(false, $file, $deps, $bottom);
-	}
+	public function enqueue_script($file, $data = null, $deps = ['jquery'], $bottom = true) {
 
+		$handle = $this->enqueue_style_or_script(false, $file, $deps, $bottom);
+		// by wrapping our $data values inside an inner array we prevent integer and boolean values to be interpreted as strings
+		// https://wpbeaches.com/using-wp_localize_script-and-jquery-values-including-strings-booleans-and-integers/
+		if(!empty($data)) wp_localize_script($handle, $this->prefix.'_custom', ['data' => $data]);
+		return $handle;
+	}
 }
 
 class zuplus_Addon {
@@ -303,8 +307,8 @@ class zuplus_Addon {
 		return is_null($this->plugin) ? null : $this->plugin->enqueue_style($file, $deps);
 	}
 
-	protected function enqueue_script($file, $deps = ['jquery'], $bottom = true) {
-		return is_null($this->plugin) ? null : $this->plugin->enqueue_script($file, $deps, $bottom);
+	protected function enqueue_script($file, $data = null, $deps = ['jquery'], $bottom = true) {
+		return is_null($this->plugin) ? null : $this->plugin->enqueue_script($file, $data, $deps, $bottom);
 	}
 
 	protected function print_option($option_key = '') {}
