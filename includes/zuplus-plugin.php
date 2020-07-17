@@ -265,10 +265,10 @@ class zuplus_Addon {
 		return $as_value ? $value : (isset($form_values[$key]) ? $form_values[$key] : '');
 	}
 
-	protected function construct_more() {
+	public function clean() {
 	}
 
-	protected function clean() {
+	protected function construct_more() {
 	}
 
 	protected function current_timestamp() {
