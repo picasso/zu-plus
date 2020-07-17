@@ -27,8 +27,6 @@ $admin-red-color: $some-red;
 $hover-darken: 10;
 $hover-shadow: 20;
 
-$primary-font-family: 'Open Sans', Arial, sans-serif;
-
 .zuplus_red { color: $admin-red-color;}
 .zuplus_green { color: $admin-green-color;}
 .zuplus_magenta { color: $admin-magenta-color;}
@@ -60,7 +58,6 @@ $primary-font-family: 'Open Sans', Arial, sans-serif;
 	opacity: 0;
 	transition: opacity 0.4s ease-in-out 0.1s;
 	.ready & {
-		font-family: $primary-font-family;
 		opacity: 1;
 	}
 }
