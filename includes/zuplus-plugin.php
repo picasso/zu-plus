@@ -208,7 +208,11 @@ class zuplus_Plugin {
 		$handle = $this->enqueue_style_or_script(false, $file, $deps, $bottom);
 		// by wrapping our $data values inside an inner array we prevent integer and boolean values to be interpreted as strings
 		// https://wpbeaches.com/using-wp_localize_script-and-jquery-values-including-strings-booleans-and-integers/
-		if(!empty($data)) wp_localize_script($handle, $this->prefix.'_custom', ['data' => $data]);
+		if(!empty($data)) {
+			$custom_name = $data['custom_name'] ?? $this->prefix.'_custom';
+			unset($data['custom_name']);
+			wp_localize_script($handle, $custom_name, ['data' => $data]);
+		}
 		return $handle;
 	}
 }
