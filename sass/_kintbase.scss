@@ -182,8 +182,8 @@ $caret-image: url("data:image/svg+xml !important;base64,PHN2ZyB4bWxucz0iaHR0cDov
   .kint-search-trigger {
     background: rgba($text-color, 0.8) !important;
     border-radius: 3px !important;
-    height: $color_size * 1px !important;
-    font-size: $color_size * 1px !important;
+    height: (($color_size * 1px) + 1px) !important;
+    font-size: 13px !important; // $color_size * 1px
     margin-left: 5px !important;
     font-weight: bold !important;
     width: $color_size * 1px !important;
@@ -195,18 +195,21 @@ $caret-image: url("data:image/svg+xml !important;base64,PHN2ZyB4bWxucz0iaHR0cDov
     overflow: hidden !important;
 
     // Carefully balanced on multiple browsers
-    line-height: $color_size * 1.1 * 1px !important;
+    line-height: (($color_size * 1px) + 1px) !important;  // $color_size * 1.1 * 1px
 
     &:hover {
       color: $text-color !important;
-      background: $main-background !important;
+      background: lighten($main-background, 10%) !important;
+      outline: 1px solid $text-color;
     }
   }
 
   // The &boxbox !important; icon is slightly higher than the &lrarr !important; icon,
   // so increase the line height to make it line out better
   dt.kint-parent > .kint-popup-trigger {
-    line-height: $color_size * 1.2 * 1px !important;
+    line-height: 15px !important;
+    font-size: 12px !important;
+    // line-height: $color_size * 1.2 * 1px !important;
   }
 
   // The &telrec !important; icon is slightly smaller than the &lrarr !important; icon,
@@ -266,7 +269,7 @@ $caret-image: url("data:image/svg+xml !important;base64,PHN2ZyB4bWxucz0iaHR0cDov
   }
 
   footer {
-    padding: 0 3px 3px !important;
+    padding: 5px 3px 3px !important;
     font-size: 9px !important;
     background: transparent !important;
 
