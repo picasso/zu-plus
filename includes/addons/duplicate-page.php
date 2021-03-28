@@ -6,7 +6,7 @@
 // Author: mndpsingh287
 // Modified: Dmitry Rudakov on 24.03.2018
 
-class ZU_DuplicatePage extends zuplus_Addon {
+class zu_PlusDuplicatePage extends zukit_Addon {
 
 	private static $dup_action = 'dup_post_as_draft';
 
@@ -15,6 +15,17 @@ class ZU_DuplicatePage extends zuplus_Addon {
 		'dup_redirect'	=> 	'to_page',
 		'dup_suffix'	=> 	'copy',
 	];
+
+	protected function config() {
+		return [
+			'name'				=> 'zuplus_duplicate_page',
+			'options'			=> [
+				'status'			=> 	'draft',
+				'redirect'			=> 	'to_page',
+				'suffix'			=> 	'copy',
+			],
+		];
+	}
 
 	protected function construct_more() {
 

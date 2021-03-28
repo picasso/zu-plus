@@ -1,15 +1,13 @@
 <?php
-// From Duplicate Menu Plugin
-// Plugin URI: https://github.com/jchristopher/duplicate-menu
-// Author: Jonathan Christopher
-// Modified: Dmitry Rudakov on 16.08.2017
 
-class ZU_DuplicateMenu {
+// Duplicate Menu helpers -----------------------------------------------------]
 
-    public function duplicate($id = null, $name = null) {
+trait zu_PlusDuplicateMenu {
+
+    private function duplicate_from_id($id = null, $name = null) {
 
         if(empty($id) || empty($name)) return false;
- 
+
         $id = intval($id);
         $name = sanitize_text_field($name);
         $source = wp_get_nav_menu_object($id);
@@ -54,20 +52,20 @@ class ZU_DuplicateMenu {
 
         return $new_id;
     }
-    
+
     public function print_metabox($options) {
-        
+
 /*
         $nav_menus = wp_get_nav_menus();
 		$desc = 'Here you can easily duplicate WordPress Menus.';
 		$items = [];
-		
+
 		if(empty($nav_menus)) {
 			$items[] ='You haven\'t created any Menus yet.';
 		} else {
-			$select_values = $items = [];	
+			$select_values = $items = [];
 			foreach($nav_menus as $_nav_menu) $select_values[$_nav_menu->term_id] = $_nav_menu->name;
-			
+
 			$items[] = tplus_select($options, 'source_menu', 'Duplicate this menu:', $select_values);
             $items[] = tplus_text($options, 'new_menu', 'And call it', 'The name will be assigned to duplicated menu.');
 			$items[] = tplus_button_link('tplus_duplicate_menu', __('Duplicate', 'tplus-plugin'), 'images-alt2', 'red', true, false);
@@ -75,16 +73,15 @@ class ZU_DuplicateMenu {
 		echo tplus_fields($items, $desc, 'tplus_duplicate_menu');
 */
     }
+
+    private function duplicate_menu() {
+
+        $source_id = intval($_POST['source_menu']);
+        $destination = sanitize_text_field($_POST['new_menu']);
+        // go ahead and duplicate our menu
+        $new_menu_id = $this->duplicate_from_id($source_id, $destination);
+
+    	if($new_menu_id) return $this->create_notice('success', sprintf('Menu was duplicated with name <strong>%1$s</strong>', $destination));
+    	else return $this->create_notice('error', 'There was a problem duplicating your menu. No action was taken.');
+    }
  }
-
-function zuplus_ajax_duplicate_menu() {
-
-    $source = intval($_POST['source_menu']);
-    $destination = sanitize_text_field($_POST['new_menu']);
-    // go ahead and duplicate our menu
-    $duplicator = new ZU_DuplicateMenu();
-    $new_menu_id = $duplicator->duplicate($source, $destination);
-
-	if($new_menu_id) return ['ok' => sprintf('Menu was duplicated with name <strong>%1$s</strong>', $destination)];
-	else return ['error' => 'There was a problem duplicating your menu. No action was taken.'];
-}

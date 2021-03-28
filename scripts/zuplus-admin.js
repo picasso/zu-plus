@@ -1,7 +1,7 @@
-/* global zuplus_custom, lodash, console */
 (function($) {
 	'use strict';
 
+	// eslint-disable-next-line no-undef
 	var zuplus_data = zuplus_custom.data || {};
 
 	$(window).on('load', function() {
@@ -159,6 +159,7 @@
 				lodash.forEach(messages, function(value) {
 					if(lodash.includes(text, value)) {
 						$notice.find('.components-notice__dismiss').click();
+						// eslint-disable-next-line no-console
 						console.info('REMOVED: ' + value);
 					}
 				});

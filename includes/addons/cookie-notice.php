@@ -6,10 +6,20 @@
 // Author: dFactory
 // Modified: Dmitry Rudakov on 10.06.2018
 
-class ZU_CookieNotice extends zuplus_Addon {
+class zu_PlusCookieNotice extends zukit_Addon {
 
 	private $refuse_code = '';
 	private $refuse_code_head = '';
+
+	protected function config() {
+		return [
+			'name'				=> 'zuplus_cookie_notice',
+			'options'			=> [
+				'cname'				=> 'zu_notice_accepted',
+				'anim'				=> 'fade',
+			],
+		];
+	}
 
     public static $_defaults = [
 		'cookie_options'		=>	[ 'cname' => 'zu_notice_accepted', 'anim' => 'fade' ],
@@ -110,7 +120,7 @@ class ZU_CookieNotice extends zuplus_Addon {
 		return array_merge(wp_kses_allowed_html('post'), [
 			'script' 	=> ['type' => [], 'src' => [],'charset' => [], 'async' => []],
 			'noscript' 	=> [],
-			'style' 	=> ['types' => []], 
+			'style' 	=> ['types' => []],
 			'iframe' 	=> ['src' => [], 'height' => [], 'width' => [], 'frameborder' => [], 'allowfullscreen' => []],
 		]);
 	}
