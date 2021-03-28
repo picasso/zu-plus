@@ -118,7 +118,7 @@ class zu_Plus extends zukit_Plugin  {
 
 		// Debug Addon
 		if($this->is_option('debug_mode')) {
-			// $this->dbug = $this->register_addon(new zu_PlusDebug());
+			$this->dbug = $this->register_addon(new zu_PlusDebug());
 			// zu()->set_debug_cache($this->check_option('debug_cache'));
 		}
 
@@ -280,7 +280,6 @@ function zuplus($file = null) {
 
 // Additional Classes & Functions ---------------------------------------------]
 
+require_once('debug/zuplus-debug.php');
 // require_once('addons/cookie-notice.php');
-// require_once('addons/duplicate-menu.php');
 // require_once('addons/duplicate-page.php');
-// require_once('debug/zuplus-debug.php');

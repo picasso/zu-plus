@@ -81,7 +81,7 @@ class zu_PlusDebug extends zukit_Addon {
 	public function enqueue() {
 		// add kint styles if needed on front-end
 		// use 'admin_enqueue_style' because the KINT styles are located in 'admin' folder
-		if($this->is_option('debug_frontend') {
+		if($this->is_option('debug_frontend')) {
 			if($this->is_option('use_kint')) $this->admin_enqueue_style('kint');
 		}
 	}
