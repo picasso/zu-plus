@@ -1,0 +1,17 @@
+@mixin breakpoint-width($point) {
+	@media all and (max-width: $point)  { @content; }
+}
+
+$red-color: #ff3358;
+$green-color: #5b9a68;
+$blue-color: #00aced;
+$violet-color: #bc2a8d;
+$magenta-color: #e01765;
+$orange-color: #fb8f3d;
+$orange-bright-color: #fcbf00;
+$red-bright-color: #ff4136;
+$text-shadow-for-white: 0 1px 3px rgba(black, 0.3);
+
+$font-family: Roboto, Menlo, Ubuntu, sans-serif;
+
+$debug-bar-selector: '#qm-debug_bar_zu_plusdebugbarpanel';

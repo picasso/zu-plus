@@ -4,6 +4,144 @@
 
 trait zu_PlusDebugOutput {
 
+	private $kint_version = '3.3';
+
+	private function init_kint() {
+		Kint::$return = true;
+		Kint::$aliases[] = 'zu_log';
+		Kint::$aliases[] = 'zu_logc';
+		Kint::$aliases[] = ['zukit_Plugin', 'log'];
+		Kint::$aliases[] = ['zukit_Plugin', 'logc'];
+		Kint::$enabled_mode = $this->is_option('use_kint');
+	}
+
+	private function kint_log($args, $rich_mode = false) {
+		$stash = Kint::$enabled_mode;
+		Kint::$enabled_mode = $rich_mode ? Kint::MODE_RICH : Kint::MODE_TEXT;
+		$log = call_user_func_array(['Kint', 'dump'], $args);
+		Kint::$enabled_mode = $stash;
+		return $log;
+	}
+
+	public function savelog($val) {
+		$this->dbar->save($val);
+	}
+
+	private function bar_log($params, $kint_log = false, $context = null, $called_class = null) {
+		if($kint_log) $this->dbar->save($params, '$context', $context, $called_class);
+		else {
+			if($context) {
+				$this->dbar->save($context);
+			}
+			$data = $this->plugin->get_log_data($params, 2);
+			foreach($data['args'] as $var) {
+				$this->dbar->save($var['name'], $var['value'], $data['log_line']);
+			}
+			return $data;
+		}
+		return null;
+	}
+
+	public function get_request_ip() { return zu_get_server_value('REMOTE_ADDR'); }
+	public function get_request_ajax() { return zu_get_server_value('AJAX'); }
+	public function get_request_refer() { return zu_get_server_value('HTTP_REFERER'); }
+}
+
+function zu_get_server_value($name) {
+	global $_zu_debug_site_url;
+
+	if(empty($_debug_site_url)) $_zu_debug_site_url = get_bloginfo('url');
+
+	$get_ajax = preg_match('/AJAX/i', $name) ? true : false;
+	$request = $_SERVER['REQUEST_URI'] ?? '';
+	$value = $_SERVER[$name] ?? '';
+	$is_ajax = stripos($request, 'admin-ajax.php') !== false;
+
+	if($name == 'HTTP_REFERER') {
+
+		if(empty($value) || $is_ajax)	{
+			if(in_array('doing_wp_cron', array_keys($_REQUEST))) $new_value = 'doing_wp_cron';
+			else if(isset($_REQUEST['data'])) $new_value = array_keys($_REQUEST['data'])[0];
+			else if(isset($_REQUEST['action'])) $new_value = $_REQUEST['action'];
+		}
+
+		if($is_ajax && empty($new_value)) return null;
+
+		$value = $is_ajax ? $value : (empty($new_value) ? $request : '');
+		$value = trim(sprintf('%1$s %2$s %3$s',  $value, $is_ajax ? '<strong>-ajax-</strong>' : '', empty($new_value) ? '' : $new_value));
+		$value =  str_replace($_zu_debug_site_url, '', $value);
+	}
+
+	return $get_ajax ? $is_ajax : $value;
+}
+
+
+Kint::$aliases[] = ['self', 'dbg'];
+Kint::$aliases[] = ['KintTest', 'dbg'];
+Kint::$aliases[] = ['KintTestPlus', 'dbg'];
+
+class KintTest {
+	public static function dbg(...$vars) {
+		Kint::$return = true;
+		$stash = Kint::$enabled_mode;
+		Kint::$enabled_mode = Kint::MODE_RICH;
+		$log = Kint::dump(...$vars);
+		Kint::$enabled_mode = $stash;
+		return $log;
+	}
+
+	public function test($call) {
+
+		$time = time();
+		$data = [
+		    'debug_mode' => true,
+		    'remove_autosave' => false,
+		    'cookie_notice' => false,
+		    'dup_page' => false,
+		    'disable_cached' => false,
+		    '_debug' => [
+		        'refresh' => false,
+		    ],
+		];
+
+		$log = self::dbg($time, $data);
+		call_user_func_array($call, [$log]);
+	}
+}
+
+class KintTestPlus extends KintTest {
+	public static function dbg(...$vars) {
+		Kint::$return = true;
+		$stash = Kint::$enabled_mode;
+		Kint::$enabled_mode = Kint::MODE_RICH;
+		$log = Kint::dump('KintTestPlus $log', ...$vars);
+		Kint::$enabled_mode = $stash;
+		return $log;
+	}
+
+	public function test2($call) {
+
+		$time = time();
+		$data = [
+		    'debug_mode' => true,
+		    'remove_autosave' => false,
+		    'cookie_notice' => false,
+		    'dup_page' => false,
+		    'disable_cached' => false,
+		    '_debug' => [
+		        'refresh' => false,
+		    ],
+		];
+
+		$log = KintTestPlus::dbg($time, $data);
+		call_user_func_array($call, [$log]);
+	}
+}
+
+
+
+trait zu_PlusDebugOutput_obsolete {
+
 	private $alog;
 	private $profiler;
 
@@ -13,7 +151,7 @@ trait zu_PlusDebugOutput {
 	private $output_html;
 	public $use_kint;
 
-	private $dbug_bar;
+	private $dbar;
 	private $use_var_dump;
 	private $location;
 	private $location_priority;
@@ -257,7 +395,7 @@ trait zu_PlusDebugOutput {
 			else $refer = sprintf('%1$s%4$s	%2$s:%3$s%4$s		from %5$s%4$s',  $trace[0]['display'], $trace[0]['calling_file'], $trace[0]['calling_line'], PHP_EOL, $refer);
 		}
 
-		if($save_debug_bar) $this->save_log($msg, $var, $ip, $refer_html);
+		if($save_debug_bar) $this->save($msg, $var, $ip, $refer_html);
 
 		$msg = sprintf('%6$s[%1$s]	%4$s~%3$s%6$s%5$s			%2$s --------------------------------------------------]%6$s',
 			date('d.m H:i:s'),
@@ -305,12 +443,4 @@ trait zu_PlusDebugOutput {
 	public function get_request_ajax() { return ZU_DebugBar::get_server_value('AJAX'); }
 	public function get_request_refer() { return ZU_DebugBar::get_server_value('HTTP_REFERER'); }
 
-	// очень сомнительно, работает только иногда
-	public function var_name($var, $with_dollar = true) {
-	    $trace = debug_backtrace();
-	    $v_line = file(__FILE__);
-	    $f_line = $v_line[$trace[1]['line'] - 1];
-	    preg_match("#\\$(\w+)#", $f_line, $match);
-	    return $with_dollar ? $match[0] : $match[1];
-	}
 }

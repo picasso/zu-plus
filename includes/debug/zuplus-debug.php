@@ -3,34 +3,44 @@
 // Debug Bar support ----------------------------------------------------------]
 
 require_once('kint.phar');
-// Kint::$return = true;
+// include_once('kint-debug/init_phar.php');
+
 include_once('debug-bar.php');
+include_once('trait-output.php');
 
 class zu_PlusDebug extends zukit_Addon {
 
-	private $dbug_bar = null;
+	private $dbar = null;
 
 	private $use_var_dump = false;
-	private $location = 0;
+	private $location = null;
 	private $location_priority = 0;
+
+	private $logfile = 'debug.log';
 	private $abs_path;
+	private $flywheel_path;
 	private $content_path;
+
+	use zu_PlusDebugOutput;
 
 	protected function config() {
 		return [
 			'name'				=> 'zuplus_debug',
 			'options'			=> [
-				'ajax_log'			=>	false,
-				'profiler'			=>	false,
-				'debug_js'			=>	false,
-				'debug_cache'		=>	false,
-				'debug_bar'			=>	true,
-				'debug_backtrace'	=>	false,
-				'write_to_file'		=>	false,
-				'output_html'		=>	true,
-				'beautify_html'		=>	true,
-				'use_kint'			=>  false,
-				'debug_frontend'	=> 	false,
+				'debug_bar'			=> true,
+				'use_kint'			=> true,
+				'flywheel_log'		=> false,
+				'debug_frontend'	=> false,
+				'debug_rsjs'		=> false,
+				'debug_caching'		=> false,
+				'write_file'		=> false,
+				'overwrite_file'	=> false,
+				'output_html'		=> true,
+
+				// 'ajax_log'			=> false,
+				// 'profiler'			=> false,
+				// 'debug_backtrace'	=> false,
+				// 'beautify_html'		=> true,
 			],
 		];
 	}
@@ -38,30 +48,65 @@ class zu_PlusDebug extends zukit_Addon {
 	protected function construct_more() {
 		$this->location = $this->plugin->dir;
 		$this->abs_path = wp_normalize_path(ABSPATH);
+		$this->flywheel_path = str_replace('/app/public/', '/logs/php/', $this->abs_path);
 		$this->content_path = wp_normalize_path(dirname(WP_CONTENT_DIR) . '/wp-content/');
+
+		$this->init_kint();
+
+		if($this->is_option('debug_bar')) {
+			$this->dbar = zu_PlusDebugBar::instance($this->options);
+			$this->dbar->link($this->plugin);
+		}
+		if($this->is_option('overwrite_file')) {
+			$handle = fopen($this->log_location(), 'w');
+			fclose($handle);
+			// $this->clear_log();
+		}
+	}
+
+	public function debug_info() {
+		$stats = $this->log_stats();
+		$use_kint = $this->is_option('use_kint');
+		return [
+			'kint_link'	=> !$use_kint ? null : [
+					'label'		=> __('Contributors', 'zu-plus'),
+					'value'		=> __('Kint for PHP', 'zu-plus'),
+					'link'		=> 'https://kint-php.github.io/kint/',
+					'depends' 	=> "$this->options_key.use_kint",
+			],
+			'kint_version'	=> !$use_kint ? null : [
+					'label'		=> __('Kint for PHP version', 'zu-plus'),
+					'value'		=> $this->kint_version,
+					'depends' 	=> "$this->options_key.use_kint",
+			],
+			'logfile'		=> [
+					'label'		=> __('Logfile', 'zu-plus'),
+					'value'		=> $stats['file'],
+					'depends' 	=> ['debug_mode', "$this->options_key.flywheel_log"],
+			],
+			'logsize'		=> [
+					'label'		=> __('Logfile Size', 'zu-plus'),
+					'value'		=> $stats['size'],
+					'depends' 	=> 'debug_mode',
+			],
+		];
 	}
 
 	public function admin_init() {
+		// zu_logc('Kint\Renderer\RichRenderer::$theme', Kint::$return, Kint::$enabled_mode);
+		//
+		// $this->log($this->options, $this->location, $this->abs_path, $this->content_path);
+	}
 
-		if($this->is_option('use_kint')) {
-			Kint::$enabled_mode = true;
-			// Kint\Renderer\RichRenderer::$theme = 'aante-light.css';
-			Kint::$return = true;
-		} else {
-			Kint::$enabled_mode = false;
-		}
-
-		if($this->is_option('debug_bar')) {
-			$this->dbug_bar = new ZU_DebugBar(
-				$this->is_option('profiler'),
-				$this->is_option('output_html'),
-				$this->is_option('use_kint')
-			);
-		}
+	public function is($key) {
+		return $this->is_option($key);
 	}
 
 	public function is_debug_frontend() {
 		return $this->is_option('debug_frontend');
+	}
+	public function is_use_kint() {
+		return $this->is_option('use_kint');
 	}
 
 	public function admin_enqueue($hook) {
@@ -88,40 +133,95 @@ class zu_PlusDebug extends zukit_Addon {
 
 	// Debug logging ----------------------------------------------------------]
 
-	public function clear_log($filename = 'debug.log') {
-		$f =  $this->log_location($filename);
-		unlink($f);
-		return ['info'	=> sprintf('Log was deleted at <strong>%1$s</strong>', $f)];
+	public function expanded_log($params, $called_class) {
+		// $args = func_get_args();
+		if($this->is_option('use_kint')) {
+			if($this->is_option('write_file')) {
+				$log = $this->kint_log($params);
+				$this->debug_log($log);
+			}
+			if($this->is_option('debug_bar')) {
+				$log = $this->kint_log($params, true);
+				$this->bar_log($log, true, null, $called_class);
+			}
+		} else {
+			$data = $this->is_option('debug_bar') ? $this->bar_log($params) : null;
+			$this->plugin->log_with(is_null($data) ? 2 : $data, null, ...$params);
+		}
+    }
+
+	// logging with context
+	public function expanded_log_with_context($context, $params, $called_class) {
+		if($this->is_option('use_kint')) {
+			if($this->is_option('write_file')) {
+				$label = $this->plugin->get_log_label($context);
+				$log = $this->kint_log($params);
+				$this->debug_log($label.$log);
+			}
+			if($this->is_option('debug_bar')) {
+				array_unshift($params, $context);
+				$log = $this->kint_log($params, true);
+				$this->bar_log($log, true, $context, $called_class);
+			}
+		} else {
+			$data = $this->is_option('debug_bar') ? $this->bar_log($params, false, $context) : null;
+			$this->plugin->log_with(is_null($data) ? 2 : $data, $context, ...$params);
+			// $this->plugin->log_with(2, $context, ...$params);
+		}
 	}
 
-	public function log_stats($filename = 'debug.log') {
+	// Logfile management -----------------------------------------------------]
 
-		$f = $this->log_location($filename);
-		$size = file_exists($f) ? filesize($f) : 0;
-		return ['size'	=> zu()->format_bytes($size, 2), 'priority' => $this->location_priority];
+	public function debug_log($log) {
+		if($this->is_option('write_file')) error_log($log, 3, $this->log_location());
 	}
 
-	public function log_location($filename = 'debug.log') {
-		return trailingslashit($this->location).$filename;
+	public function log_location($filename = null) {
+		$filename = $filename ?? $this->logfile;
+		return ($this->is_option('flywheel_log') ? $this->flywheel_path : trailingslashit($this->location)).$filename;
+	}
+
+	private function short_location($file) {
+		if($this->is_option('flywheel_log')) return preg_replace('/.+\/logs\/php\//', '/logs/php/', $file);
+		else return str_replace($this->content_path, '/', $file);
+	}
+
+	public function clear_log($filename = null) {
+		$file =  $this->log_location($filename ?? $this->logfile);
+		unlink($file);
+		$this->create_notice('info', sprintf(
+			'Debug log was deleted at <strong>%1$s</strong>',
+			$this->short_location($file)
+		));
+	}
+
+	public function log_stats($filename = null) {
+		$file = $this->log_location($filename ?? $this->logfile);
+		$size = file_exists($file) ? filesize($file) : 0;
+		return [
+			'file'		=> $this->short_location($file),
+			'size'		=> $this->snippets('format_bytes', $size, 2),
+			'priority'	=> $this->location_priority,
+		];
 	}
 
 	public function change_log_location($path, $priority = 1) {
 		if(stripos($path, '.php') !== false) $path = dirname($path);
 		if($priority > $this->location_priority) {
-			$this->location = trailingslashit($path);
+			$this->location = $path;
 			$this->location_priority = $priority;
 		}
 	}
 
 	public function profiler_flag($flag_name) {
 		// Call this at each point of interest, passing a descriptive string
-		if($this->is_option('profiler') && !empty($this->dbug_bar)) $this->dbug_bar->set_profiler_flag($flag_name);
+		if($this->is_option('profiler') && !empty($this->dbar)) $this->dbar->set_profiler_flag($flag_name);
 	}
 
 	public function save_log($log_name, $log_value = '', $ip = null, $refer = null) {
-    	if(!empty($this->dbug_bar)) {
+    	if(!empty($this->dbar)) {
 	    	$log_value = $log_value !== 'novar' ? $this->process_var($log_value, $this->is_option('output_html')) : '';
-	    	$this->dbug_bar->save_log($log_name, $log_value, $ip, $refer);
+	    	$this->dbar->save_log($log_name, $log_value, $ip, $refer);
 	    }
 	}
 
@@ -146,46 +246,7 @@ class zu_PlusDebug extends zukit_Addon {
 		if($condition) $this->write_log($msg, $var, $bt, $save_debug_bar);
 	}
 
-	// Admin functions -----------------------------------------------------------]
-
-	public function print_log_location($post) {
-
-		$form = $this->get_form();
-		if(empty($form)) return;
-
-		$form->add_value('log_location', $this->log_location());
-		$form->text('log_location', 'Log Location', '', true);
-
-		echo $form->fields('It can be changed with the function <span>_dbug_change_log_location()</span>.');
-	}
-
-	public function print_stats() {
-
-		$stats = $this->log_stats();
-		return sprintf('<p>Log size: <span>%1$s</span></p><p>Log priority: <span>%2$s</span></p>', $stats['size'], $stats['priority']);
-	}
-
-	public function print_debug_options($post) {
-
-		$form = $this->get_form();
-		if(empty($form)) return;
-
-		$form->checkbox('debug_bar', 'Use Debug Bar', 'Works only if <span>Query Monitor</span> is activated.');
-		$form->checkbox('use_kint', 'Use KINT', '<span>Kint for PHP</span> is a tool designed to present debugging data in the best way possible graphically.');
-		$form->checkbox('debug_frontend', 'Support on Front End', 'Enable debugging JS & CSS on the front side. Commonly used with KINT.');
-		$form->checkbox('debug_js', 'Activate Responsive JS Debug info', 'Adds class <span>debug</span> to BODY and displays debug info for responsive elements.');
-
-		$form->checkbox('debug_cache', 'Debug Caching', 'If checked, all calls to cache functions will be logged.');
-		$form->checkbox('debug_backtrace', 'Always Include Backtrace', 'In some cases, this can <span>greatly slow down</span> the loading of the page and even lead to a fatal error.');
-		$form->checkbox('write_to_file', 'Write log to file', 'If unchecked, only the information for <span>Debug Bar</span> will be saved.');
-		$form->checkbox('output_html', 'Display HTML entities in Debug Bar', 'If checked, all characters which have HTML character entity equivalents are translated into these entities.');
-		$form->checkbox('beautify_html', 'Beautify HTML in output', 'If unchecked, all HTML values will be saved without any modifications. Otherwise HTML beautifier will be used.');
-
-		$form->checkbox('ajax_log', 'Activate AJAX Logging', 'You should make <span>AJAX calls</span> from your JS.');
-		$form->checkbox('profiler', 'Activate Profiler', 'You should call <span>_profiler_flag()</span> at each point of interest, passing a descriptive string.');
-
-		echo $form->fields('Debug Mode Settings.');
-	}
+	// Debug methods ----------------------------------------------------------]
 
 }
 
@@ -246,8 +307,9 @@ if(!function_exists('_dbug_log_only')) {
 		zuplus_instance()->dbug->write_log_no_debug_bar($msg, $var, $bt);
 	}
 }
-
-if(!function_exists('_dbug_dump')) {	// Use this function to output structured information. Arrays and objects are explored recursively with values indented to show structure.
+// Use this function to output structured information. Arrays and objects are explored
+// recursively with values indented to show structure.
+if(!function_exists('_dbug_dump')) {
 	function _dbug_dump($msg, $var = 'novar', $bt = false) {
 		if(zuplus_nodebug()) return;
 		zuplus_instance()->dbug->use_var_dump(true);

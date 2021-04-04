@@ -1,16 +1,17 @@
 <?php
 /*
-Plugin Name: ZU+
+Plugin Name: Zu Plus
 Plugin URI: https://github.com/picasso/zulpus
 GitHub Plugin URI: https://github.com/picasso/zuplus
-Description: This plugin encompasses ZU framework functionality.
-Version: 1.4.8
+Description: This plugin is designed to support development with the Zukit framework and
+implements various debugging methods and other service functions.
+Version: 2.0.0
 Author: Dmitry Rudakov
 Author URI: https://dmitryrudakov.com/about/
-Text Domain: zuplus
+Text Domain: zu-plus
 Domain Path: /lang/
 Requires at least: 5.3.0
-Requires PHP: 7.0.0
+Requires PHP: 7.4.1
 */
 
 // Prohibit direct script loading
@@ -27,8 +28,10 @@ add_action('plugins_loaded', function() { 	// DEBUG ONLY
 require_once('zukit/load.php');
 
 // compatibility check for Zukit
-if(Zukit::is_compatible(__FILE__)) {
-
+if(Zukit::is_compatible(__FILE__, array(
+    'min_wp'    => '5.3.0',
+    'min_php'   => '7.4.1')
+)) {
 	require_once('includes/zuplus-plugin.php');
 	zuplus(__FILE__);
 }

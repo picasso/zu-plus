@@ -20,9 +20,9 @@ $foldout-zindex: 999999 !important;
 
 // IE flat out refuses to work with url mode unless it's base64 encoded... Stupid IE.
 // <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 150"><g stroke-width="2" fill="#FFF"><path d="M1 1h28v28H1zm5 14h18m-9 9V6M1 61h28v28H1zm5 14h18" stroke="#379"/><path d="M1 31h28v28H1zm5 14h18m-9 9V36M1 91h28v28H1zm5 14h18" stroke="#5A3"/><path d="M1 121h28v28H1zm5 5l18 18m-18 0l18-18" stroke="#CCC"/></g></svg>
-$caret-image: url("data:image/svg+xml !important;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMCAxNTAiPjxnIHN0cm9rZS13aWR0aD0iMiIgZmlsbD0iI0ZGRiI+PHBhdGggZD0iTTEgMWgyOHYyOEgxem01IDE0aDE4bS05IDlWNk0xIDYxaDI4djI4SDF6bTUgMTRoMTgiIHN0cm9rZT0iIzM3OSIvPjxwYXRoIGQ9Ik0xIDMxaDI4djI4SDF6bTUgMTRoMThtLTkgOVYzNk0xIDkxaDI4djI4SDF6bTUgMTRoMTgiIHN0cm9rZT0iIzVBMyIvPjxwYXRoIGQ9Ik0xIDEyMWgyOHYyOEgxem01IDVsMTggMThtLTE4IDBsMTgtMTgiIHN0cm9rZT0iI0NDQyIvPjwvZz48L3N2Zz4=") !default;
+$caret-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMCAxNTAiPjxnIHN0cm9rZS13aWR0aD0iMiIgZmlsbD0iI0ZGRiI+PHBhdGggZD0iTTEgMWgyOHYyOEgxem01IDE0aDE4bS05IDlWNk0xIDYxaDI4djI4SDF6bTUgMTRoMTgiIHN0cm9rZT0iIzM3OSIvPjxwYXRoIGQ9Ik0xIDMxaDI4djI4SDF6bTUgMTRoMThtLTkgOVYzNk0xIDkxaDI4djI4SDF6bTUgMTRoMTgiIHN0cm9rZT0iIzVBMyIvPjxwYXRoIGQ9Ik0xIDEyMWgyOHYyOEgxem01IDVsMTggMThtLTE4IDBsMTgtMTgiIHN0cm9rZT0iI0NDQyIvPjwvZz48L3N2Zz4=") !default;
 
-#qm-debug_bar_zu_debugbarpanel {
+#qm-debug_bar_zu_plusdebugbarpanel {
 .kint-rich {
   font-size: 13px !important;
   overflow-x: auto !important;
@@ -37,16 +37,17 @@ $caret-image: url("data:image/svg+xml !important;base64,PHN2ZyB4bWxucz0iaHR0cDov
     z-index: $foldout-zindex !important;
     width: 100% !important;
     margin: 0 !important;
-    display: none !important;
+    display: block !important;
 
-    &.kint-show {
-      display: block !important;
-    }
-
-    dd.kint-folder {
+    dd.kint-foldout {
       max-height: $foldout-max-size !important;
       padding-right: $spacing * 2px !important;
       overflow-y: scroll !important;
+      display: none !important;
+
+      &.kint-show {
+        display: block !important;
+      }
     }
   }
 
@@ -70,7 +71,7 @@ $caret-image: url("data:image/svg+xml !important;base64,PHN2ZyB4bWxucz0iaHR0cDov
     box-sizing: border-box !important;
     border-radius: 0 !important;
     color: $text-color !important;
-    float: none !important !important;
+    float: none !important;
     // font-family: Consolas, Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif !important;
     line-height: 15px !important;
     margin: 0 !important;
@@ -173,7 +174,7 @@ $caret-image: url("data:image/svg+xml !important;base64,PHN2ZyB4bWxucz0iaHR0cDov
     border-top: 0 !important;
     border: $border !important;
     background: $main-background !important;
-    display: block;
+    display: block !important;
     word-break: normal !important;
   }
 
@@ -182,34 +183,32 @@ $caret-image: url("data:image/svg+xml !important;base64,PHN2ZyB4bWxucz0iaHR0cDov
   .kint-search-trigger {
     background: rgba($text-color, 0.8) !important;
     border-radius: 3px !important;
-    height: (($color_size * 1px) + 1px) !important;
-    font-size: 13px !important; // $color_size * 1px
+    height: ($color_size * 1px) !important;
+    font-size: ($color_size * 1px) !important;
     margin-left: 5px !important;
     font-weight: bold !important;
-    width: $color_size * 1px !important;
+    width: ($color_size * 1px) !important;
     text-align: center !important;
-    float: right !important !important;
+    float: right !important;
     cursor: pointer !important;
     color: $main-background !important;
     position: relative !important;
     overflow: hidden !important;
 
     // Carefully balanced on multiple browsers
-    line-height: (($color_size * 1px) + 1px) !important;  // $color_size * 1.1 * 1px
+    line-height: ($color_size * 1.1 * 1px) !important;
 
     &:hover {
       color: $text-color !important;
+      // background: $main-background !important;
       background: lighten($main-background, 10%) !important;
-      outline: 1px solid $text-color;
     }
   }
 
   // The &boxbox !important; icon is slightly higher than the &lrarr !important; icon,
   // so increase the line height to make it line out better
   dt.kint-parent > .kint-popup-trigger {
-    line-height: 15px !important;
-    font-size: 12px !important;
-    // line-height: $color_size * 1.2 * 1px !important;
+    line-height: $color_size * 1.2 * 1px !important;
   }
 
   // The &telrec !important; icon is slightly smaller than the &lrarr !important; icon,
@@ -224,7 +223,7 @@ $caret-image: url("data:image/svg+xml !important;base64,PHN2ZyB4bWxucz0iaHR0cDov
     border-top-width: 0 !important;
     border-bottom-width: 0 !important;
     padding: $spacing * 1px !important;
-    float: right !important !important;
+    float: right !important;
     margin: ($spacing * -1px) 0 !important;
     color: $variable-name-color !important;
     background: $secondary-background !important;

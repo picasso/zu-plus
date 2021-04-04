@@ -1,8 +1,7 @@
 <?php
-if(!defined('ABSPATH')) die();
 
-// Add a new Debug Bar Panel.
-class ZU_DebugBarPanel extends Debug_Bar_Panel {
+// Add a new Debug Bar Panel
+class zu_PlusDebugBarPanel extends Debug_Bar_Panel {
     private $callback;
 
     public function set_callback( $callback ) {

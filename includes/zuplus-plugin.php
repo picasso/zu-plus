@@ -38,48 +38,54 @@ class zu_Plus extends zukit_Plugin  {
 				'remove_autosave'	=> false,
 				'cookie_notice'		=> false,
 				'dup_page'			=> false,
+				'disable_cached'	=> false,
+			],
+
+			'admin'				=> [
+				'menu'          	=>	'Zu+',
 			],
 		];
 	}
 
+	protected function construct_more() {
+		$this->options();
+		// we need to register Debug Addon earlier, otherwise its methods will not be available until 'init'
+		if($this->is_option('debug_mode')) {
+			$this->dbug = $this->register_addon(new zu_PlusDebug());
+			// zu()->set_debug_cache($this->check_option('debug_cache'));
+		}
+	}
+
 	protected function extend_info() {
-		return [];
-		// $stats = $this->folders ? $this->folders->stats() : [];
-		// return [
-		// 	'folders' 		=> empty($stats) ? null : [
-		// 			'label'		=> __('Folders', 'zu-media'),
-		// 			'value'		=> $stats['folders'],
-		// 			'depends' 	=> 'folders',
-		// 	],
-		// 	'memory'		=> [
-		// 			'label'		=> __('Cached Data', 'zu-media'),
-		// 			'value'		=> $this->get_cached_memory($stats),
-		// 			'depends' 	=> ['folders', 'disable_cache'],
-		// 	],
-		// ];
+		return array_merge([
+			// 'memory'		=> [
+			// 		'label'		=> __('Cached Shortcodes', 'zu-plus'),
+			// 		'value'		=> $this->get_cached_memory($stats),
+			// 		'depends' 	=> ['folders', 'disable_cache'],
+			// ],
+		], $this->dbug ? $this->dbug->debug_info() : []);
 	}
 
 	protected function extend_actions() {
 		return [
 			[
-				'label'		=> __('Reset All Cached Shortcodes', 'zuplus'),
+				'label'		=> __('Reset All Cached Shortcodes', 'zu-plus'),
 				'value'		=> 'zuplus_reset_cached',
 				'icon'		=> 'dismiss',
 				'color'		=> 'magenta',
-				'help'		=> __('Clear all cached data referenced to shortcodes '.
-									'(<strong>gallery</strong> and <strong>select</strong>). '.
-									'Needs if something went wrong.', 'zuplus'),
-				// 'depends'	=> false,
+				'help'		=> __('Clear all cached data referenced to shortcodes (**gallery** and **select**). '.
+									'Needs if something went wrong.', 'zu-plus'),
+				'depends'	=> '!disable_cached',
 			],
 			[
-				'label'		=> __('Revoke Cookie', 'zuplus'),
+				'label'		=> __('Revoke Cookie', 'zu-plus'),
 				'value'		=> 'zuplus_revoke_cookie',
 				'icon'		=> 'hidden',
 				'color'		=> 'gold',
-				'help'		=> __('Set "expires" value on cookie for 1970 which leads to cookie <strong>deleting</strong>. '.
-									'Needs for debugging only.', 'zuplus'),
+				'help'		=> __('Set "expires" value on cookie for 1970 which leads to cookie *deleting*. '.
+									'Needs for debugging only.', 'zu-plus'),
 				// the button will be visible only if this option is 'true'
-				'depends'	=> 'dominant',
+				'depends'	=> 'cookie_notice',
 				// ZU_CookieNotice::cookie_name()
 			],
 		];
@@ -112,21 +118,15 @@ class zu_Plus extends zukit_Plugin  {
 		// 	],
 		// ] : [];
 	}
+
 	// Actions & Add-ons ------------------------------------------------------]
 
 	public function init() {
-
-		// Debug Addon
-		if($this->is_option('debug_mode')) {
-			$this->dbug = $this->register_addon(new zu_PlusDebug());
-			// zu()->set_debug_cache($this->check_option('debug_cache'));
-		}
 
 		// Cookie Notice Addon
 		if($this->is_option('cookie_notice')) {
 			// $this->cnotice = $this->register_addon(new zu_PlusCookieNotice());
 		}
-
 
 		// Some internal 'inits' ----------------------------------------------]
 
@@ -154,6 +154,18 @@ class zu_Plus extends zukit_Plugin  {
 		// 	return $zu_defaults;
 		//
 		// }, 10, 2);
+
+		$time = time();
+		$data = $this->options;
+		// d($time, $data);
+		//
+		// $ktest = new KintTest();
+		zu_logc('*test message', $time, $data);
+
+		// $this->log($this->uri, $this->version, $this->prefix);
+		// $this->logc('Zu+ Options', $this->options);
+		zu_log($this->uri, $this->version, $this->prefix);
+		zu_logc('!Zu+ Options', $this->options);
 	}
 
 	public function admin_init() {
@@ -164,12 +176,33 @@ class zu_Plus extends zukit_Plugin  {
 		}
 	}
 
+	// Debug logging helpers --------------------------------------------------]
+
 	public function is_debug() {
 		return empty($this->dbug) ? false : true;
 	}
+	// public function with_kint() {
+	// 	return empty($this->dbug) ? false : $this->dbug->is('use_kint');
+	// }
+
+	protected function file_log($log) {
+		if($this->is_debug()) $this->dbug->debug_log($log);
+		else parent::file_log($log);
+	}
+
+	public function dlog($args, $called_class = null) {
+		if($this->is_debug()) $this->dbug->expanded_log($args, $called_class);
+		else parent::log_with(0, null, ...$args);
+	}
+
+	// logging with context
+	public function dlogc($context, $args, $called_class = null) {
+		if($this->is_debug()) $this->dbug->expanded_log_with_context($context, $args, $called_class);
+		else parent::log_with(0, $context, ...$args);
+	}
 
 	private function is_debug_frontend() {
-		return !empty($this->dbug) && $this->dbug->is_debug_frontend();
+		return empty($this->dbug) ? false : $this->dbug->is('debug_frontend');
 	}
 
 	// Custom menu position ---------------------------------------------------]
@@ -206,10 +239,10 @@ class zu_Plus extends zukit_Plugin  {
 				],
 			],
 			'rename'	=>	[
-				[
-					'menu'				=> 	'options-privacy.php',
-					'new_name'			=>	'Privacy',
-				],
+				// [
+				// 	'menu'				=> 	'options-privacy.php',
+				// 	'new_name'			=>	'Privacy',
+				// ],
 				[
 					'menu'				=> 	'watermark-options',
 					'new_name'			=>	'Watermark',

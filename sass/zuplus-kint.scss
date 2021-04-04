@@ -1,104 +1,190 @@
+@import "vars";
+@import "icons";
 $spacing: 5;
 
-$main-background: #FFDF99; //FFD479;
+$main-background: #FFDF99;
 $secondary-background: #CCAA61;
+$text-color: darken($secondary-background, 35%);
+$text-color-light: darken($secondary-background, 30%);
+$text-color-dark: darken($secondary-background, 40%);
 
-// $backdrop-color: $secondary-background;
-//
-// // base 0
-// $text-color: #839496;
-//
-// // base 1
-// $variable-name-color: #93a1a1;
-//
+$main-font-family: $font-family;
 
-$variable-type-color: #B24512; //#8C4600; //A75809;
-$variable-type-color-hover: #FF0020; //#0433FF;
+$variable-type-color: #B24512;
+$variable-type-color-hover: #B24512;
 $tab-inactive-color-hover: #FFF7BE;
-$error-color: #FF0020;
+$error-color: $red-bright-color;
 
-$border-color: #9A8049;
-$border-color-hover: #043396;
+$border-color: lighten(#9A8049, 10%);
+$border-color-hover: darken($main-background, 20%);
 
-$footer-color: #4C3D1E; //#7F6732;
+$footer-color: #4C3D1E;
 $footer-bg-color: #FFF7E6;
 
-// <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 30 150"><defs><path stroke-linejoin="round" d="M4 3a24 32 0 0 1 0 24 40 20-10 0 1 23-12A40 20 10 0 1 4 3z" id="a"/></defs><g fill="#93a1a1" stroke="#93a1a1"><use xlink:href="#a"/><use xlink:href="#a" transform="rotate(90 -15 45)"/></g><g fill="#586e75" stroke="#586e75" transform="translate(0 30)"><use xlink:href="#a"/><use xlink:href="#a" transform="rotate(90 -15 45)"/></g><path d="M6 126l18 18m-18 0l18-18" stroke-width="2" stroke="#586e75"/></svg>
-// $caret-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2aWV3Qm94PSIwIDAgMzAgMTUwIj48ZGVmcz48cGF0aCBzdHJva2UtbGluZWpvaW49InJvdW5kIiBkPSJNNCAzYTI0IDMyIDAgMCAxIDAgMjQgNDAgMjAtMTAgMCAxIDIzLTEyQTQwIDIwIDEwIDAgMSA0IDN6IiBpZD0iYSIvPjwvZGVmcz48ZyBmaWxsPSIjOTNhMWExIiBzdHJva2U9IiM5M2ExYTEiPjx1c2UgeGxpbms6aHJlZj0iI2EiLz48dXNlIHhsaW5rOmhyZWY9IiNhIiB0cmFuc2Zvcm09InJvdGF0ZSg5MCAtMTUgNDUpIi8+PC9nPjxnIGZpbGw9IiM1ODZlNzUiIHN0cm9rZT0iIzU4NmU3NSIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCAzMCkiPjx1c2UgeGxpbms6aHJlZj0iI2EiLz48dXNlIHhsaW5rOmhyZWY9IiNhIiB0cmFuc2Zvcm09InJvdGF0ZSg5MCAtMTUgNDUpIi8+PC9nPjxwYXRoIGQ9Ik02IDEyNmwxOCAxOG0tMTggMGwxOC0xOCIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2U9IiM1ODZlNzUiLz48L3N2Zz4=");
+$var-color: $text-color-dark;
+$var-bg-color: desaturate(darken($main-background, 20%), 15%);
+$var-bg-internal-color: desaturate(darken($main-background, 8%), 20%);
+$var-font-family: $font-family;
 
-$caret-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMCAxNTAiPjxnIHN0cm9rZS13aWR0aD0iMiIgZmlsbD0iI0ZGRiI+PHBhdGggZD0iTTEgMWgyOHYyOEgxem01IDE0aDE4bS05IDlWNk0xIDYxaDI4djI4SDF6bTUgMTRoMTgiIHN0cm9rZT0iIzM3OSIvPjxwYXRoIGQ9Ik0xIDMxaDI4djI4SDF6bTUgMTRoMThtLTkgOVYzNk0xIDkxaDI4djI4SDF6bTUgMTRoMTgiIHN0cm9rZT0iIzVBMyIvPjxwYXRoIGQ9Ik0xIDEyMWgyOHYyOEgxem01IDVsMTggMThtLTE4IDBsMTgtMTgiIHN0cm9rZT0iI0NDQyIvPjwvZz48L3N2Zz4=");
+$context-color: darken($secondary-background, 20%);
+$context-text-color: white;
+$context-text-shadow: $text-shadow-for-white;
+$context-border-color: darken($context-color, 10%);
 
+$trigger-bg-color: darken($secondary-background, 20%);
+$trigger-color: $main-background;
+$trigger-hover-bg-color: darken($main-background, 10%);
+$trigger-hover-color: $text-color-light;
+
+$ip-color: darken($violet-color, 10%);
+$func-color: darken($orange-color, 30%);
+$class-color: darken($red-color, 30%);
+
+
+
+$caret-image: $nav-icon;
+
+// не обновлять!! _kintbase.scss потому что он модифицирован добавлением !important плюс некоторые другие изменения
+// нужно только проконтролировать что верхний селектор в "kintbase" соответствует текущему
+// сейчас этот селектор = $debug-bar-selector: '#qm-debug_bar_zu_plusdebugbarpanel'
 @import "kintbase";
 
-#qm-debug_bar_zu_debugbarpanel {
+// #qm-debug_bar_zu_plusdebugbarpanel
+#{$debug-bar-selector} {
     .kint-rich {
         padding: 10px 10px 5px !important;
         background: $secondary-background !important;
-        font-family: Roboto, Menlo, Ubuntu, sans-serif !important;
-        // box-shadow: 0 0 5px 3px $secondary-background;
+        font-family: $main-font-family !important;
 
-      .kint-focused {
-        // green
-        box-shadow: 0 0 3px 2px #859900 inset !important;
-        border-radius: 7px !important;
-      }
+        .kint-focused {
+            box-shadow: 0 0 3px 2px #859900 inset !important;
+            border-radius: 7px !important;
+        }
+        var {
+            font-weight: 500 !important;
+            letter-spacing: 1px !important;
+            cursor: pointer;
+        }
+        dt {
+            letter-spacing: 0.5px !important;
+            span {
+                color: $error-color !important;
+                font-weight: 700;
+            }
+            b {
+                color: $variable-type-color !important;
+                font-weight: 500 !important;
+            }
+            &.__context.__dbg {
+                background-color: $context-color !important;
+                color: $context-text-color !important;
+                border-color: $context-border-color !important;
+                &:hover {
+                    border-color: $context-border-color !important;
+                }
+            }
+        }
+        dfn {
+            color: $var-color !important;
+            background-color: $var-bg-color;
+            padding: 0 5px !important;
+            border-radius: 3px !important;
+            letter-spacing: 1px !important;
+            font-weight: 500 !important;
+            font-family: $var-font-family !important;
+            font-size: 12px !important;
+        }
+        nav + dfn, nav + var {
+            margin-left: 5px !important;
+        }
+        dd {
+            dfn {
+                color: $text-color-light !important;
+                background-color: $var-bg-internal-color;
+            }
+            pre {
+                background-color: white !important;
+            }
+        }
 
-      var {
-          font-weight: 500 !important;
-      }
-      dt {
-          span {
-              color: $error-color !important;
-              font-weight: 700;
-          }
-          b {
-              color: $variable-type-color !important;
-              font-weight: 500 !important;
-          }
-      }
-      dfn {
-          color: #a0a !important;
-          letter-spacing: 1px;
-          font-weight: 500;
-          font-family: Roboto, Ubuntu, Menlo, sans-serif !important;
-          font-size: 12px;
-      }
-      dd {
-          dfn {
-             color: #222 !important;
-          }
-          pre {
-              background-color: white !important;
-          }
-      }
+        > dl > dt,
+        ul.kint-tabs {
+            box-shadow: none;
+        }
 
-      > dl > dt,
-      ul.kint-tabs {
-        box-shadow: none;
-      }
+        ul.kint-tabs li.kint-active-tab {
+            padding-top: 7px !important;
+            height: 34px !important;
+        }
 
-      ul.kint-tabs li.kint-active-tab {
-        padding-top: 7px !important;
-        height: 34px !important;
-      }
+        ul.kint-tabs {
+            li:hover {
+                color: $tab-inactive-color-hover !important;
+            }
+        }
 
-      ul.kint-tabs {
-          li:hover {
-              color: $tab-inactive-color-hover !important;
-          }
-      }
+        .kint-search-trigger,
+        .kint-popup-trigger,
+        .kint-access-path-trigger {
+            background-color: $trigger-bg-color !important;
+            color:$trigger-color !important;
+            line-height: 15px !important;
+            font-size: 13px !important;
+            font-weight: 500 !important;
+            height: 17px !important;
+            width: 18px !important;
+            &:hover {
+                background-color: $trigger-hover-bg-color !important;
+                color:$trigger-hover-color !important;
+            }
+        }
+        .kint-search-trigger {
+            font-size: 19px !important;
+            line-height: 17px !important;
+        }
 
-      footer {
-          ol {
-              margin-top: 10px !important;
-              padding: 10px !important;
-              background-color: $footer-bg-color !important;
-              li {
-                color: $footer-color !important;
-                letter-spacing: 1px !important;
-                margin-bottom: 5px !important;
-              }
-          }
-      }
-  }
+        dt.kint-parent > .kint-popup-trigger {
+            line-height: 16px !important;
+        }
+
+        footer {
+            .kint-popup-trigger {
+                background-color: transparent !important;
+                color:$trigger-hover-color !important;
+                &:hover {
+                    background-color: $trigger-hover-bg-color !important;
+                }
+            }
+            .kint-popup-trigger + nav {
+                margin-top: -3px !important;
+            }
+            ol {
+                margin-top: 10px !important;
+                padding: 10px !important;
+                background-color: $footer-bg-color !important;
+                li {
+                    color: $footer-color !important;
+                    letter-spacing: 1px !important;
+                    margin-bottom: 5px !important;
+                }
+            }
+
+            em {
+                font-style: normal !important;
+                &.__ip {
+                    color: $ip-color !important;
+                }
+                &.__func {
+                    font-weight: 600;
+                    letter-spacing: 0.5px !important;
+                    color: $func-color !important;
+                }
+                &.__class {
+                    font-weight: 600;
+                    letter-spacing: 0.8px !important;
+                    color: $class-color !important;
+                }
+            }
+        }
+    }
 }
