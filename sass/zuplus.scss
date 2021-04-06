@@ -93,6 +93,21 @@ $notice-dark-color: darken($notice-color, 20%);
 		letter-spacing: 0.5px !important;
 		color: $kint-theme-text-dark !important;
 		font-weight: 600 !important;
+		pre {
+			background-color: $kint-theme-main !important;
+			color: $kint-theme-text-dark !important;
+			max-width: 70em !important;
+			overflow: hidden !important;
+			text-overflow: ellipsis !important;
+			em {
+				font-style: normal !important;
+				padding: 1px !important;
+				border-radius: 3px !important;
+				background-color: $kint-theme-var-bg-internal-color !important;
+				letter-spacing: 0.5px;
+				color: #222 !important;
+			}
+		}
 	}
 	.__time, .__file {
 		color: $kint-theme-text-light !important;
@@ -103,38 +118,22 @@ $notice-dark-color: darken($notice-color, 20%);
 	.__time, .__ip {
 		text-align: center !important;
 	}
-
-	pre {
-		background-color: $kint-theme-main !important;
-		color: $kint-theme-text-dark !important;
-		max-width: 70em !important;
-		overflow: hidden !important;
-		text-overflow: ellipsis !important;
-		em {
-			font-style: normal !important;
-			padding: 1px !important;
-			border-radius: 3px !important;
-			background-color: $kint-theme-var-bg-internal-color !important;
-			letter-spacing: 0.5px;
-			color: #222 !important;
-		}
-	}
 }
 
-.notice {
-	a {
-		text-decoration: none;
-		border-bottom: 1px dotted;
-	}
-	span {
-		color: $magenta-color;
-		font-weight: 500;
-	}
-	&.notice-error a {
-		font-weight: 600;
-		color: $red-bright-color;
-	}
-}
+// .notice {
+// 	a {
+// 		text-decoration: none;
+// 		border-bottom: 1px dotted;
+// 	}
+// 	span {
+// 		color: $magenta-color;
+// 		font-weight: 500;
+// 	}
+// 	&.notice-error a {
+// 		font-weight: 600;
+// 		color: $red-bright-color;
+// 	}
+// }
 
 // .metabox-holder .postbox-container .empty-container {
 // 	border: 1px dashed #b4b9be;
@@ -143,9 +142,9 @@ $notice-dark-color: darken($notice-color, 20%);
 // 	top: 2px;
 // }
 
-#wp-admin-bar-site-name {
-	min-width: 160px;
-}
+// #wp-admin-bar-site-name {
+// 	min-width: 160px;
+// }
 
 // Remove advertisements ------------------------------------------------------]
 
