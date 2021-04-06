@@ -49,7 +49,7 @@ class zu_Plus extends zukit_Plugin  {
 
 	protected function construct_more() {
 		$this->options();
-		// we need to register Debug Addon earlier, otherwise its methods will not be available until 'init'
+		// we need to register 'Debug Addon' earlier, otherwise its methods will not be available until 'init'
 		if($this->is_option('debug_mode')) {
 			$this->dbug = $this->register_addon(new zu_PlusDebug());
 			// zu()->set_debug_cache($this->check_option('debug_cache'));
@@ -163,8 +163,8 @@ class zu_Plus extends zukit_Plugin  {
 		// zu_logc('*test message', $time, $data);
 
 		// $this->log($this->uri, $this->version, $this->prefix);
-$this->logc('Zu+ Options', $this->options);
-zu_log($this->uri, $this->version, $this->prefix);
+// $this->logc('Zu+ Options', $this->options);
+// zu_log($this->uri, $this->version, $this->prefix, wp_doing_ajax());
 		// zu_logc('!Zu+ Options', $this->options);
 	}
 
@@ -200,10 +200,6 @@ zu_log($this->uri, $this->version, $this->prefix);
 	public function dlogc($context, $args, $called_class = null) {
 		if($this->is_debug()) $this->dbug->expanded_log_with_context($context, $args, $called_class);
 		// if 'debug mode' is not activated, then all such calls should be muted
-	}
-
-	private function is_debug_frontend() {
-		return empty($this->dbug) ? false : $this->dbug->is('debug_frontend');
 	}
 
 	// Custom menu position ---------------------------------------------------]
@@ -273,34 +269,28 @@ zu_log($this->uri, $this->version, $this->prefix);
 	// Script enqueue ---------------------------------------------------------]
 
 	protected function should_load_css($is_frontend, $hook) {
-		return $is_frontend ? $this->is_debug_frontend() : $this->ends_with_slug($hook);
+		// we do not use true for the backend as this will add 'zukit' in dependencies
+		// which is not needed for all pages
+		// loading is implemented via 'enqueue_more'
+		return false;
 	}
 
 	protected function should_load_js($is_frontend, $hook) {
-		return $is_frontend ? $this->is_debug_frontend() : $this->ends_with_slug($hook);
+		return $is_frontend ? false : $this->ends_with_slug($hook);
 	}
 
-	// наверное устарело!
-	// public function init() {
-	// 	if($this->should_load_frontend()) {
-	// 		$this->ready();
-	// 	}
-	// }
+	protected function enqueue_more($is_frontend, $hook) {
+		$frontend_allowed = !empty($this->dbug) && $this->dbug->is('debug_frontend');
+		$autosave_allowed = $this->is_option('remove_autosave') && in_array($hook, ['post.php', 'post-new.php']);
 
-	// protected function enqueue_more($is_frontend, $hook) {
-	// 	if($this->is_debug()) $this->dbug->enqueue_kint_css($this->plugin);
-	// }
+		if(!$is_frontend || $frontend_allowed) {
+			$this->admin_enqueue_style(null);
+		}
 
-	// protected function admin_enqueue_more() {
-	// 	if($this->is_debug()) {
-	// 		$this->plugin->dbug->enqueue_kint_css($this->plugin);
-	// 	}
-	// }
-	//
-	// protected function enqueue_more() {
-	// 	$this->dbug->enqueue_kint_css($this);
-	// 	$this->enqueue_script($this->prefix.'-admin', [true]);
-	// }
+		if(!$is_frontend && $autosave_allowed) {
+			$this->admin_enqueue_script('rm-autosave', ['deps'	=> 'jquery']);
+		}
+	}
 	// protected function admin_extend_localize_data() {
 	// 	return ['remove_autosave' => $this->check_option('remove_autosave')];
 	// }
