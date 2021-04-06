@@ -3,6 +3,7 @@
 // Debug Bar support ----------------------------------------------------------]
 
 require_once('kint.phar');
+// require_once('kint-old.phar');
 // include_once('kint-debug/init_phar.php');
 
 include_once('debug-bar.php');
