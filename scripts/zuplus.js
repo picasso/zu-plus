@@ -19,7 +19,7 @@ const EditZuplus = ({
 		// ajaxAction,
 }) => {
 
-	const { options: optionsData, debug: debugOptionsData } = zuplus;
+	const { options: optionsData, debug: debugOptionsData, debugSelect: debugSelectData } = zuplus;
 
 	return (
 			<>
@@ -29,6 +29,7 @@ const EditZuplus = ({
 				<ZuplusDebug
 					wp={ wp }
 					data={ debugOptionsData }
+					selectData={ debugSelectData }
 					options={ options }
 					updateOptions={ updateOptions }
 				/>

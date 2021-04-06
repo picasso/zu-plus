@@ -155,17 +155,17 @@ class zu_Plus extends zukit_Plugin  {
 		//
 		// }, 10, 2);
 
-		$time = time();
-		$data = $this->options;
+		// $time = time();
+		// $data = $this->options;
 		// d($time, $data);
 		//
 		// $ktest = new KintTest();
-		zu_logc('*test message', $time, $data);
+		// zu_logc('*test message', $time, $data);
 
 		// $this->log($this->uri, $this->version, $this->prefix);
-		// $this->logc('Zu+ Options', $this->options);
-		zu_log($this->uri, $this->version, $this->prefix);
-		zu_logc('!Zu+ Options', $this->options);
+$this->logc('Zu+ Options', $this->options);
+zu_log($this->uri, $this->version, $this->prefix);
+		// zu_logc('!Zu+ Options', $this->options);
 	}
 
 	public function admin_init() {
@@ -181,24 +181,25 @@ class zu_Plus extends zukit_Plugin  {
 	public function is_debug() {
 		return empty($this->dbug) ? false : true;
 	}
-	// public function with_kint() {
-	// 	return empty($this->dbug) ? false : $this->dbug->is('use_kint');
-	// }
 
 	protected function file_log($log) {
 		if($this->is_debug()) $this->dbug->debug_log($log);
-		else parent::file_log($log);
+		// if 'debug mode' is not activated, then all such calls should be muted
+	}
+
+	protected function dump_log($log) {
+		return $this->is_debug() ? $this->dbug->dump($log) : '';
 	}
 
 	public function dlog($args, $called_class = null) {
 		if($this->is_debug()) $this->dbug->expanded_log($args, $called_class);
-		else parent::log_with(0, null, ...$args);
+		// if 'debug mode' is not activated, then all such calls should be muted
 	}
 
 	// logging with context
 	public function dlogc($context, $args, $called_class = null) {
 		if($this->is_debug()) $this->dbug->expanded_log_with_context($context, $args, $called_class);
-		else parent::log_with(0, $context, ...$args);
+		// if 'debug mode' is not activated, then all such calls should be muted
 	}
 
 	private function is_debug_frontend() {

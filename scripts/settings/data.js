@@ -7,22 +7,21 @@ const { __ } = wp.i18n;
 const options = {
 	debug_mode: {
 		label: 	__('Activate Debug Mode?', 'zu-plus'),
-		help:	__('All debug functions like *_dbug()* will be activated. Otherwise all calls will be muted.', 'zu-plus'),
+		help:	__('All debug functions like *zu_log()* will be activated. Otherwise all calls will be muted.', 'zu-plus'),
 	},
 	dup_page: {
 		label: 	__('Activate Duplicate Page & Menu?', 'zu-plus'),
 		help:	__('Allows duplicate Menu, Posts, Pages and Custom Posts using single click.', 'zu-plus'),
-		// depends: 'responsive',
 	},
 	cookie_notice: {
 		label: 	__('Activate Cookie Notice?', 'zu-plus'),
 		help:	__('Allows you to inform users that the site uses cookies and to comply with the EU GDPR regulations.', 'zu-plus'),
-		// 2em -> margins above and under the divider
-		divider: 2,
 	},
 	disable_cached: {
 		label: 	__('Disable Cached Shortcodes?', 'zu-plus'),
 		help: __('Disabling caching will result in memory savings, but very small (**not recommended**).', 'zu-plus'),
+		// 2em -> margins above and under the divider
+		divider: 2,
 	},
 	remove_autosave: {
 		label: 	__('Remove Autosave Notices?', 'zu-plus'),
@@ -47,13 +46,13 @@ const debug = {
 	debug_caching: {
 		label: 	__('Debug Caching', 'zu-plus'),
 		help: 	__('If checked, all calls to cache functions will be logged.', 'zu-plus'),
-		divider: 2,
 	},
 	debug_bar: {
 		label: 	__('Use Debug Bar', 'zu-plus'),
 		help:	__('Works only if [Query Monitor](https://github.com/johnbillion/query-monitor) is activated.', 'zu-plus'),
+		divider: 2,
 	},
-	output_html: {
+	convert_html: {
 		label: 	__('Convert to HTML entities in Debug Bar', 'zu-plus'),
 		help: 	__('If checked, all characters which have HTML character entity equivalents are translated into these entities.', 'zu-plus'),
 		depends: 'debug_bar',
@@ -62,35 +61,38 @@ const debug = {
 		label: 	__('Write log to file', 'zu-plus'),
 		help: 	__('If unchecked, only the information for `Debug Bar` will be saved.', 'zu-plus'),
 	},
-	overwrite_file: {
-		label: 	__('Overwrite logfile', 'zu-plus'),
-		help: 	__('If checked, the log data will be **overwritten on every request**, otherwise it will be appended to the file.', 'zu-plus'),
-		depends: 'write_file',
-	},
 	flywheel_log: {
 		label: 	__('Use Local logfile location', 'zu-plus'),
 		help: __('[Local by Flywheel](https://localwp.com//) is a free development application to develop WordPress locally.', 'zu-plus'),
 		depends: 'write_file',
 	},
-
-	// debug_backtrace: {
-	// 	label: 	__('Always Include Backtrace', 'zu-plus'),
-	// 	help: 	__('In some cases, this can `greatly slow down` the loading of the page and even lead to a fatal error.', 'zu-plus'),
-	// },
-	//
-	// beautify_html: {
-	// 	label: 	__('Beautify HTML in output', 'zu-plus'),
-	// 	help: 	__('If unchecked, all HTML values will be saved without any modifications. Otherwise HTML beautifier will be used.', 'zu-plus'),
-	// },
+	overwrite: {
+		label: 	__('Overwrite logs', 'zu-plus'),
+		help: 	__('If checked, the log data will be **overwritten on every request**, otherwise it will be appended to the file/Debug Bar.', 'zu-plus'),
+		depends: ['||', 'debug_bar', 'write_file'],
+	},
 	// ajax_log: {
 	// 	label: 	__('Activate AJAX Logging', 'zu-plus'),
 	// 	help: 	__('You should make `AJAX calls` from your JS.', 'zu-plus'),
 	// },
-	// profiler: {
-	// 	label: 	__('Activate Profiler', 'zu-plus'),
-	// 	help: 	__('You should call `_profiler_flag()` at each point of interest, passing a descriptive string.', 'zu-plus'),
-	// },
+};
 
+const dumpMethod = {
+	id: 'dump_method',
+	label: 	__('Method for outputting debug data', 'zu-plus'),
+	help:	__('Choose which method will be used to output **human-readable** information about a logged data.\nAttention! `var_export` does not handle circular references (**try another option in case of error**).', 'zu-plus'),
+	options: [
+		{ value: 'var_export', label: __('"var_export" function', 'zu-plus') },
+		{ value: 'print_r', label: __('"print_r" function', 'zu-plus') },
+		{ value: 'dump_var', label: __('"dump_var" function', 'zu-plus') },
+	],
+	defaultValue: 'var_export',
+	depends: '!use_kint',
+	divider: 2,
+};
+
+const debugSelect = {
+	dump_method: dumpMethod,
 };
 
 const panels = {
@@ -110,5 +112,6 @@ const panels = {
 export const zuplus = {
 	options,
 	debug,
+	debugSelect,
 	panels,
 }
