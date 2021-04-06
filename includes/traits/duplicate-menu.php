@@ -53,6 +53,16 @@ trait zu_PlusDuplicateMenu {
         return $new_id;
     }
 
+    private function get_menus() {
+        $nav_menus = wp_get_nav_menus();
+		$items = [];
+
+        foreach($nav_menus as $menu) {
+            $items[$menu->term_id] = $menu->name;
+        }
+        return $items;
+    }
+
     public function print_metabox($options) {
 
 /*

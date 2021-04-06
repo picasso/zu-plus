@@ -1,3 +1,6 @@
+#### 2.0.0 / 2021-04-01
+???
+
 #### 1.4.8 / 2020-04-20
 * refactoring `enqueue_style` and `enqueue_script` for Admin
 * !!changed order of args for `enqueue_script` to support `wp_localize_script`
