@@ -1,21 +1,19 @@
 # ZU+
 
-_Custom Functionality Plugin_
+_Plugin for developers_
 
-This plugin encompasses ZU framework functionality.
+This plugin does a lot of things. I will describe this later, after version 2.
 
-See [Dmitry Rudakov Coding](https://dmitryrudakov.com/coding/) for complete docs and demos.
 
 ## Install
 
 ### Download
 
-+ [ZU+ on GitHub](https://github.com/picasso/zu-plus/archive/master.zip) 
++ [ZU+ on GitHub](https://github.com/picasso/zu-plus/archive/master.zip)
 
 ## Description
 
-Link directly to ZU+ files on [dmitryrudakov.com](https://dmitryrudakov.com/coding/zu-plus/).
+There will be a detailed description ... maybe
 
-``` 
 ```
-
+```
