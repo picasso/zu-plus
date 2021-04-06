@@ -2,12 +2,12 @@
 @import "icons";
 $spacing: 5;
 
-$main-background: #FFDF99;
-$secondary-background: #CCAA61;
-$text-color: darken($secondary-background, 35%);
-$text-color-light: darken($secondary-background, 30%);
-$text-color-dark: darken($secondary-background, 40%);
+$text-color: $kint-theme-text;
+$text-color-light: $kint-theme-text-light;
+$text-color-dark: $kint-theme-text-dark;
 
+$main-background: $kint-theme-main;
+$secondary-background: $kint-theme-secondary;
 $main-font-family: $font-family;
 
 $variable-type-color: #B24512;
@@ -16,31 +16,29 @@ $tab-inactive-color-hover: #FFF7BE;
 $error-color: $red-bright-color;
 
 $border-color: lighten(#9A8049, 10%);
-$border-color-hover: darken($main-background, 20%);
+$border-color-hover: darken($kint-theme-main, 20%);
 
 $footer-color: #4C3D1E;
 $footer-bg-color: #FFF7E6;
 
-$var-color: $text-color-dark;
-$var-bg-color: desaturate(darken($main-background, 20%), 15%);
-$var-bg-internal-color: desaturate(darken($main-background, 8%), 20%);
+$var-color: $kint-theme-var-color;
+$var-bg-color: $kint-theme-var-bg-color;
+$var-bg-internal-color: $kint-theme-var-bg-internal-color;
 $var-font-family: $font-family;
 
-$context-color: darken($secondary-background, 20%);
+$context-color: darken($kint-theme-secondary, 20%);
 $context-text-color: white;
 $context-text-shadow: $text-shadow-for-white;
 $context-border-color: darken($context-color, 10%);
 
-$trigger-bg-color: darken($secondary-background, 20%);
-$trigger-color: $main-background;
-$trigger-hover-bg-color: darken($main-background, 10%);
+$trigger-bg-color: darken($kint-theme-secondary, 20%);
+$trigger-color: $kint-theme-main;
+$trigger-hover-bg-color: darken($kint-theme-main, 10%);
 $trigger-hover-color: $text-color-light;
 
 $ip-color: darken($violet-color, 10%);
 $func-color: darken($orange-color, 30%);
 $class-color: darken($red-color, 30%);
-
-
 
 $caret-image: $nav-icon;
 
@@ -53,8 +51,9 @@ $caret-image: $nav-icon;
 #{$debug-bar-selector} {
     .kint-rich {
         padding: 10px 10px 5px !important;
-        background: $secondary-background !important;
+        background: $kint-theme-secondary !important;
         font-family: $main-font-family !important;
+        margin-top: 0 !important;
 
         .kint-focused {
             box-shadow: 0 0 3px 2px #859900 inset !important;
@@ -67,15 +66,7 @@ $caret-image: $nav-icon;
         }
         dt {
             letter-spacing: 0.5px !important;
-            span {
-                color: $error-color !important;
-                font-weight: 700;
-            }
-            b {
-                color: $variable-type-color !important;
-                font-weight: 500 !important;
-            }
-            &.__context.__dbg {
+            #{$query-monitor-selector} &.__context.__dbg {
                 background-color: $context-color !important;
                 color: $context-text-color !important;
                 border-color: $context-border-color !important;

@@ -24,8 +24,10 @@ $context-warn-border-color: darken($context-warn-color, 10%);
 $context-hlt-color: darken($violet-color, 10%);
 $context-hlt-border-color: darken($context-hlt-color, 10%);
 
+$notice-color: #aad5ff;
+$notice-dark-color: darken($notice-color, 20%);
 
-dt, #{$debug-bar-selector} div.kint-rich dt {
+#{$zu-custom-logs-selector} dt, #{$debug-bar-selector} div.kint-rich dt {
 	&.__context {
 		letter-spacing: 1px !important;
 		background-color: $context-color !important;
@@ -60,10 +62,63 @@ dt, #{$debug-bar-selector} div.kint-rich dt {
 	}
 }
 
-pre {
-	max-width: 70em;
-	overflow: hidden;
-	text-overflow: ellipsis;
+#{$zu-custom-logs-selector} {
+	.qm-boxed {
+		padding: 10px 15px !important;
+		.qm-notice {
+			letter-spacing: 0.5px;
+			padding: 10px 15px !important;
+			margin: 0 !important;
+			em {
+				color: $notice-dark-color !important;
+				font-weight: 600 !important;
+				font-style: normal !important;
+			}
+		}
+	}
+	dt.__context {
+		padding: 5px 5px 5px 10px !important;
+	}
+	.__var {
+		margin: 5px !important;
+		color: $kint-theme-var-color !important;
+		background-color: $kint-theme-var-bg-color !important;
+		padding: 0 5px !important;
+		border-radius: 3px !important;
+		letter-spacing: 1px !important;
+		font-weight: 500 !important;
+		font-size: 12px !important;
+	}
+	.__value {
+		letter-spacing: 0.5px !important;
+		color: $kint-theme-text-dark !important;
+		font-weight: 600 !important;
+	}
+	.__time, .__file {
+		color: $kint-theme-text-light !important;
+		max-width: 40em !important;
+		overflow: hidden !important;
+		text-overflow: ellipsis !important;
+	}
+	.__time, .__ip {
+		text-align: center !important;
+	}
+
+	pre {
+		background-color: $kint-theme-main !important;
+		color: $kint-theme-text-dark !important;
+		max-width: 70em !important;
+		overflow: hidden !important;
+		text-overflow: ellipsis !important;
+		em {
+			font-style: normal !important;
+			padding: 1px !important;
+			border-radius: 3px !important;
+			background-color: $kint-theme-var-bg-internal-color !important;
+			letter-spacing: 0.5px;
+			color: #222 !important;
+		}
+	}
 }
 
 .notice {

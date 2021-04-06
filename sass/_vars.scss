@@ -14,4 +14,16 @@ $text-shadow-for-white: 0 1px 3px rgba(black, 0.3);
 
 $font-family: Roboto, Menlo, Ubuntu, sans-serif;
 
+$kint-theme-main: #FFDF99;
+$kint-theme-secondary: #CCAA61;
+$kint-theme-text: darken($kint-theme-secondary, 35%);
+$kint-theme-text-light: darken($kint-theme-secondary, 30%);
+$kint-theme-text-dark: darken($kint-theme-secondary, 40%);
+
+$kint-theme-var-color: $kint-theme-text-dark;
+$kint-theme-var-bg-color: desaturate(darken($kint-theme-main, 20%), 15%);
+$kint-theme-var-bg-internal-color: desaturate(darken($kint-theme-main, 8%), 20%);
+
 $debug-bar-selector: '#qm-debug_bar_zu_plusdebugbarpanel';
+$query-monitor-selector: '#query-monitor-main';
+$zu-custom-logs-selector: '#{$query-monitor-selector} #zu-custom-logs';
