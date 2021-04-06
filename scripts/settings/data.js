@@ -10,18 +10,17 @@ const options = {
 		help:	__('All debug functions like *zu_log()* will be activated. Otherwise all calls will be muted.', 'zu-plus'),
 	},
 	dup_page: {
-		label: 	__('Activate Duplicate Page & Menu?', 'zu-plus'),
-		help:	__('Allows duplicate Menu, Posts, Pages and Custom Posts using single click.', 'zu-plus'),
+		label: 	__('Activate Duplicate Page & Post?', 'zu-plus'),
+		help:	__('Allows duplicate Posts, Pages and Custom Posts using single click.', 'zu-plus'),
 	},
 	cookie_notice: {
 		label: 	__('Activate Cookie Notice?', 'zu-plus'),
 		help:	__('Allows you to inform users that the site uses cookies and to comply with the EU GDPR regulations.', 'zu-plus'),
 	},
 	disable_cached: {
+		divider: 2,
 		label: 	__('Disable Cached Shortcodes?', 'zu-plus'),
 		help: __('Disabling caching will result in memory savings, but very small (**not recommended**).', 'zu-plus'),
-		// 2em -> margins above and under the divider
-		divider: 2,
 	},
 	remove_autosave: {
 		label: 	__('Remove Autosave Notices?', 'zu-plus'),
@@ -34,14 +33,13 @@ const debug = {
 		label: 	__('Use KINT', 'zu-plus'),
 		help: __('[Kint for PHP](https://kint-php.github.io/kint/) is a tool designed to present debugging data in the best way possible graphically.', 'zu-plus'),
 	},
-	debug_frontend: {
-		label: 	__('Support front-end debugging?', 'zu-plus'),
-		help:	__('Enable debugging JS & CSS on the front side. Commonly used with KINT.', 'zu-plus'),
-		// depends: '!hide_root',
-	},
 	debug_rsjs: {
 		label: 	__('Activate `Responsive JS` debug info', 'zu-plus'),
-		help:	__('Adds class *debug* to BODY and displays debug info for responsive elements.', 'zu-plus'),
+		help:	__('Adds class *debug* to BODY and displays info for responsive elements (only if the theme supports it).', 'zu-plus'),
+	},
+	avoid_ajax: {
+		label: 	__('Do not log from AJAX calls', 'zu-plus'),
+		help:	__('If checked, all logging inside AJAX calls (via **admin-ajax.php**) will be ignored.', 'zu-plus'),
 	},
 	debug_caching: {
 		label: 	__('Debug Caching', 'zu-plus'),
@@ -51,6 +49,11 @@ const debug = {
 		label: 	__('Use Debug Bar', 'zu-plus'),
 		help:	__('Works only if [Query Monitor](https://github.com/johnbillion/query-monitor) is activated.', 'zu-plus'),
 		divider: 2,
+	},
+	debug_frontend: {
+		label: 	__('Support front-end debugging?', 'zu-plus'),
+		help:	__('Enable debugging JS & CSS on the front side. Used only with Debug Bar.', 'zu-plus'),
+		depends: 'debug_bar',
 	},
 	convert_html: {
 		label: 	__('Convert to HTML entities in Debug Bar', 'zu-plus'),

@@ -36,6 +36,7 @@ class zu_PlusDebug extends zukit_Addon {
 				'overwrite'			=> true,
 				'convert_html'		=> true,
 				'dump_method'		=> 'var_export',
+				'avoid_ajax'		=> true,
 
 				// 'ajax_log'			=> false,
 			],
@@ -98,16 +99,8 @@ class zu_PlusDebug extends zukit_Addon {
 	}
 
 	public function admin_enqueue($hook) {
-		if(in_array($hook, ['post.php', 'post-new.php'])) {
-			$this->admin_enqueue_script('debug', [
-				'data'		=> [
-					'remove_autosave' => $this->is_option('remove_autosave'),
-				],
-			]);
-		}
-		// prefix will be added to script name automatically
-		// $this->admin_enqueue_style('debug');
 		// add kint styles if needed
+		// prefix will be added to script name automatically
 		if($this->is_option('use_kint')) $this->admin_enqueue_style('kint');
 	}
 
@@ -122,6 +115,9 @@ class zu_PlusDebug extends zukit_Addon {
 	// Debug logging ----------------------------------------------------------]
 
 	public function expanded_log($params, $called_class) {
+
+		if($this->is_option('avoid_ajax') && wp_doing_ajax()) return;
+
 		if($this->is_option('use_kint')) {
 			if($this->is_option('write_file')) {
 				$log = $this->kint_log($params);
@@ -139,6 +135,9 @@ class zu_PlusDebug extends zukit_Addon {
 
 	// logging with context
 	public function expanded_log_with_context($context, $params, $called_class) {
+
+		if($this->is_option('avoid_ajax') && wp_doing_ajax()) return;
+
 		if($this->is_option('use_kint')) {
 			if($this->is_option('write_file')) {
 				$label = $this->plugin->get_log_label($context);
@@ -159,6 +158,7 @@ class zu_PlusDebug extends zukit_Addon {
 	// Logfile management -----------------------------------------------------]
 
 	public function debug_log($log) {
+		if($this->is_option('avoid_ajax') && wp_doing_ajax()) return;
 		if($this->is_option('write_file')) error_log($log, 3, $this->log_location());
 	}
 
