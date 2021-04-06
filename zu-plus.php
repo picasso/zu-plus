@@ -23,7 +23,7 @@ if(wp_doing_cron()) return;
 
 // Start! ---------------------------------------------------------------------]
 
-add_action('plugins_loaded', function() { 	// DEBUG ONLY
+// add_action('plugins_loaded', function() { 	// DEBUG ONLY
 
 require_once('zukit/load.php');
 
@@ -36,7 +36,7 @@ if(Zukit::is_compatible(__FILE__, array(
 	zuplus(__FILE__);
 }
 
-});
+// });
 
 // Hides the internal actions of Query Monitor in the output info from the plugin itself
 define('QM_HIDE_SELF', true);

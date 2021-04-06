@@ -25,13 +25,13 @@ class zu_Plus extends zukit_Plugin  {
 				'domain'			=> 'zu-plus',
 			],
 
-			// 'appearance'		=> [
-			// 	'colors'			=> [
-			// 		'backdrop'			=> '#f0f4fd',
-			// 		'header'			=> '#b0c5fd',
-			// 		'title'				=> '#283965',
-			// 	],
-			// ],
+			'appearance'		=> [
+				'colors'			=> [
+					'backdrop'	=> '#fffbf2',
+					'header'	=> '#ffdf99',
+					'title'		=> '#705824',
+				],
+			],
 
 			'options'			=> [
 				'debug_mode'		=> false,
@@ -44,6 +44,13 @@ class zu_Plus extends zukit_Plugin  {
 			'admin'				=> [
 				'menu'          	=>	'Zu+',
 			],
+
+			// add menu data for the Settings Page
+	        'settings_script'	=> [
+	            'data'  => [
+	                'menus'	=> $this->get_menus(),
+	            ],
+	        ],
 		];
 	}
 
@@ -130,8 +137,7 @@ class zu_Plus extends zukit_Plugin  {
 
 		// Some internal 'inits' ----------------------------------------------]
 
-		// $this->init_cachekeys();
-		// $this->init_baseurl();
+		// $this->init_??();
 
 		// не совсем понятно зачем это? скорее чтобы из плагина управлять опциями темы...
 		// устарелое решение, но нужно разобраться прежде чем удалять
@@ -155,21 +161,18 @@ class zu_Plus extends zukit_Plugin  {
 		//
 		// }, 10, 2);
 
-		// $time = time();
-		// $data = $this->options;
-		// d($time, $data);
-		//
-		// $ktest = new KintTest();
-		// zu_logc('*test message', $time, $data);
+// $time = time();
+// $data = $this->options;
+zu_log(Kint::$plugins);
+// zu_logc('*test message', $time, $data);
 
-		// $this->log($this->uri, $this->version, $this->prefix);
-// $this->logc('Zu+ Options', $this->options);
-// zu_log($this->uri, $this->version, $this->prefix, wp_doing_ajax());
-		// zu_logc('!Zu+ Options', $this->options);
+// $this->log($this->uri, $this->version, $this->prefix);
+$this->logc('Zu+ Options', $this->options);
+zu_log($this->uri, $this->version, $this->prefix, wp_doing_ajax());
+// zu_logc('!Zu+ Options', $this->options);
 	}
 
 	public function admin_init() {
-
 		// Duplicate Page Addon
 		if($this->is_option('dup_page')) {
 			// $this->duppage = $this->register_addon(new zu_PlusDuplicatePage());
