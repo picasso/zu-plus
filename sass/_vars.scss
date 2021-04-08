@@ -2,6 +2,21 @@
 	@media all and (max-width: $point)  { @content; }
 }
 
+// Alert colors
+$wp-alert-yellow: #f0b849;
+$wp-alert-red: #cc1818;
+$wp-alert-green: #4ab866;
+$wp-gray-900: #1e1e1e;          // For UI, use $gray-900.
+$wp-gray-700: #757575;		    // Meets 4.6:1 text contrast against white.
+$wp-gray-600: #949494;		    // Meets 3:1 UI or large text contrast against white.
+$wp-gray-400: #ccc;
+$wp-gray-200: #ddd;             // Used for most borders.
+$wp-blue-medium-100: #e5f5fa;
+$wp-blue-medium-500: #00a0d2;
+$wp-light-gray-500: #e2e4e7;
+$wp-link-blue: #0073aa;
+$wp-admin-blue-color: #0075af;
+
 $red-color: #ff3358;
 $green-color: #5b9a68;
 $blue-color: #00aced;
@@ -27,3 +42,4 @@ $kint-theme-var-bg-internal-color: desaturate(darken($kint-theme-main, 8%), 20%)
 $debug-bar-selector: '#qm-debug_bar_zu_plusdebugbarpanel';
 $query-monitor-selector: '#query-monitor-main';
 $zu-custom-logs-selector: '#{$query-monitor-selector} #zu-custom-logs';
+$duplicate-menu-selector: '.zuplus_dup_menu';
