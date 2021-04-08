@@ -120,6 +120,77 @@ $notice-dark-color: darken($notice-color, 20%);
 	}
 }
 
+// Settings Page --------------------------------------------------------------]
+
+$dup-padding: 10px;
+$dup-item-padding: 8px;
+
+.components-base-control__help {
+	color: $kint-theme-text !important;
+	font-style: normal !important;
+	em {
+		background-color: rgba($kint-theme-main, 0.4) !important;
+		color: $kint-theme-text !important;
+		font-style: normal !important;
+	}
+}
+
+#{$duplicate-menu-selector} {
+	min-width: 17em;
+
+	.__title, .__menu, .__input {
+		padding: $dup-padding;
+	}
+	.components-menu-group__label {
+		margin: 0;
+		padding: 0 $dup-item-padding 0 0;
+		white-space: nowrap;
+		text-align: left;
+		width: 100%;
+	}
+	.__title {
+		padding: ($dup-padding / 2) $dup-padding;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		border-bottom: 1px solid $wp-gray-400;
+		background-color: $wp-light-gray-500;
+		.__close {
+			padding-right: 0;
+			margin-right: -5px;
+		}
+	}
+	.__menu {
+		border-bottom: 1px solid $wp-gray-200;
+		.components-menu-item__button {
+			transition: background-color 0.2s ease-in;
+			border-bottom: 1px solid rgba($wp-gray-200, 0.5);
+			&:last-child {
+				border-bottom-color: transparent;
+			}
+			&:hover {
+				background-color: $wp-blue-medium-100;
+			}
+		}
+	}
+	.__input {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: flex-end;
+		.components-base-control {
+			margin: 0;
+			width: 100%;
+		}
+		.components-menu-group__label {
+			padding-bottom: $dup-item-padding;
+		}
+		.__submit {
+			padding-right: 16px;
+		}
+	}
+}
+
 // .notice {
 // 	a {
 // 		text-decoration: none;
