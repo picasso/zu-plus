@@ -93,7 +93,6 @@ class zu_Plus extends zukit_Plugin  {
 											'*Needs for debugging only*.', 'zu-plus'),
 				// the button will be visible only if this option is 'true'
 				'depends'			=> 'cookie_notice',
-				// ZU_CookieNotice::cookie_name()
 			],
 			[
 				// an indication that we will use the slot for 'MoreActions'
@@ -120,12 +119,6 @@ class zu_Plus extends zukit_Plugin  {
 		// 		'value'		=> 'zumedia_fix_orphaned',
 		// 		'icon'		=> 'hammer',
 		// 		'color'		=> 'blue',
-		// 	],
-		// 	[
-		// 		'label'		=> __('Check Existed Terms', 'zu-media'),
-		// 		'value'		=> 'zumedia_check_terms',
-		// 		'icon'		=> 'warning',
-		// 		'color'		=> 'gold',
 		// 	],
 		// ] : [];
 	}
@@ -164,15 +157,6 @@ class zu_Plus extends zukit_Plugin  {
 		// 	return $zu_defaults;
 		//
 		// }, 10, 2);
-
-// $time = time();
-// $data = $this->options;
-// zu_logc('*test message', $time, $data);
-
-// $this->log($this->uri, $this->version, $this->prefix);
-// $this->logc('Zu+ Options', $this->options);
-// zu_log($this->uri, $this->version, $this->prefix, wp_doing_ajax());
-// zu_logc('!Zu+ Options', $this->options);
 	}
 
 	public function admin_init() {
@@ -211,6 +195,15 @@ class zu_Plus extends zukit_Plugin  {
 	public function dlogc($context, $args, $called_class = null) {
 		if($this->is_debug()) $this->dbug->expanded_log_with_context($context, $args, $called_class);
 		// if 'debug mode' is not activated, then all such calls should be muted
+	}
+
+	// log location management
+	public function dlog_location($path, $priority = 1) {
+		if($this->is_debug()) {
+			if(is_null($path)) return $this->dbug->log_location();
+			else return $this->dbug->change_log_location($path, $priority);
+		}
+		return null;
 	}
 
 	// Custom menu position ---------------------------------------------------]
@@ -302,9 +295,6 @@ class zu_Plus extends zukit_Plugin  {
 			$this->admin_enqueue_script('rm-autosave', ['deps'	=> 'jquery']);
 		}
 	}
-	// protected function admin_extend_localize_data() {
-	// 	return ['remove_autosave' => $this->check_option('remove_autosave')];
-	// }
 }
 
 // Entry Point ----------------------------------------------------------------]

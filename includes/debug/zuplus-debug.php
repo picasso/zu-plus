@@ -202,45 +202,11 @@ class zu_PlusDebug extends zukit_Addon {
 			$this->location = $path;
 			$this->location_priority = $priority;
 		}
+		return $this->log_location();
 	}
 
 	private function short_location($file) {
 		if($this->is_option('flywheel_log')) return preg_replace('/.+\/logs\/php\//', '/logs/php/', $file);
 		else return str_replace($this->content_path, '/', $file);
-	}
-}
-
-// Functions for use in code --------------------------------------------------]
-
-if(!function_exists('zu_write_log')) {
-	function zu_write_log($msg, $var = 'novar') {
-		if(zuplus_nodebug()) return;
-		if(zuplus_instance()->dbug->use_kint) {
-			$info = $var;
-			_dbug('ZU_LOG: '.$msg, $info);
-		} else {
-			zuplus_instance()->dbug->write_log($msg, $var);
-		}
-	}
-}
-
-if(!function_exists('_dbug_change_log_location')) {
-	function _dbug_change_log_location($path, $priority = 1) {
-		if(zuplus_nodebug()) return;
-		zuplus_instance()->dbug->change_log_location($path, $priority);
-	}
-}
-
-if(!function_exists('_dbug_log_if')) {
-	function _dbug_log_if($condition, $msg, $var = 'novar', $bt = false) {
-		if(zuplus_nodebug()) return;
-		zuplus_instance()->dbug->write_log_if($condition, $msg, $var, $bt);
-	}
-}
-
-if(!function_exists('_ajax_log')) {
-	function _ajax_log($data) {
-		if(zuplus_nodebug()) return;
-		zuplus_instance()->dbug->write_ajax_log($data);
 	}
 }
