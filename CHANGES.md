@@ -1,5 +1,31 @@
-#### 2.0.0 / 2021-04-01
-???
+#### 2.0.2 / 2021-04-08
+* plugin description updated
+* implemented `Output menu order` debug option
+* re-implemented the functionality of duplicating the menu
+* improved log `location` methods
+* css improvements
+
+#### 2.0.1 / 2021-04-01
+* added custom colors for Settings Page
+* updated `Kint` phar
+* restored support of `remove_autosave` option
+* added `avoid_ajax` debug option
+* fixed css styles for `<pre>`
+* improved Kint support
+* added support for `dump method`
+* small improvements
+
+#### 2.0.0 / 2021-03-29
+* first working version after refactoring (not perfect)
+* updated `Kint` to ver 3.3
+* simple __Settings Page__ re-implemented
+* refactoring to use __Zukit__
+
+---
+
+&#x274C;  __Attention!__ Breaking changes in version 2.0.0
+
+---
 
 #### 1.4.8 / 2020-04-20
 * refactoring `enqueue_style` and `enqueue_script` for Admin
@@ -16,9 +42,9 @@
 
 #### 1.4.5 / 2020-02-03
 * fixed compatibility with Wordpress 5.3
-* added `KINT` support & integration with `Query Monitor`
+* added `Kint` support & integration with `Query Monitor`
 * added Kint theme for Query QueryMonitor
-* added `_dbug` function to use with KINT
+* added `_dbug` function to use with Kint
 * small fixes
 
 #### 1.4.4 / 2018-07-03
