@@ -38,7 +38,7 @@ const debug = {
 		help:	__('Adds class *debug* to BODY and displays info for responsive elements (only if the theme supports it).', 'zu-plus'),
 	},
 	avoid_ajax: {
-		label: 	__('Do not log from AJAX calls', 'zu-plus'),
+		label: 	__('Avoid AJAX calls', 'zu-plus'),
 		help:	__('If checked, all logging inside AJAX calls (via **admin-ajax.php**) will be ignored.', 'zu-plus'),
 	},
 	debug_caching: {
@@ -98,6 +98,14 @@ const debugSelect = {
 	dump_method: dumpMethod,
 };
 
+const duplicate = {
+	action: __('Duplicate Menu', 'zu-plus'),
+	help: __('Here you can easily duplicate any of your **WordPress Menus**. Just follow the instructions.', 'zu-plus'),
+	select: __('Select menu to duplicate', 'zu-plus'),
+	input: __('And enter a name for menu', 'zu-plus'),
+	button: __('Duplicate', 'zu-plus'),
+};
+
 const panels = {
 	debug: {
 		value: true,
@@ -116,5 +124,6 @@ export const zuplus = {
 	options,
 	debug,
 	debugSelect,
+	duplicate,
 	panels,
 }

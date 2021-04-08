@@ -76,24 +76,28 @@ class zu_Plus extends zukit_Plugin  {
 	protected function extend_actions() {
 		return [
 			[
-				'label'		=> __('Reset All Cached Shortcodes', 'zu-plus'),
-				'value'		=> 'zuplus_reset_cached',
-				'icon'		=> 'dismiss',
-				'color'		=> 'magenta',
-				'help'		=> __('Clear all cached data referenced to shortcodes (**gallery** and **select**). '.
+				'label'				=> __('Reset Cached Shortcodes', 'zu-plus'),
+				'value'				=> 'zuplus_reset_cached',
+				'icon'				=> 'backup',
+				'color'				=> 'magenta',
+				'help'				=> __('Clear all cached data referenced to shortcodes (**gallery** and **select**). '.
 									'Needs if something went wrong.', 'zu-plus'),
-				'depends'	=> '!disable_cached',
+				'depends'			=> '!disable_cached',
 			],
 			[
-				'label'		=> __('Revoke Cookie', 'zu-plus'),
-				'value'		=> 'zuplus_revoke_cookie',
-				'icon'		=> 'hidden',
-				'color'		=> 'gold',
-				'help'		=> __('Set "expires" value on cookie for 1970 which leads to cookie *deleting*. '.
-									'Needs for debugging only.', 'zu-plus'),
+				'label'				=> __('Revoke Cookie', 'zu-plus'),
+				'value'				=> 'zuplus_revoke_cookie',
+				'icon'				=> 'food',
+				'color'				=> 'gold',
+				'help'				=> __('Set "expires" value on cookie for 1970 which leads to cookie **deleting**. '.
+											'*Needs for debugging only*.', 'zu-plus'),
 				// the button will be visible only if this option is 'true'
-				'depends'	=> 'cookie_notice',
+				'depends'			=> 'cookie_notice',
 				// ZU_CookieNotice::cookie_name()
+			],
+			[
+				// an indication that we will use the slot for 'MoreActions'
+				'hasMoreActions'	=> true,
 			],
 		];
 	}
@@ -163,12 +167,11 @@ class zu_Plus extends zukit_Plugin  {
 
 // $time = time();
 // $data = $this->options;
-zu_log(Kint::$plugins);
 // zu_logc('*test message', $time, $data);
 
 // $this->log($this->uri, $this->version, $this->prefix);
-$this->logc('Zu+ Options', $this->options);
-zu_log($this->uri, $this->version, $this->prefix, wp_doing_ajax());
+// $this->logc('Zu+ Options', $this->options);
+// zu_log($this->uri, $this->version, $this->prefix, wp_doing_ajax());
 // zu_logc('!Zu+ Options', $this->options);
 	}
 

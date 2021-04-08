@@ -1,5 +1,7 @@
 // WordPress dependencies
 
+const { get } = lodash;
+
 // Zukit dependencies
 
 const { renderPage, toggleOption } = wp.zukit.render;
@@ -9,6 +11,7 @@ const { ZukitPanel } = wp.zukit.components;
 
 import { zuplus } from './settings/data.js';
 import ZuplusDebug from './settings/debug.js';
+import ZuplusDupMenu from './settings/duplicate-menu.js';
 
 const EditZuplus = ({
 		wp,
@@ -16,10 +19,16 @@ const EditZuplus = ({
 		options,
 		updateOptions,
 		// setUpdateHook,
-		// ajaxAction,
+		ajaxAction,
+		moreData,
 }) => {
 
-	const { options: optionsData, debug: debugOptionsData, debugSelect: debugSelectData } = zuplus;
+	const {
+		options: optionsData,
+		debug: debugOptionsData,
+		debugSelect: debugSelectData,
+		duplicate: duplicateData,
+	} = zuplus;
 
 	return (
 			<>
@@ -32,6 +41,11 @@ const EditZuplus = ({
 					selectData={ debugSelectData }
 					options={ options }
 					updateOptions={ updateOptions }
+				/>
+				<ZuplusDupMenu
+					data={ duplicateData }
+					menus={ get(moreData, 'menus', null) }
+					ajaxAction={ ajaxAction }
 				/>
 			</>
 	);
