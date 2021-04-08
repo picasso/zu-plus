@@ -41,6 +41,10 @@ const debug = {
 		label: 	__('Avoid AJAX calls', 'zu-plus'),
 		help:	__('If checked, all logging inside AJAX calls (via **admin-ajax.php**) will be ignored.', 'zu-plus'),
 	},
+	debug_menus: {
+		label: 	__('Output menu order', 'zu-plus'),
+		help: 	__('If checked, the current order of items in **menus** and **submenus** will be logged.', 'zu-plus'),
+	},
 	debug_caching: {
 		label: 	__('Debug Caching', 'zu-plus'),
 		help: 	__('If checked, all calls to cache functions will be logged.', 'zu-plus'),

@@ -38,6 +38,7 @@ class zu_PlusDebug extends zukit_Addon {
 				'convert_html'		=> true,
 				'dump_method'		=> 'var_export',
 				'avoid_ajax'		=> true,
+				'debug_menus'		=> false,
 
 				// 'ajax_log'			=> false,
 			],
@@ -91,10 +92,11 @@ class zu_PlusDebug extends zukit_Addon {
 		];
 	}
 
-	// public function admin_init() {
-	// 	// $this->log($this->options, $this->location, $this->abs_path, $this->content_path);
-	// }
-	//
+	public function admin_init() {
+		// zu_log($this->dbar);
+		// $this->log($this->options, $this->location, $this->abs_path, $this->content_path);
+	}
+
 	public function is($key) {
 		return $this->is_option($key);
 	}

@@ -188,6 +188,11 @@ class zu_Plus extends zukit_Plugin  {
 		return empty($this->dbug) ? false : true;
 	}
 
+	// output in log the current order of items in menus and submenus
+	protected function custom_menu_debug() {
+		return $this->is_debug() ? $this->dbug->is('debug_menus') : false;
+	}
+
 	protected function file_log($log) {
 		if($this->is_debug()) $this->dbug->debug_log($log);
 		// if 'debug mode' is not activated, then all such calls should be muted
