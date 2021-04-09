@@ -56,10 +56,10 @@ class zu_PlusDebug extends zukit_Addon {
 			$this->dbar = zu_PlusDebugBar::instance($this->options);
 			$this->dbar->link($this);
 		}
-		// remove previous logs
-		if($this->is_option('overwrite')) {
-			$handle = fopen($this->log_location(), 'w');
-			if($handle !== false) fclose($handle);
+		// remove previous logs if 'overwrite' is true
+		// skip ajax and REST calls or the log can be unintentionally cleared before reading
+		if($this->is_option('overwrite') && !wp_doing_ajax() && $this->plugin->doing_rest()) {
+			$this->clear_file($this->log_location());
 			zu_PlusDebugBar::reset_logs();
 		}
 	}
@@ -179,11 +179,16 @@ class zu_PlusDebug extends zukit_Addon {
 
 	public function clear_log($filename = null) {
 		$file =  $this->log_location($filename ?? $this->logfile);
-		unlink($file);
-		$this->create_notice('info', sprintf(
-			'Debug log was deleted at <strong>%1$s</strong>',
-			$this->short_location($file)
-		));
+		$size = file_exists($file) ? filesize($file) : 0;
+		if($this->clear_file($file)) {
+			// unlink($file);
+			return $this->create_notice('success', sprintf(
+				htmlentities('**Debug log** [*%2$s*] was deleted at `<ROOT>%1$s`'),
+				$this->short_location($file),
+				$this->snippets('format_bytes', $size, 1)
+			));
+		}
+		return null;
 	}
 
 	public function log_stats($filename = null) {
@@ -208,5 +213,11 @@ class zu_PlusDebug extends zukit_Addon {
 	private function short_location($file) {
 		if($this->is_option('flywheel_log')) return preg_replace('/.+\/logs\/php\//', '/logs/php/', $file);
 		else return str_replace($this->content_path, '/', $file);
+	}
+
+	private function clear_file($file) {
+		$handle = fopen($file, 'w');
+		if($handle !== false) fclose($handle);
+		return $handle !== false;
 	}
 }

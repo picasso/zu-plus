@@ -206,6 +206,10 @@ class zu_Plus extends zukit_Plugin  {
 		return null;
 	}
 
+	public function dlog_clean() {
+		return $this->is_debug() ? $this->dbug->clear_log() : null;
+	}
+
 	// Custom menu position ---------------------------------------------------]
 
 	protected function custom_admin_menu() {
