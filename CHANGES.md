@@ -1,3 +1,8 @@
+#### 2.0.3 / 2021-04-12
+* addded Zukit `Core Info` panel
+* admin styles are divided into common and for the Settings Page
+* implemented supports log clearing now
+
 #### 2.0.2 / 2021-04-08
 * plugin description updated
 * implemented `Output menu order` debug option

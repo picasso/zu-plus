@@ -4,7 +4,7 @@ Plugin Name: Zu Plus
 Plugin URI: https://github.com/picasso/zu-plus
 GitHub Plugin URI: https://github.com/picasso/zu-plus
 Description: Plugin that supports development with the Zukit framework and implements various debugging methods and other service functions.
-Version: 2.0.2
+Version: 2.0.3
 Author: Dmitry Rudakov
 Author URI: https://dmitryrudakov.com/about/
 Text Domain: zu-plus

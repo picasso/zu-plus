@@ -18,11 +18,11 @@ class zu_PlusDuplicatePage extends zukit_Addon {
 
 	protected function config() {
 		return [
-			'name'				=> 'zuplus_duplicate_page',
+			'name'		=> 'zuplus_duplicate_page',
 			'options'			=> [
-				'status'			=> 	'draft',
-				'redirect'			=> 	'to_page',
-				'suffix'			=> 	'copy',
+				'status'	=> 'draft',
+				'redirect'	=> 'to_page',
+				'suffix'	=> 'copy',
 			],
 		];
 	}
@@ -53,7 +53,13 @@ class zu_PlusDuplicatePage extends zukit_Addon {
 	public function duplicate_post_as_draft() {
 		global $wpdb;
 
-		if(!(isset($_GET['post']) || isset($_POST['post']) || (isset($_REQUEST['action']) && self::$dup_action == $_REQUEST['action']))) 	wp_die('No post to duplicate has been supplied!');
+		if(!(
+			isset($_GET['post'])
+			|| isset($_POST['post'])
+			|| (isset($_REQUEST['action']) && self::$dup_action == $_REQUEST['action'])
+		)) {
+
+		}	wp_die('No post to duplicate has been supplied!');
 
 		$returnpage = '';
 		$post_id = (isset($_GET['post']) ? $_GET['post'] : $_POST['post']);
@@ -67,7 +73,7 @@ class zu_PlusDuplicatePage extends zukit_Addon {
 		$new_post_author = $current_user->ID;
 		$new_post_title = function_exists('tplus_modify_content') ? tplus_modify_content($post->post_title, '', $suffix) : zu()->modify_content($post->post_title, '', $suffix);
 
-		//		if post data exists, create the post duplicate
+		// if post data exists, create the post duplicate
 
 		if(isset($post) && $post != null) {
 			$args = [
@@ -86,12 +92,10 @@ class zu_PlusDuplicatePage extends zukit_Addon {
 				'menu_order' 				=> $post->menu_order
 			];
 
-			//		insert the post by wp_insert_post() function
-
+			// insert the post by wp_insert_post() function
 			$new_post_id = wp_insert_post($args);
 
 			 //	get all current post terms ad set them to the new post draft
-
 			$taxonomies = get_object_taxonomies($post->post_type);
 			if(!empty($taxonomies) && is_array($taxonomies)) {
 				foreach($taxonomies as $taxonomy) {
@@ -100,8 +104,7 @@ class zu_PlusDuplicatePage extends zukit_Addon {
 				}
 			}
 
-			//		duplicate all post meta
-
+			// duplicate all post meta
 			$post_meta_infos = $wpdb->get_results("SELECT meta_key, meta_value FROM $wpdb->postmeta WHERE post_id=$post_id");
 
 			if(count($post_meta_infos) !=0) {
@@ -116,8 +119,7 @@ class zu_PlusDuplicatePage extends zukit_Addon {
 				$wpdb->query($sql_query);
 			}
 
-			//		finally, redirecting to your choice
-
+			// finally, redirecting to your choice
 			if($post->post_type != 'post') $returnpage = '?post_type='.$post->post_type;
 
 			if(!empty($redirect_it) && $redirect_it == 'to_list') wp_redirect(admin_url('edit.php'.$returnpage));
@@ -130,27 +132,30 @@ class zu_PlusDuplicatePage extends zukit_Addon {
 		}
 	}
 
-	public function duplicate_post_link($actions, $post) {				// Add the duplicate link to action list for post_row_actions
+	// Add the duplicate link to action list for post_row_actions
+	public function duplicate_post_link($actions, $post) {
 
 		if(current_user_can('edit_posts')) {
-			$actions['duplicate_this'] = sprintf('<a href="admin.php?action=%1$s&amp;post=%2$s" title="Duplicate this as %3$s" rel="permalink">%4$s</a>',
+			$actions['duplicate_this'] = sprintf(
+				'<a href="admin.php?action=%1$s&amp;post=%2$s" title="Duplicate this as %3$s" rel="permalink">%4$s</a>',
 				self::$dup_action,
 				$post->ID,
 				$this->get_form_value('dup_status'),
-				__('Duplicate This', 'zu-plugin')
+				__('Duplicate This', 'zu-plus')
 			);
 		}
 		return $actions;
 	}
 
-	public function duplicate_post_button() {									// Add the duplicate link to edit screen
+	// Add the duplicate link to edit screen
+	public function duplicate_post_button() {
 		global $post;
 
 		$icon = 'images-alt2';
 		$color = 'blue';
 		$button_classes = ['button', 'button-primary', 'zu-dashicons', 'zu-button', 'zu-side-button']; // , 'zuplus_ajax_option'
 
-		printf(
+		zu_printf(
 			'<div id="zuplus-duplicate-this" class="zuplus zu-pub-section">
 				<a class="%6$s zu-button-%5$s" href="admin.php?action=%1$s&amp;post=%2$s" title="Duplicate this as %3$s" rel="permalink">
 					<span class="dashicons dashicons-%4$s"></span>
@@ -163,7 +168,7 @@ class zu_PlusDuplicatePage extends zukit_Addon {
 			$icon,
 			$color,
 			zu()->merge_classes($button_classes),
-			__('Duplicate This', 'zu-plugin')
+			__('Duplicate This', 'zu-plus')
 		);
 	}
 
