@@ -19,8 +19,8 @@ const optionsKey = 'zuplus_debug_options';
 
 const ZuplusDebug = ({
 		// wp,
-		data,
-		selectData,
+		labels,
+		selectLabels,
 		options,
 		updateOptions,
 }) => {
@@ -28,9 +28,9 @@ const ZuplusDebug = ({
 	if(options['debug_mode'] === false) return null;
 
 	return (
-			<ZukitPanel className="__debug" id="debug" options={ options } initialOpen={ true }>
-				{ toggleOption(data, options, updateOptions, optionsKey) }
-				{ selectOption(selectData.dump_method, options, updateOptions, optionsKey) }
+			<ZukitPanel className="__debug" id="debug" options={ options } initialOpen={ false }>
+				{ toggleOption(labels, options, updateOptions, optionsKey) }
+				{ selectOption(selectLabels.dump_method, options, updateOptions, optionsKey) }
 			</ZukitPanel>
 	);
 };

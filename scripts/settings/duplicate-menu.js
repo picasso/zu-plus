@@ -13,7 +13,7 @@ const cprefix = 'zuplus_dup_menu';
 const buttonIcon = 'welcome-widgets-menus';
 
 const ZuplusDupMenu = ({
-		data,
+		labels,
 		menus,
 		ajaxAction,
 }) => {
@@ -59,8 +59,8 @@ const ZuplusDupMenu = ({
 				color="green"
 				icon={ buttonIcon }
 				onClick={ openLinkUI }
-				label={ data.action }
-				help={ data.help }
+				label={ labels.action }
+				help={ labels.help }
 				ref={ anchorRef }
 			/>
 			{ isOpen && (
@@ -73,7 +73,7 @@ const ZuplusDupMenu = ({
 				>
 					<div className={ cprefix }>
 						<div className="__title">
-							<div className="components-menu-group__label">{ data.select }</div>
+							<div className="components-menu-group__label">{ labels.select }</div>
 							<Button
 								className="__close"
 								icon={ closeIcon }
@@ -93,7 +93,7 @@ const ZuplusDupMenu = ({
 							) }
 						</NavigableMenu>
 						<div className="__input">
-							<div className="components-menu-group__label">{ data.input }</div>
+							<div className="components-menu-group__label">{ labels.input }</div>
 							<AdvTextControl
 								// withDebounce
 								// withoutClear
@@ -110,7 +110,7 @@ const ZuplusDupMenu = ({
 								icon={ buttonIcon }
 								onClick={ duplicateMenu }
 							>
-								{ data.button }
+								{ labels.button }
 							</Button>
 						</div>
 					</div>

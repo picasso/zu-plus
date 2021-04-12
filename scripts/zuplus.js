@@ -12,6 +12,7 @@ const { ZukitPanel } = wp.zukit.components;
 import { zuplus } from './settings/data.js';
 import ZuplusDebug from './settings/debug.js';
 import ZuplusDupMenu from './settings/duplicate-menu.js';
+import ZuplusCoreInfo from './settings/info.js';
 
 const EditZuplus = ({
 		wp,
@@ -24,27 +25,32 @@ const EditZuplus = ({
 }) => {
 
 	const {
-		options: optionsData,
-		debug: debugOptionsData,
-		debugSelect: debugSelectData,
-		duplicate: duplicateData,
+		options: optionsLabels,
+		debug: debugOptionsLabels,
+		debugSelect: debugSelectLabels,
+		duplicate: duplicateLabels,
+		info: coreInfoLabels,
 	} = zuplus;
 
 	return (
 			<>
 				<ZukitPanel title={ title }>
-					{ toggleOption(optionsData, options, updateOptions) }
+					{ toggleOption(optionsLabels, options, updateOptions) }
 				</ZukitPanel>
 				<ZuplusDebug
 					wp={ wp }
-					data={ debugOptionsData }
-					selectData={ debugSelectData }
+					labels={ debugOptionsLabels }
+					selectLabels={ debugSelectLabels }
 					options={ options }
 					updateOptions={ updateOptions }
 				/>
 				<ZuplusDupMenu
-					data={ duplicateData }
+					labels={ duplicateLabels }
 					menus={ get(moreData, 'menus', null) }
+					ajaxAction={ ajaxAction }
+				/>
+				<ZuplusCoreInfo
+					labels={ coreInfoLabels }
 					ajaxAction={ ajaxAction }
 				/>
 			</>
