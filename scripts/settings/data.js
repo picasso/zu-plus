@@ -75,7 +75,7 @@ const debug = {
 	},
 	overwrite: {
 		label: 	__('Overwrite logs', 'zu-plus'),
-		help: 	__('If checked, the log data will be **overwritten on every request**, otherwise it will be appended to the file/Debug Bar.', 'zu-plus'),
+		help: 	__('If checked, the log data will be **overwritten on every reload**, otherwise it will be appended to the file/Debug Bar.', 'zu-plus'),
 		depends: ['||', 'debug_bar', 'write_file'],
 	},
 	// ajax_log: {
@@ -110,6 +110,11 @@ const duplicate = {
 	button: __('Duplicate', 'zu-plus'),
 };
 
+const info = {
+	version: __('Active Version', 'zu-plus'),
+	loaded: __('Loaded From', 'zu-plus'),
+};
+
 const panels = {
 	debug: {
 		value: true,
@@ -122,6 +127,10 @@ const panels = {
 		label: 	__('Cookie Notice', 'zu-plus'),
 		depends: 'cookie_notice',
 	},
+	core_info: {
+		value: false,
+		label: 	__('Zukit Framework Info', 'zu-plus'),
+	}
 };
 
 export const zuplus = {
@@ -129,5 +138,6 @@ export const zuplus = {
 	debug,
 	debugSelect,
 	duplicate,
+	info,
 	panels,
 }

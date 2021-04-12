@@ -10,6 +10,12 @@ $dup-item-padding: 8px;
 
 $info-font-family: Roboto,Ubuntu,"Helvetica Neue",sans-serif;
 $info-font-size: 13px;
+$info-last-ver-color: darken($green-color, 20%);
+$info-last-ver-bg-color: rgba($green-color, 0.2);
+$info-active-ver-color: darken($blue-color, 20%);
+$info-active-ver-bg-color: rgba($blue-color, 0.2);
+$info-old-ver-color: darken($orange-color, 20%);
+$info-old-ver-bg-color: rgba($orange-color, 0.3);
 
 .components-base-control__help, .__zu_markdown {
 	color: $kint-theme-text !important;
@@ -78,9 +84,68 @@ $info-font-size: 13px;
 }
 
 #{$coreinfo-selector} {
+	.__info {
+		font-family: $info-font-family;
+		letter-spacing: 0.5px;
+		font-size: $info-font-size;
+
+		strong {
+			min-width: 100px;
+			font-weight: 500;
+			display: inline-block;
+			margin-right: 10px;
+		}
+		.__ver {
+			background-color: $info-last-ver-bg-color;
+			color: $info-last-ver-color;
+			padding: 1px 5px;
+			display: inline-block;
+			border-radius: 5px;
+		}
+		.__path {
+			font-weight: 400;
+			color: darken($blue-color, 20%);
+		}
+	}
 	.zukit-table {
 		font-family: $info-font-family;
 		letter-spacing: 0.5px;
 		font-size: $info-font-size;
+		margin-left: 30px;
+
+		.cell__origin {
+			width: 52px;
+			em {
+				background-color: transparent !important;
+				color: $info-active-ver-color !important;
+				padding: 0 8px !important;
+				display: block !important;
+				border-radius: 10px !important;
+				border: 1px solid $info-active-ver-color !important;
+			}
+		}
+		.cell__version span {
+			background-color: transparent !important;
+			color: $kint-theme-text-dark !important;
+			padding: 1px 8px !important;
+			display: block !important;
+			border: 1px solid rgba($kint-theme-text-light, 0.5) !important;
+		}
+		.cell__framework {
+			span {
+				background-color: $info-old-ver-bg-color !important;
+				color: $info-old-ver-color;
+				padding: 1px 8px !important;
+				display: block !important;
+			}
+			&.active span {
+				background-color: $info-active-ver-bg-color !important;
+				color: $info-active-ver-color !important;
+			}
+			&.great span {
+				background-color: $info-last-ver-bg-color !important;
+				color: $info-last-ver-color !important;
+			}
+		}
 	}
 }
