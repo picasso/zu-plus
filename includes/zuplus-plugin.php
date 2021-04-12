@@ -277,10 +277,10 @@ class zu_Plus extends zukit_Plugin  {
 	// Script enqueue ---------------------------------------------------------]
 
 	protected function should_load_css($is_frontend, $hook) {
-		// we do not use true for the backend as this will add 'zukit' in dependencies
-		// which is not needed for all pages
-		// loading is implemented via 'enqueue_more'
-		return false;
+		// here we load only 'zuplus' for the Settings Page
+		// 'zuplus-admin' which is needed for all pages is loaded via 'enqueue_more'
+		// return false;
+		return $is_frontend ? false : $this->ends_with_slug($hook);
 	}
 
 	protected function should_load_js($is_frontend, $hook) {
@@ -292,7 +292,7 @@ class zu_Plus extends zukit_Plugin  {
 		$autosave_allowed = $this->is_option('remove_autosave') && in_array($hook, ['post.php', 'post-new.php']);
 
 		if(!$is_frontend || $frontend_allowed) {
-			$this->admin_enqueue_style(null);
+			$this->admin_enqueue_style('zuplus-admin');
 		}
 
 		if(!$is_frontend && $autosave_allowed) {

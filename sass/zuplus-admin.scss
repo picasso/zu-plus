@@ -1,0 +1,144 @@
+@import "vars";
+
+.zuplus_red { color: $red-color;}
+.zuplus_green { color: $green-color;}
+.zuplus_magenta { color: $magenta-color;}
+.zuplus_gold { color: $orange-bright-color;}
+.zuplus_blue { color: $blue-color;}
+
+._bold { font-weight: 600; letter-spacing: 0.5pt;}
+._grand { font-weight: 600; font-size: 110%; letter-spacing: 1pt; text-transform: uppercase;}
+._uppercase { text-transform: uppercase; font-size: 0.8em;}
+._uppercase2 { font-weight: 500; text-transform: uppercase; letter-spacing: 0.5pt;}
+._shift { margin-left: 1.5em;}
+
+$context-text-color: white;
+$context-text-shadow: $text-shadow-for-white;
+
+$context-color: darken($blue-color, 20%);
+$context-border-color: darken($context-color, 10%);
+$context-err-color: darken($red-bright-color, 20%);
+$context-err-border-color: darken($context-err-color, 10%);
+$context-warn-color: darken($orange-color, 20%);
+$context-warn-border-color: darken($context-warn-color, 10%);
+$context-hlt-color: darken($green-color, 10%);
+$context-hlt-border-color: darken($context-hlt-color, 10%);
+
+$notice-color: #aad5ff;
+$notice-dark-color: darken($notice-color, 20%);
+
+#{$zu-custom-logs-selector} dt, #{$debug-bar-selector} div.kint-rich dt {
+	&.__context {
+		letter-spacing: 1px !important;
+		background-color: $context-color !important;
+		color: $context-text-color !important;
+		border-color: $context-border-color !important;
+		text-shadow: $context-text-shadow !important;
+		padding-left: 8px !important;
+		&:hover {
+			border-color: $context-border-color !important;
+		}
+	}
+	&.__err {
+		background-color: $context-err-color !important;
+		border-color: $context-err-border-color !important;
+		&:hover {
+			border-color: $context-err-border-color !important;
+		}
+	}
+	&.__warn {
+		background-color: $context-warn-color !important;
+		border-color: $context-warn-border-color !important;
+		&:hover {
+			border-color: $context-warn-border-color !important;
+		}
+	}
+	&.__hlt {
+		background-color: $context-hlt-color !important;
+		border-color: $context-hlt-border-color !important;
+		&:hover {
+			border-color: $context-hlt-border-color !important;
+		}
+	}
+}
+
+#{$zu-custom-logs-selector} {
+	.qm-boxed {
+		padding: 10px 15px !important;
+		.qm-notice {
+			letter-spacing: 0.5px;
+			padding: 10px 15px !important;
+			margin: 0 !important;
+			em {
+				color: $notice-dark-color !important;
+				font-weight: 600 !important;
+				font-style: normal !important;
+			}
+		}
+	}
+	dt.__context {
+		padding: 5px 5px 5px 10px !important;
+	}
+	.__var {
+		margin: 5px !important;
+		color: $kint-theme-var-color !important;
+		background-color: $kint-theme-var-bg-color !important;
+		padding: 0 5px !important;
+		border-radius: 3px !important;
+		letter-spacing: 1px !important;
+		font-weight: 500 !important;
+		font-size: 12px !important;
+	}
+	.__value {
+		letter-spacing: 0.5px !important;
+		color: $kint-theme-text-dark !important;
+		font-weight: 600 !important;
+		pre {
+			background-color: $kint-theme-main !important;
+			color: $kint-theme-text-dark !important;
+			max-width: 70em !important;
+			overflow: hidden !important;
+			text-overflow: ellipsis !important;
+			em {
+				font-style: normal !important;
+				padding: 1px !important;
+				border-radius: 3px !important;
+				background-color: $kint-theme-var-bg-internal-color !important;
+				letter-spacing: 0.5px;
+				color: #222 !important;
+			}
+		}
+	}
+	.__time, .__file {
+		color: $kint-theme-text-light !important;
+		max-width: 40em !important;
+		overflow: hidden !important;
+		text-overflow: ellipsis !important;
+	}
+	.__time, .__ip {
+		text-align: center !important;
+	}
+}
+
+// #wp-admin-bar-site-name {
+// 	min-width: 160px;
+// }
+
+// Remove advertisements ------------------------------------------------------]
+
+#gfw-hosting-meta-box,
+#gfw-news-meta-box,
+.wpe-dify-posts,
+#itsec-sidebar-widget-pro-upsell,
+#itsec-sidebar-widget-mail-list-signup,
+#itsec-sidebar-widget-form-backupbuddy-cross-promo,
+#itsec-sidebar-widget-form-malware-scan,
+#itsec-sidebar-widget-form-sync-cross-promo,
+#itsec-sidebar-widget-form-support,
+.itsec-module-pro-upsell,
+#toplevel_page_itsec ul li:nth-child(5),
+a[title*="BBQ Pro"],
+a[title*="BBQ Firewall"],
+a[href*="bbq_settings"],
+.image-watermark-settings .df-credits
+{ display: none !important;}
