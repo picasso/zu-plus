@@ -44,7 +44,7 @@ trait zu_PlusAjax {
 		// define table columns and styles
 		$table = new zukit_Table(['origin', 'logo', 'name', 'version', 'framework', 'settings'], true);
 
-		$table->align(['version'], 'center');
+		$table->align(['origin', 'version'], 'center');
 		$table->strong('name');
 		$table->as_icon('logo');
 		$table->shrink(['logo', 'version', 'settings']);

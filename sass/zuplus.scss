@@ -114,14 +114,14 @@ $info-old-ver-bg-color: rgba($orange-color, 0.3);
 		margin-left: 30px;
 
 		.cell__origin {
-			width: 52px;
+			width: 70px;
 			em {
 				background-color: transparent !important;
 				color: $info-active-ver-color !important;
 				padding: 0 8px !important;
 				display: block !important;
 				border-radius: 10px !important;
-				border: 1px solid $info-active-ver-color !important;
+				border: 1px solid rgba($info-active-ver-color, 0.3) !important;
 			}
 		}
 		.cell__version span {
@@ -129,9 +129,10 @@ $info-old-ver-bg-color: rgba($orange-color, 0.3);
 			color: $kint-theme-text-dark !important;
 			padding: 1px 8px !important;
 			display: block !important;
-			border: 1px solid rgba($kint-theme-text-light, 0.5) !important;
+			border: 1px solid rgba($kint-theme-text-light, 0.3) !important;
 		}
 		.cell__framework {
+			padding-left: 30px;
 			span {
 				background-color: $info-old-ver-bg-color !important;
 				color: $info-old-ver-color;
