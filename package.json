@@ -1,6 +1,8 @@
 {
     "name": "zuplus",
     "version": "2.0.3",
+    "testedWP": "5.7.0",
+    "requiresPHP": ">=7.2.0",
     "repository": {
         "type": "git",
         "url": "https://github.com/picasso/zuplus.git"
@@ -13,7 +15,7 @@
         "debug"
     ],
     "author": "Dmitry Rudakov",
-    "description": "Plugin that supports development with the Zukit framework and implements various debugging methods and other service functions.",
+    "description": "Supports development with the Zukit framework and implements various debugging methods and other service functions.",
     "license": "MIT",
     "scripts": {},
     "devDependencies": {

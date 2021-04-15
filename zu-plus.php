@@ -3,7 +3,7 @@
 Plugin Name: Zu Plus
 Plugin URI: https://github.com/picasso/zu-plus
 GitHub Plugin URI: https://github.com/picasso/zu-plus
-Description: Plugin that supports development with the Zukit framework and implements various debugging methods and other service functions.
+Description: Supports development with the Zukit framework and implements various debugging methods and other service functions.
 Version: 2.0.3
 Author: Dmitry Rudakov
 Author URI: https://dmitryrudakov.com/about/
@@ -27,10 +27,7 @@ if(wp_doing_cron()) return;
 require_once('zukit/load.php');
 
 // compatibility check for Zukit
-if(Zukit::is_compatible(__FILE__, array(
-    'min_wp'    => '5.3.0',
-    'min_php'   => '7.4.1')
-)) {
+if(Zukit::is_compatible(__FILE__, array('min_php' => '7.4.1') )) {
 	require_once('includes/zuplus-plugin.php');
 	zuplus(__FILE__);
 }
