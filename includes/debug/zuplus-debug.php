@@ -56,9 +56,10 @@ class zu_PlusDebug extends zukit_Addon {
 			$this->dbar = zu_PlusDebugBar::instance($this->options);
 			$this->dbar->link($this);
 		}
+
 		// remove previous logs if 'overwrite' is true
 		// skip ajax and REST calls or the log can be unintentionally cleared before reading
-		if($this->is_option('overwrite') && !wp_doing_ajax() && $this->plugin->doing_rest()) {
+		if($this->is_option('overwrite') && !wp_doing_ajax() && !$this->plugin->doing_rest()) {
 			$this->clear_file($this->log_location());
 			zu_PlusDebugBar::reset_logs();
 		}
