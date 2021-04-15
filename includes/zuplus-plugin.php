@@ -10,7 +10,7 @@ class zu_Plus extends zukit_Plugin  {
 	// Plugin addons
 	private $dbug = null;
 	private $cnotice = null;
-	private $duppage = null;
+	private $dupost = null;
 
 	// Ajax, Duplicate Menu, Cache and ?
 	use zu_PlusAjax, zu_PlusDuplicateMenu; //, zu_PlusCache;
@@ -160,9 +160,10 @@ class zu_Plus extends zukit_Plugin  {
 	}
 
 	public function admin_init() {
+
 		// Duplicate Page Addon
 		if($this->is_option('dup_page')) {
-			// $this->duppage = $this->register_addon(new zu_PlusDuplicatePage());
+			$this->dupost = $this->register_addon(new zu_PlusDuplicatePage());
 		}
 	}
 
@@ -310,5 +311,5 @@ function zuplus($file = null) {
 // Additional Classes & Functions ---------------------------------------------]
 
 require_once('debug/zuplus-debug.php');
+require_once('addons/duplicate-page.php');
 // require_once('addons/cookie-notice.php');
-// require_once('addons/duplicate-page.php');
