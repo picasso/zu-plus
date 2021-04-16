@@ -70,7 +70,10 @@ class zu_Plus extends zukit_Plugin  {
 			// 		'value'		=> $this->get_cached_memory($stats),
 			// 		'depends' 	=> ['folders', 'disable_cache'],
 			// ],
-		], $this->dbug ? $this->dbug->debug_info() : []);
+		], $this->dbug ? $this->dbug->debug_info() :
+		// we use a fake element that will never be displayed since the 'value' is null
+		// but will cause the hook to fire when the value of the 'debug_mode' option changes
+		['fake' => ['value' => null, 'depends' => 'debug_mode']]);
 	}
 
 	protected function extend_actions() {

@@ -69,15 +69,15 @@ class zu_PlusDebug extends zukit_Addon {
 		$stats = $this->log_stats();
 		$use_kint = $this->is_option('use_kint');
 		return [
-			'kint_link'	=> !$use_kint ? null : [
+			'kint_link'	=> [
 					'label'		=> __('Contributors', 'zu-plus'),
-					'value'		=> __('Kint for PHP', 'zu-plus'),
+					'value'		=> $use_kint ? __('Kint for PHP', 'zu-plus') : null,
 					'link'		=> 'https://kint-php.github.io/kint/',
 					'depends' 	=> "$this->options_key.use_kint",
 			],
-			'kint_version'	=> !$use_kint ? null : [
+			'kint_version'	=> [
 					'label'		=> __('Kint for PHP version', 'zu-plus'),
-					'value'		=> $this->kint_version,
+					'value'		=> $use_kint ? $this->kint_version : null,
 					'depends' 	=> "$this->options_key.use_kint",
 			],
 			'logfile'		=> [
