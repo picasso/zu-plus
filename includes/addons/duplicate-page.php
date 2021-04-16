@@ -1,9 +1,4 @@
 <?php
-// From Duplicate Page Plugin
-// based on version: 2.6
-// Plugin URI: https://wordpress.org/plugins/duplicate-page/
-// Author: mndpsingh287
-// Modified: Dmitry Rudakov on 24.03.2018
 
 class zu_PlusDuplicatePage extends zukit_Addon {
 
@@ -24,6 +19,10 @@ class zu_PlusDuplicatePage extends zukit_Addon {
 		// add_action('post_submitbox_misc_actions', [$this, 'duplicate_post_button']);
 	}
 
+	// From Duplicate Page Plugin
+	// based on version: 2.6
+	// Plugin URI: https://wordpress.org/plugins/duplicate-page/
+	// Author: mndpsingh287
 	public function duplicate_post_as_draft() {
 		global $wpdb;
 

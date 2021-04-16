@@ -1,6 +1,6 @@
 <?php
 
-class ZU_PlusFunctions {
+trait zu_Plus_____Functions {
 
 	private static $_zufunc_instance;
 
