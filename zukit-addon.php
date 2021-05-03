@@ -8,6 +8,7 @@ class zukit_Addon {
 	protected $name;
 	protected $options;
 	protected $options_key;
+	private $nonce;
 
 	public function register($plugin) {
 
@@ -17,6 +18,7 @@ class zukit_Addon {
 		} else {
 			$this->config = array_merge($this->config_defaults(), $this->config());
 			$this->name = $this->get('name') ?? 'zuaddon';
+			$this->nonce = $this->get('nonce') ?? $this->name.'_ajax_nonce';
 
 			$this->options_key = $this->name.'_options';
 			$this->init_options();
@@ -114,7 +116,7 @@ class zukit_Addon {
 		return $this->plugin->check_error($error, $ajax, $report);
 	}
 	protected function ajax_nonce($create = false) {
-		return $this->plugin->ajax_nonce($create);
+		return $this->plugin->ajax_nonce($create, $this->nonce);
 	}
 	protected function ajax_send($result) {
 		return $this->plugin->ajax_send($result);
@@ -122,8 +124,14 @@ class zukit_Addon {
 	protected function create_notice($status, $message, $actions = []) {
 		return $this->plugin->create_notice($status, $message, $actions);
 	}
-	protected function log_error($error, $context = null) {
-		$this->plugin->log_error($error, $context, 1);
+	protected function log(...$params) {
+        $this->plugin->log_with(0, null, ...$params);
+    }
+	protected function logc($context, ...$params) {
+		$this->plugin->log_with(0, $context, ...$params);
+	}
+	protected function logd(...$params) {
+		$this->plugin->logd(...$params);
 	}
 
 	// Common interface to plugin methods with availability check -------------]

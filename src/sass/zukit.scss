@@ -19,9 +19,10 @@ $divider-component-class: zukit-divider;
 
 .zukit-settings {
 
-	#wpfooter {
+	#wpfooter, #update-nag, .update-nag {
 		display: none;
 	}
+
 	.interface-interface-skeleton__body,
 	.block-editor-editor-skeleton__body {
 		padding: 0;
@@ -106,9 +107,28 @@ $divider-component-class: zukit-divider;
 				.components-notice__content div {
 					display: inline-block;
 				}
-				span {
-					color: darken($admin-blue-color, 20%);
-					font-weight: 600;
+				// I just don't like notifications with a white background
+				.is-info {
+					background-color: rgba($blue-color, 0.1);
+				}
+				.is-warning {
+					background-color: rgba($orange-bright-color, 0.1);
+				}
+
+				.__code {
+					@extend %markdown_basic;
+					@extend %markdown_code;
+				}
+				strong {
+					@extend %markdown_strong;
+				}
+				em {
+					@extend %markdown_basic;
+					@extend %markdown_em;
+					font-style: normal;
+					@include in('^.is-success') { @extend %markdown_green; }
+					@include in('^.is-error') { @extend %markdown_red_on_red; }
+					@include in('^.is-warning') { @extend %markdown_gold; }
 				}
 				.zukit-data {
 					height: auto;
@@ -124,6 +144,7 @@ $divider-component-class: zukit-divider;
 			}
 
 			.#{$skeleton-editor-class} {
+				background-color: transparent;
 				position: relative;
 				padding-top: 50px;
 				flex: 1 1 auto;
@@ -215,8 +236,28 @@ $divider-component-class: zukit-divider;
 				color: $toggle-help-color;
 				font-size: 13px;
 				font-style: italic;
+				text-align: right;
 				@include breakpoint-width(LESS_SETTINGS_BREAK) {
 					margin-left: 0;
+					text-align: left;
+				}
+			}
+
+			// markdown css in help elements
+			.components-base-control__help {
+				.__code {
+					@extend %markdown_basic;
+					@extend %markdown_code;
+					@include in('^.is-green') { @extend %markdown_green; }
+					@include in('^.is-red') { @extend %markdown_red; }
+					@include in('^.is-gold') { @extend %markdown_gold; }
+				}
+				strong {
+					@extend %markdown_strong;
+				}
+				em {
+					@extend %markdown_basic;
+					@extend %markdown_em;
 				}
 			}
 
@@ -286,6 +327,7 @@ $divider-component-class: zukit-divider;
 
 		// Settings Common Rules ----------------------------------------------]
 
+		// flex blocks
 		.__flex {
 			display: flex;
 			align-items: center;
@@ -301,6 +343,24 @@ $divider-component-class: zukit-divider;
 			&.__side {
 				justify-content: space-between;
 				& > * { margin: 0; }
+			}
+		}
+
+		// simple markdown css
+		.__zu_markdown {
+			.__code {
+				@extend %markdown_basic;
+				@extend %markdown_code;
+				@include in('^.is-green') { @extend %markdown_green; }
+				@include in('^.is-red') { @extend %markdown_red; }
+				@include in('^.is-gold') { @extend %markdown_gold; }
+			}
+			strong {
+				@extend %markdown_strong;
+			}
+			em {
+				@extend %markdown_basic;
+				@extend %markdown_em;
 			}
 		}
 
