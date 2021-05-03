@@ -2,8 +2,8 @@
 // Includes all traits --------------------------------------------------------]
 
 include_once('traits/ajax.php');
-// include_once('traits/cache.php');
 include_once('traits/duplicate-menu.php');
+// include_once('traits/cache.php');
 
 class zu_Plus extends zukit_Plugin  {
 
@@ -12,7 +12,7 @@ class zu_Plus extends zukit_Plugin  {
 	private $cnotice = null;
 	private $dupost = null;
 
-	// Ajax, Duplicate Menu, Cache and ?
+	// Ajax, Duplicate Menu and Cache and
 	use zu_PlusAjax, zu_PlusDuplicateMenu; //, zu_PlusCache;
 
 	protected function config() {
@@ -87,16 +87,16 @@ class zu_Plus extends zukit_Plugin  {
 									'Needs if something went wrong.', 'zu-plus'),
 				'depends'			=> '!disable_cached',
 			],
-			[
-				'label'				=> __('Revoke Cookie', 'zu-plus'),
-				'value'				=> 'zuplus_revoke_cookie',
-				'icon'				=> 'food',
-				'color'				=> 'gold',
-				'help'				=> __('Set "expires" value on cookie for 1970 which leads to cookie **deleting**. '.
-											'*Needs for debugging only*.', 'zu-plus'),
-				// the button will be visible only if this option is 'true'
-				'depends'			=> 'cookie_notice',
-			],
+			// [
+			// 	'label'				=> __('Revoke Cookie', 'zu-plus'),
+			// 	'value'				=> 'zuplus_revoke_cookie',
+			// 	'icon'				=> 'food',
+			// 	'color'				=> 'gold',
+			// 	'help'				=> __('Set "expires" value on cookie for 1970 which leads to cookie **deleting**. '.
+			// 								'*Needs for debugging only*.', 'zu-plus'),
+			// 	// the button will be visible only if this option is 'true'
+			// 	'depends'			=> 'cookie_notice',
+			// ],
 			[
 				// an indication that we will use the slot for 'MoreActions'
 				'hasMoreActions'	=> true,
@@ -163,7 +163,6 @@ class zu_Plus extends zukit_Plugin  {
 	}
 
 	public function admin_init() {
-
 		// Duplicate Page Addon
 		if($this->is_option('dup_page')) {
 			$this->dupost = $this->register_addon(new zu_PlusDuplicatePage());
@@ -248,10 +247,6 @@ class zu_Plus extends zukit_Plugin  {
 				],
 			],
 			'rename'	=>	[
-				// [
-				// 	'menu'				=> 	'options-privacy.php',
-				// 	'new_name'			=>	'Privacy',
-				// ],
 				[
 					'menu'				=> 	'watermark-options',
 					'new_name'			=>	'Watermark',

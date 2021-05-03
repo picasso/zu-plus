@@ -16,6 +16,8 @@ const options = {
 	cookie_notice: {
 		label: 	__('Activate Cookie Notice?', 'zu-plus'),
 		help:	__('Allows you to inform users that the site uses cookies and to comply with the EU GDPR regulations.', 'zu-plus'),
+		// temporarily remove - not yet implemented
+		depends: false,
 	},
 	disable_cached: {
 		divider: 2,
