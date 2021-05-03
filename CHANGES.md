@@ -1,3 +1,13 @@
+#### 2.1.0 / 2021-05-03
+* first stable version after refactoring (`shortcode cache` and `cookie notice` not restored yet)
+* added support for GitHub data for `Core Info` panel
+* __Zukit__ updated to version 1.2.2
+* according to the changes in __Zukit__, rows in `Plugin Info` are now hidden through the value equal to __null__
+* min `php` version updated
+* refactored version of `duplicate`
+* fixed bug with `overwrite` check
+* cleaning and css improvements
+
 #### 2.0.3 / 2021-04-12
 * addded Zukit `Core Info` panel
 * admin styles are divided into common and for the Settings Page

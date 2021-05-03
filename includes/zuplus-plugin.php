@@ -129,7 +129,6 @@ class zu_Plus extends zukit_Plugin  {
 	// Actions & Add-ons ------------------------------------------------------]
 
 	public function init() {
-
 		// Cookie Notice Addon
 		if($this->is_option('cookie_notice')) {
 			// $this->cnotice = $this->register_addon(new zu_PlusCookieNotice());
