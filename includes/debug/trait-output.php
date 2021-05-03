@@ -34,13 +34,19 @@ trait zu_PlusDebugOutput {
 		return $log.PHP_EOL;
 	}
 
+	private function log_lineshift() {
+		// if someone has registered an additional shift 
+		// plus two lines, which were introduced by this add-on
+		return $this->plugin->debug_line_shift(null) + 2;
+	}
+
 	private function bar_log($params, $kint_log = false, $context = null, $called_class = null) {
 		if($kint_log) $this->dbar->save($params, $context, null, $called_class);
 		else {
 			if($context) {
 				$this->dbar->save($context);
 			}
-			$data = $this->plugin->get_log_data($params, 2, $context);
+			$data = $this->plugin->get_log_data($params, $this->log_lineshift(), $context);
 			foreach($data['args'] as $var) {
 				$this->dbar->save($var['name'], $var['value'], $data['log_line'], $called_class);
 			}

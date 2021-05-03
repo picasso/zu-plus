@@ -93,6 +93,7 @@ class zu_PlusDebug extends zukit_Addon {
 	}
 
 	public function admin_init() {
+		// $this->logc('?Debug Bar option', $this->is_option('debug_bar'));
 		// zu_log($this->dbar);
 		// $this->log($this->options, $this->location, $this->abs_path, $this->content_path);
 	}
@@ -132,7 +133,7 @@ class zu_PlusDebug extends zukit_Addon {
 			}
 		} else {
 			$data = $this->is_option('debug_bar') ? $this->bar_log($params, false, null, $called_class) : null;
-			$this->plugin->log_with(is_null($data) ? 2 : $data, null, ...$params);
+			$this->plugin->log_with(is_null($data) ? $this->log_lineshift() : $data, null, ...$params);
 		}
     }
 
@@ -154,7 +155,7 @@ class zu_PlusDebug extends zukit_Addon {
 			}
 		} else {
 			$data = $this->is_option('debug_bar') ? $this->bar_log($params, false, $context, $called_class) : null;
-			$this->plugin->log_with(is_null($data) ? 2 : $data, $context, ...$params);
+			$this->plugin->log_with(is_null($data) ? $this->log_lineshift() : $data, $context, ...$params);
 		}
 	}
 
