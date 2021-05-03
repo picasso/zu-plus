@@ -42,13 +42,13 @@ trait zu_PlusAjax {
 		}
 
 		// define table columns and styles
-		$table = new zukit_Table(['origin', 'logo', 'name', 'version', 'framework', 'settings'], true);
+		$table = new zukit_Table(['origin', 'logo', 'name', 'version', 'lastest', 'framework', 'settings']);
 
 		$table->align(['origin', 'version'], 'center');
 		$table->strong('name');
 		$table->as_icon('logo');
 		$table->shrink(['logo', 'version', 'settings']);
-		$table->fixwidth(['origin', 'name', 'framework'], [null, '100px', '200px']);
+		$table->fix_width(['origin', 'name', 'framework'], [null, '100px', '200px']);
 
 		$rows = [];
 		$instances = $this->instance_by_router();
@@ -57,27 +57,34 @@ trait zu_PlusAjax {
 
 		foreach($instances as $router => $instance) {
 			$info = $instance->info();
-			// $info['author']
-			// $info['description']
+
 			$link = $instance->admin_settings_link(null, true);
 			$zuver = $this->detect_zukit_version($instance->dir);
 			$zuver_fixed = preg_replace('/[^\d|.]+/', '', $zuver);
 
-			$table->markdowncell('origin', $zukit_origin === $instance->dir ? '*origin*' : '');
-
+			$table->markdown_cell('origin', $zukit_origin === $instance->dir ? '*framework origin*' : '');
 			$table->cell('name', $info['title']);
-			$table->iconcell('logo', ['svg' => $info['icon']]);
+			$table->icon_cell('logo', ['svg' => $info['icon']]);
 			$table->cell('name', $info['title']);
-			$table->markdowncell('version', sprintf('Version `%s`', $info['version']));
-			$table->cell_with_params(
-				'framework',
-				sprintf('Zukit Version `%s`', $zuver), [
-					'markdown',
-					'className' => $zuver === $active_version ? 'active' :
-						(version_compare($zuver_fixed, $zukit_version, '<=') ? 'less' : 'great'),
-				]
+			$table->dynamic_cell('version',[
+					'markdown'	=> true
+				],
+				sprintf('Version `%s`', $info['version'])
 			);
-			$table->linkcell('settings', $link[0], $link[1]);
+			$table->dynamic_cell('lastest', [
+				'markdown'	=> true,
+				'github'	=> $info['github'],
+				'current'	=> $info['version'],
+				'linked'	=> 'version',
+			]);
+			$table->dynamic_cell('framework', [
+					'markdown'	=> true,
+					'current'	=> $zuver,
+				],
+				sprintf('Zukit Version `%s`', $zuver),
+				$zuver === $active_version ? 'active' : ''
+			);
+			$table->link_cell('settings', $link[0], $link[1]);
 
 			$table->next_row();
 		}

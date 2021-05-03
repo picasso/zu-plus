@@ -17,7 +17,36 @@ $info-active-ver-bg-color: rgba($blue-color, 0.2);
 $info-old-ver-color: darken($orange-color, 20%);
 $info-old-ver-bg-color: rgba($orange-color, 0.3);
 
-.components-base-control__help, .__zu_markdown {
+$info-border-color-opacity: 0.2;
+$info-border-color-dark-opacity: 0.3;
+
+
+%version {
+	margin-left: 10px;
+	padding: 1px 8px !important;
+	background-color: transparent !important;
+	color: $kint-theme-text !important;
+	padding: 1px 8px !important;
+	display: block !important;
+	border: 1px solid rgba($kint-theme-text-light, $info-border-color-dark-opacity) !important;
+}
+%version-less {
+	background-color: $info-old-ver-bg-color !important;
+	color: $info-old-ver-color !important;
+	border-color: rgba($info-old-ver-color, $info-border-color-opacity) !important;
+}
+%version-active {
+	background-color: $info-active-ver-bg-color !important;
+	color: $info-active-ver-color !important;
+	border-color: rgba($info-active-ver-color, $info-border-color-opacity) !important;
+}
+%version-great {
+	background-color: $info-last-ver-bg-color !important;
+	color: $info-last-ver-color !important;
+	border-color: rgba($info-last-ver-color, $info-border-color-opacity) !important;
+}
+
+.components-base-control__help {
 	color: $kint-theme-text !important;
 	font-style: normal !important;
 	em {
@@ -95,16 +124,26 @@ $info-old-ver-bg-color: rgba($orange-color, 0.3);
 			display: inline-block;
 			margin-right: 10px;
 		}
+		.__lastest {
+			min-height: 22px;
+		}
 		.__ver {
-			background-color: $info-last-ver-bg-color;
-			color: $info-last-ver-color;
-			padding: 1px 5px;
-			display: inline-block;
-			border-radius: 5px;
+			@extend %version;
+			&.less { @extend %version-less; }
+			&.active { @extend %version-active; }
+			&.great { @extend %version-great; }
+			display: inline-block !important;
+			margin-left: 0;
 		}
 		.__path {
 			font-weight: 400;
 			color: darken($blue-color, 20%);
+		}
+		.components-spinner {
+			background-color: rgba($kint-theme-text-light, 0.8);
+			margin: 0;
+			transform: scale(0.9);
+			top: 5px;
 		}
 	}
 	.zukit-table {
@@ -113,40 +152,34 @@ $info-old-ver-bg-color: rgba($orange-color, 0.3);
 		font-size: $info-font-size;
 		margin-left: 30px;
 
+		.cell .components-spinner {
+			background-color: rgba($kint-theme-text-light, 0.8);
+			margin: 0; //0 auto;
+		}
+
 		.cell__origin {
-			width: 70px;
+			width: 140px;
+			padding-right: 0;
 			em {
-				background-color: transparent !important;
+				font-style: normal;
+				font-size: 12px;
+				letter-spacing: 1px;
+				background-color: rgba($info-active-ver-color, 0.05) !important;
 				color: $info-active-ver-color !important;
-				padding: 0 8px !important;
+				padding: 2px 8px !important;
 				display: block !important;
 				border-radius: 10px !important;
-				border: 1px solid rgba($info-active-ver-color, 0.3) !important;
+				border: 1px solid rgba($info-active-ver-color, $info-border-color-dark-opacity) !important;
 			}
 		}
-		.cell__version span {
-			background-color: transparent !important;
-			color: $kint-theme-text-dark !important;
-			padding: 1px 8px !important;
-			display: block !important;
-			border: 1px solid rgba($kint-theme-text-light, 0.3) !important;
+		.cell__lastest {
+			color: rgba($kint-theme-text-light, 0.7);
 		}
-		.cell__framework {
-			padding-left: 30px;
-			span {
-				background-color: $info-old-ver-bg-color !important;
-				color: $info-old-ver-color;
-				padding: 1px 8px !important;
-				display: block !important;
-			}
-			&.active span {
-				background-color: $info-active-ver-bg-color !important;
-				color: $info-active-ver-color !important;
-			}
-			&.great span {
-				background-color: $info-last-ver-bg-color !important;
-				color: $info-last-ver-color !important;
-			}
+		.cell__version, .cell__lastest, .cell__framework {
+			.__code { @extend %version; }
+			&.less .__code { @extend %version-less; }
+			&.active .__code { @extend %version-active; }
+			&.great .__code { @extend %version-great; }
 		}
 	}
 }

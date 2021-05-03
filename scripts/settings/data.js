@@ -111,8 +111,10 @@ const duplicate = {
 };
 
 const info = {
+	lastest: __('Lastest Version', 'zu-plus'),
 	version: __('Active Version', 'zu-plus'),
 	loaded: __('Loaded From', 'zu-plus'),
+	error: __('Ajax request failed', 'zu-plus'),
 };
 
 const panels = {
@@ -129,7 +131,7 @@ const panels = {
 	},
 	core_info: {
 		value: false,
-		label: 	__('Zukit Framework Info', 'zu-plus'),
+		label: 	__('Framework Info', 'zu-plus'),
 	}
 };
 

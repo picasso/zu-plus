@@ -22,6 +22,7 @@ const EditZuplus = ({
 		// setUpdateHook,
 		ajaxAction,
 		moreData,
+		noticeOperations,
 }) => {
 
 	const {
@@ -52,6 +53,7 @@ const EditZuplus = ({
 				<ZuplusCoreInfo
 					labels={ coreInfoLabels }
 					ajaxAction={ ajaxAction }
+					noticeOperations={ noticeOperations }
 				/>
 			</>
 	);
