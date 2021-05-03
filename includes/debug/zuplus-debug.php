@@ -3,7 +3,6 @@
 // Debug Bar support ----------------------------------------------------------]
 
 require_once('kint.phar');
-// require_once('kint-old.phar');
 // include_once('kint-debug/init_phar.php');
 
 include_once('debug-bar.php');
@@ -70,7 +69,7 @@ class zu_PlusDebug extends zukit_Addon {
 		$use_kint = $this->is_option('use_kint');
 		return [
 			'kint_link'	=> [
-					'label'		=> __('Contributors', 'zu-plus'),
+					'label'		=> __('Used Tools', 'zu-plus'),
 					'value'		=> $use_kint ? __('Kint for PHP', 'zu-plus') : null,
 					'link'		=> 'https://kint-php.github.io/kint/',
 					'depends' 	=> "$this->options_key.use_kint",

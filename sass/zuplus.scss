@@ -5,6 +5,8 @@ $coreinfo-selector: '.zuplus_core_info';
 
 // Settings Page --------------------------------------------------------------]
 
+$help-markdown-code-opacity: 0.25;
+
 $dup-padding: 10px;
 $dup-item-padding: 8px;
 
@@ -50,7 +52,7 @@ $info-border-color-dark-opacity: 0.3;
 	color: $kint-theme-text !important;
 	font-style: normal !important;
 	em {
-		background-color: rgba($kint-theme-main, 0.4) !important;
+		background-color: rgba($kint-theme-main, $help-markdown-code-opacity) !important;
 		color: $kint-theme-text !important;
 		font-style: normal !important;
 	}

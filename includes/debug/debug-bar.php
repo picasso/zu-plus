@@ -31,7 +31,6 @@ class zu_PlusDebugBar extends zukit_Singleton {
 		$panel = new zu_PlusDebugBarPanel('Zu Plus');
 		$panel->set_callback([$this, 'panel_callback']);
 		$panels[] = $panel;
-// zu_logc('*Object test', $panel);
 		return $panels;
 	}
 

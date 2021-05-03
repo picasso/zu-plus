@@ -123,7 +123,7 @@ const panels = {
 	debug: {
 		value: true,
 		label: 	__('Debug Mode Settings', 'zu-plus'),
-		// Это позволит исключить эту панель когда значение option is false
+		// This will exclude this panel when option is 'false'
 		depends: 'debug_mode',
 	},
 	cookie_notice: {
