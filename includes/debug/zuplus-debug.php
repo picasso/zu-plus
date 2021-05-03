@@ -196,8 +196,8 @@ class zu_PlusDebug extends zukit_Addon {
 		$file = $this->log_location($filename ?? $this->logfile);
 		$size = file_exists($file) ? filesize($file) : 0;
 		return [
-			'file'		=> $this->short_location($file),
-			'size'		=> $this->snippets('format_bytes', $size, 2),
+			'file'		=> sprintf('`%s`', $this->short_location($file)),
+			'size'		=> $this->snippets('format_bytes', $size, 2, false, '**%s** %s'),
 			'priority'	=> $this->location_priority,
 		];
 	}

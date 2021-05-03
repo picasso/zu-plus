@@ -28,7 +28,7 @@ const ZuplusDebug = ({
 	if(options['debug_mode'] === false) return null;
 
 	return (
-			<ZukitPanel className="__debug" id="debug" options={ options } initialOpen={ false }>
+			<ZukitPanel className="__debug" id="debug" options={ options } initialOpen={ true }>
 				{ toggleOption(labels, options, updateOptions, optionsKey) }
 				{ selectOption(selectLabels.dump_method, options, updateOptions, optionsKey) }
 			</ZukitPanel>
