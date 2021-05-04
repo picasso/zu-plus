@@ -146,7 +146,7 @@ class zu_PlusDebug extends zukit_Addon {
 			if($this->is_option('write_file')) {
 				$label = $this->plugin->get_log_label($context);
 				$log = $this->kint_log($params);
-				$this->debug_log($label.$log);
+				$this->debug_log($label . $log);
 			}
 			if($this->is_option('debug_bar')) {
 				array_unshift($params, $context);
