@@ -170,17 +170,18 @@ class zu_PlusDebugBar extends zukit_Singleton {
 
 	private function get_formatted_context($context, $source = null) {
 		if(is_null($source)) $source = sprintf('<dt>%s</dt>', $context);
+		$context_end_marker = '</dt></dl>';
 		$is_error = substr($context, 0, 1) === '!';
 		$is_warning = substr($context, 0, 1) === '?';
 		$is_highlight = substr($context, 0, 1) === '*';
 		$context_class = $is_error ? '__err' : ($is_warning ? '__warn' : ($is_highlight ? '__hlt' : '__dbg'));
-		$source = str_replace(htmlentities($context), '#context#', $source);
+		$source = str_replace(htmlentities($context) . '"' . $context_end_marker, '#context#', $source);
 		$source = preg_replace(
 			'/<dt>.*?#context#["|\']*/m',
 			sprintf(
 				'<dt class="__context %s">%s',
 				$context_class,
-				preg_replace('/^[!|?|*]/', '', htmlentities($context))
+				preg_replace('/^[!|?|*]/', '', htmlentities($context) . $context_end_marker)
 			),
 			$source
 		);
