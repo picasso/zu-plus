@@ -1,8 +1,8 @@
 # Zu Plus: Developer tools for WordPress and Zukit.
 
-[![WordPress Plugin Version](https://img.shields.io/wordpress/plugin/v/zu-plus?style=for-the-badge)]()
-[![WordPress Plugin: Tested WP Version](https://img.shields.io/wordpress/plugin/tested/zu-plus?color=4ab866&style=for-the-badge)]()
-[![WordPress Plugin Required PHP Version](https://img.shields.io/wordpress/plugin/required-php/zu-plus?color=bc2a8d&style=for-the-badge)](https://www.php.net/)
+[![WordPress Plugin Version](https://img.shields.io/github/package-json/v/picasso/zu-plus?style=for-the-badge)](https://github.com/picasso/zu-plus)
+[![WordPress Plugin: Tested WP Version](https://img.shields.io/github/package-json/testedWP/picasso/zu-plus?color=4ab866&label=wordpress%20tested&style=for-the-badge)](https://wordpress.org)
+[![WordPress Plugin Required PHP Version](https://img.shields.io/github/package-json/requiresPHP/picasso/zu-plus?color=bc2a8d&label=php&style=for-the-badge)](https://www.php.net/)
 [![License](https://img.shields.io/github/license/picasso/zu-plus?color=fcbf00&style=for-the-badge)](https://github.com/picasso/zu-plus/blob/master/LICENSE)
 
 Supports development with the [Zukit framework](https://github.com/picasso/zukit) and implements various debugging methods and other service functions for WordPress.
@@ -35,7 +35,7 @@ Unfortunately, when developing in PHP for WordPress, it is not always possible t
 
 ## Download
 
-+ [Zu Plus on GitHub](https://github.com/picasso/zu-plus/archive/master.zip)
++ [Zu Plus on GitHub](https://github.com/picasso/zu-plus/archive/refs/heads/master.zip)
 
 ## Installation
 
