@@ -10,6 +10,7 @@ trait zu_PlusDebugOutput {
 		Kint::$return = true;
 		Kint::$aliases[] = 'zu_log';
 		Kint::$aliases[] = 'zu_logc';
+		Kint::$aliases[] = 'zu_log_if';
 		Kint::$aliases[] = ['zukit_Plugin', 'log'];
 		Kint::$aliases[] = ['zukit_Plugin', 'logc'];
 		Kint::$enabled_mode = $this->is_option('use_kint');
@@ -19,6 +20,10 @@ trait zu_PlusDebugOutput {
 		$stash = Kint::$enabled_mode;
 		Kint::$enabled_mode = $rich_mode ? Kint::MODE_RICH : Kint::MODE_TEXT;
 		$log = call_user_func_array(['Kint', 'dump'], $args);
+		if($args[0] === '!condition hit!') {
+			$hit_regex = '/┌─[\S|\s]*?!condition hit![\'|\"]/m';
+			$log = preg_replace($hit_regex, '* * * conditionally logged * * *', $log);
+		}
 		// fix KINT JS to overcome 'important' priority
 		if($rich_mode) {
 			$js_regex = '/style\.display\s*=\s*["|\']block["|\']/m';
@@ -35,7 +40,7 @@ trait zu_PlusDebugOutput {
 	}
 
 	private function log_lineshift() {
-		// if someone has registered an additional shift 
+		// if someone has registered an additional shift
 		// plus two lines, which were introduced by this add-on
 		return $this->plugin->debug_line_shift(null) + 2;
 	}
