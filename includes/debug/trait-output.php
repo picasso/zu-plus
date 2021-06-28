@@ -20,6 +20,10 @@ trait zu_PlusDebugOutput {
 		$stash = Kint::$enabled_mode;
 		Kint::$enabled_mode = $rich_mode ? Kint::MODE_RICH : Kint::MODE_TEXT;
 		$log = call_user_func_array(['Kint', 'dump'], $args);
+		if($args[0] === '!context!') {
+			$hit_regex = '/┌─[\S|\s]*?!context![\'|\"]\n/m';
+			$log = preg_replace($hit_regex, '', $log);
+		}
 		if($args[0] === '!condition hit!') {
 			$hit_regex = '/┌─[\S|\s]*?!condition hit![\'|\"]/m';
 			$log = preg_replace($hit_regex, '* * * conditionally logged * * *', $log);
