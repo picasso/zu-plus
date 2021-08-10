@@ -1,3 +1,14 @@
+#### 2.1.1 / 2021-08-10
+* for the logging functions, the `classname_only` option is implemented, which allows you to display only the class name without properties and methods - which speeds up logging and reduces the amount of logs
+* fixed bug with `zu_logc` in KINT mode
+* always load __Zukit__ even if we don't use it later
+* changed loading order for Zukit
+* __Zukit__ updated to version 1.3.0
+* improved support `zu_log_if` function
+* fixed badges
+* improved context replacement
+* fixed bug with `htmlentities` in context string
+
 #### 2.1.0 / 2021-05-03
 * first stable version after refactoring (`shortcode cache` and `cookie notice` not restored yet)
 * added support for GitHub data for `Core Info` panel
