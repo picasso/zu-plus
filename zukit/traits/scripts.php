@@ -16,6 +16,11 @@ trait zukit_Scripts {
 
     // Scripts management -----------------------------------------------------]
 
+    public function is_origin($get_root = false) {
+        $root_dirname = dirname(self::$zukit_root);
+        return $get_root ? $root_dirname : $root_dirname === ($this->dir.'/zukit');
+	}
+
     public function zukit_dirname($subdir = null) {
         return dirname(self::$zukit_root).(empty($subdir) ? '' : '/'.ltrim($subdir, '/'));
 	}
@@ -126,7 +131,7 @@ trait zukit_Scripts {
             // and boolean values to be interpreted as strings
             // https://wpbeaches.com/using-wp_localize_script-and-jquery-values-including-strings-booleans-and-integers/
             if(!$is_style && !empty($data)) {
-                $jsdata_name = $data['jsdata_name'] ?? $this->prefix.'_jsdata';
+                $jsdata_name = $data['jsdata_name'] ?? $this->prefix_it('jsdata', '_');
                 if(isset($data['jsdata_name'])) unset($data['jsdata_name']);
                 wp_localize_script($handle, $jsdata_name, ['data' => $data]);
             }
@@ -140,6 +145,7 @@ trait zukit_Scripts {
             //     '$handle'       => $handle,
             //     '$data'         => $data,
             //     '$refresh'      => $refresh,
+            //     '$version'      => $version,
             //     '$deps'         => $deps,
             //     '$bottom'       => $bottom,
             // ]);

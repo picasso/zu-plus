@@ -3,18 +3,57 @@ trait zusnippets_Useful {
 
 	// Useful functions -------------------------------------------------------]
 
-	public function array_prefix($array, $prefix, $use_keys = false) {
+	// to determine whether an array has some 'string' keys (associative array)
+	public function is_assoc_array($array) {
+		return count(array_filter(array_keys($array ?? []), 'is_string')) > 0;
+	}
+
+	public function array_md5($array) {
+		// https://stackoverflow.com/questions/2254220/php-best-way-to-md5-multi-dimensional-array
+	    // since we're inside a function (which uses a copied array, not
+	    // a referenced array), you shouldn't need to copy the array
+	    array_multisort($array);
+	    return md5(json_encode($array ?? []));
+	}
+
+	public function array_prefix($array, $prefix, $suffix = '', $use_keys = false) {
 		return array_map(
-				function($v) use($prefix) { return $prefix.$v; },
-				$use_keys ? array_keys($array) : $array
+				function($v) use($prefix, $suffix) { return $prefix.$v.$suffix; },
+				$use_keys ? array_keys($array ?? []) : $array ?? []
 		);
 	}
 
-	public function array_prefix_keys($array, $prefix) {
+	public function array_prefix_keys($array, $prefix, $suffix = '') {
 		return array_combine(
-			$this->array_prefix($array, $prefix, true),
-			$array
+			$this->array_prefix($array, $prefix, $suffix, true),
+			$array ?? []
 		);
+	}
+
+	public function array_without_null($array) {
+		return array_filter($array ?? [], function($val) { return !is_null($val); });
+	}
+
+	public function array_without_keys($array, $keys) {
+		return array_diff_key($array ?? [], array_flip($keys));
+	}
+
+	public function array_pick_keys($array, $keys) {
+		return array_intersect_key($array ?? [], array_flip($keys));
+	}
+
+	public function array_with_defaults($array, $defaults, $only_default_keys = true, $clean = true) {
+		$array = $only_default_keys ? $this->array_pick_keys($array, array_keys($defaults)) : $array ?? [];
+		return array_merge($defaults, $clean ? $this->array_without_null($array) : $array);
+	}
+
+	public function array_flatten($array) {
+		$flatten = [];
+		foreach($array ?? [] as $value) {
+			if(is_array($value)) $flatten = array_merge($flatten, $this->array_flatten($value));
+			else $flatten[] = $value;
+		}
+		return $flatten;
 	}
 
 	public function format_bytes($bytes, $precision = 0, $approximately_sign = false, $template = null) {
@@ -64,10 +103,10 @@ trait zusnippets_Useful {
 		}
 
 		if($strip_xml) {
-			$svg = preg_replace('/.+<svg/ims', '<svg', $svg);
-			$svg = preg_replace('/<svg[^>]+viewBox="([^\"]+)[^>]*/ims', '<svg xmlns="http://www.w3.org/2000/svg" viewBox="$1"', $svg);
+			$svg = preg_replace('/\n/m', '', $svg);
+			$svg = preg_replace('/^.*?<svg/i', '<svg', $svg);
+			$svg = preg_replace('/^<svg[^>]+viewBox="([^\"]+)[^>]*/', '<svg xmlns="http://www.w3.org/2000/svg" viewBox="$1"', $svg);
 		}
-
 		return $this->remove_space_between_tags($svg);
 	}
 
@@ -106,7 +145,6 @@ trait zusnippets_Useful {
 		        )
 		    )
 		);
-
 		return $intval === false ? $min : $intval;
 	}
 
@@ -128,8 +166,18 @@ trait zusnippets_Useful {
 		return $values;
 	}
 
-	public function shortcode_atts_with_cast($atts, $pairs, $types, $shortcode = '') {
-		return shortcode_atts($pairs, $this->cast($atts, $types), $shortcode);
+	// if keys are given that need to be converted to the boolean type
+	public function cast_bool($values, $keys) {
+		if(!empty($keys)) {
+			if(is_string($keys)) $keys = [$keys];
+			return $this->cast($values, array_fill_keys($keys, 'bool'));
+		}
+		return $values;
+	}
+
+	public function shortcode_atts_with_cast($pairs, $atts, $types, $shortcode = '') {
+		$fixed_atts = $this->is_assoc_array($types) ? $this->cast($atts, $types) : $this->cast_bool($atts, $types);
+		return shortcode_atts($pairs, $fixed_atts, $shortcode);
 	}
 
 	public function blank_data_uri_img() {
