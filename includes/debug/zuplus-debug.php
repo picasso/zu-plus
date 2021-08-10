@@ -38,7 +38,7 @@ class zu_PlusDebug extends zukit_Addon {
 				'dump_method'		=> 'var_export',
 				'avoid_ajax'		=> true,
 				'debug_menus'		=> false,
-
+				'classname_only'	=> false,
 				// 'ajax_log'			=> false,
 			],
 		];
@@ -121,6 +121,7 @@ class zu_PlusDebug extends zukit_Addon {
 	public function expanded_log($params, $called_class) {
 
 		if($this->is_option('avoid_ajax') && wp_doing_ajax()) return;
+		if($this->is_option('classname_only')) $params = $this->stub_class_instance($params);
 
 		if($this->is_option('use_kint')) {
 			if($this->is_option('write_file')) {
@@ -141,6 +142,7 @@ class zu_PlusDebug extends zukit_Addon {
 	public function expanded_log_with_context($context, $params, $called_class) {
 
 		if($this->is_option('avoid_ajax') && wp_doing_ajax()) return;
+		if($this->is_option('classname_only')) $params = $this->stub_class_instance($params);
 
 		if($this->is_option('use_kint')) {
 			if($this->is_option('write_file')) {
@@ -166,6 +168,7 @@ class zu_PlusDebug extends zukit_Addon {
 
 	public function debug_log($log) {
 		if($this->is_option('avoid_ajax') && wp_doing_ajax()) return;
+		if($this->is_option('classname_only')) $log = $this->fix_class_instance($log);
 		if($this->is_option('write_file')) error_log($log, 3, $this->log_location());
 	}
 

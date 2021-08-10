@@ -39,6 +39,10 @@ const debug = {
 		label: 	__('Activate `Responsive JS` debug info', 'zu-plus'),
 		help:	__('Adds class *debug* to BODY and displays info for responsive elements (only if the theme supports it).', 'zu-plus'),
 	},
+	classname_only: {
+		label: 	__('Log only class names', 'zu-plus'),
+		help:	__('Only *class names* will be logged instead of a detailed data of the class instance (including its props and methods).', 'zu-plus'),
+	},
 	avoid_ajax: {
 		label: 	__('Avoid AJAX calls', 'zu-plus'),
 		help:	__('If checked, all logging inside AJAX calls (via **admin-ajax.php**) will be ignored.', 'zu-plus'),

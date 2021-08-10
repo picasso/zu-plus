@@ -50,8 +50,10 @@ trait zu_PlusDebugOutput {
 	}
 
 	private function bar_log($params, $kint_log = false, $context = null, $called_class = null) {
-		if($kint_log) $this->dbar->save($params, $context, null, $called_class);
-		else {
+		if($kint_log) {
+			$log = $this->is_option('classname_only') ? $this->fix_class_instance($params, true) : $params;
+			$this->dbar->save($log, $context, null, $called_class);
+		} else {
 			if($context) {
 				$this->dbar->save($context);
 			}
@@ -76,6 +78,36 @@ trait zu_PlusDebugOutput {
 		$text_output = html_entity_decode(strip_tags($output));
 		$text_output = preg_replace($remove_refline_regex, '', $text_output);
 		return preg_replace('/\n$/m', '', $text_output);
+	}
+
+	private function stub_class_instance($args) {
+		foreach($args as $key => $value) {
+			if(is_array($value)) $args[$key] = $this->stub_class_instance($value);
+			else {
+				$name = is_object($value) ? get_class($value) : false;
+				if($name !== false) $args[$key] = "instance of $name";
+				// $this->is_option('use_kint') ? "!instance!$name" :  "instance of $name";
+			}
+		}
+		return $args;
+	}
+
+	private function fix_class_instance($log, $bar = false) {
+		if($bar) {
+			$log = preg_replace(
+				'/td\s+title=\"string\s\(\d+\)\">instance\sof\s([^\s|<]+)/m',
+				'td title="class instance">instance of <dfn>$1</dfn>',
+				$log
+			);
+			$log = preg_replace(
+				'/<var>string<\/var>\s+\(\d+\)\s*[\"]*instance\sof\s([^\s|\"]+)[\"]*/m',
+				'<var>class instance</var> $1',
+				$log
+			);
+		} elseif($this->is_option('use_kint')) {
+			$log = preg_replace('/string\s\(\d+\)\s+\"instance\sof\s([^\"]+)\"/m', 'instance of $1', $log);
+		}
+		return $log;
 	}
 
 	// public function write_ajax_log($data) {
