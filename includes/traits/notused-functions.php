@@ -32,15 +32,6 @@ trait zu_Plus_____Functions {
 		return $this->theme_version;
 	}
 
-	public function array_md5($array, $only_json = false) {
-
-		// https://stackoverflow.com/questions/2254220/php-best-way-to-md5-multi-dimensional-array
-	    // since we're inside a function (which uses a copied array, not
-	    // a referenced array), you shouldn't need to copy the array
-	    array_multisort($array);
-	    return $only_json ? json_encode($array) : md5(json_encode($array));
-	}
-
 	public function set_debug_cache($value) {
 
 		$this->debug_cache = $value;
@@ -110,69 +101,6 @@ trait zu_Plus_____Functions {
 	}
 
 	// Color functions -----------------------------------------------------------]
-
-	public function get_svgcurve($look = 'upright', $height = 100, $class = '', $html_id = '') {
-
-	// 	to use 'custom curve' you need add_filter('zu_custom_curve', 'your_function', 10, 2);
-	// 	args: $curve,  $height
-
-		$height = intval(str_replace('px', '', $height));
-
-		switch($look) {
-
-			case 'downleftinverse':
-				$path = sprintf('M100,0 L100,%1$s L0,%1$s L0,0 L100,0 z M100,0 L0,0 C20,135 50,0 100,0 z', $height);
-				break;
-
-		    case 'upright':
-		    	$path = sprintf('M0 %1$s C 50 0 80 -%2$s 100 %1$s Z', $height, intval($height/3));
-				break;
-
-		    case 'upleft':
-		    	$path = sprintf('M0 %1$s C 20 -%2$s 30 0 100 %1$s Z', $height, intval($height/3));
-				break;
-
-		    case 'downleft':
-		    	$path = sprintf('M0 0 C 20 %1$s 50 0 100 0 Z', $height * 2);
-				break;
-
-		    case 'downright':
-		    	$path = sprintf('M0 0 C 50 0 80 %1$s 100 0 Z', $height * 2);
-				break;
-
-		    case 'lessdownleft':
-		    	$path = sprintf('M0 0 C 20 %1$s 50 0 100 0 Z', intval($height * 1.3));
-				break;
-
-		    case 'lessdownright':
-		    	$path = sprintf('M0 0 C 50 0 80 %1$s 100 0 Z', intval($height * 1.3));
-				break;
-
-		    case 'custom':
-		    	$path = apply_filters('zu_custom_curve', '', $height);
-				break;
-
-		    default;
-		    	$path = sprintf('M0 %1$s C 50 0 80 -%2$s 100 %1$s Z', $height, intval($height/3));
-				break;
-		}
-
-		$curve = sprintf(
-			'<div %2$s class="_curve %5$s" style="height: %4$spx">
-				<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100%%" height="%1$spx"
-					style="position:relative; padding:0; margin:0; fill: currentColor; stroke: currentColor; top:0;"
-					viewBox="0 0 100 %1$s" preserveAspectRatio="none">
-					<path d="%3$s"></path>
-				 </svg>
-			 </div>',
-			$height,
-			empty($html_id) ? '' : sprintf('id="%1$s"', $html_id),
-			$path,
-			($height - 1),
-			$class
-		);
-		return $curve;
-	}
 
 	public function set_copyright($copy_string) {
 		$this->copy_string = $copy_string;
