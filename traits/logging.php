@@ -88,6 +88,24 @@ trait zukit_Logging {
 		return null;
 	}
 
+	// Profile methods --------------------------------------------------------]
+
+	protected function pstart($context) {
+		do_action('qm/start', $this->get_profile_timer($context));
+	}
+
+	protected function plap($context) {
+		do_action('qm/lap', $this->get_profile_timer($context));
+	}
+
+	protected function pstop($context) {
+		do_action('qm/stop', $this->get_profile_timer($context));
+	}
+
+	private function get_profile_timer($context) {
+		return sprintf('%s [%s]', $context, static::class);
+	}
+
 	// private helpers --------------------------------------------------------]
 
 	private function skip_log() {
@@ -171,6 +189,24 @@ trait zukit_Logging {
 		$log = PHP_EOL.$marker.PHP_EOL.'┌'.str_repeat('~', strlen($marker) - 1).PHP_EOL;
 		$log .= sprintf(' %s = %s', $info, preg_replace('/\n$/', '', $value));
 		$log .= PHP_EOL.str_repeat('~', strlen($marker)).'┘'.PHP_EOL;
+		error_log($log);
+	}
+
+	public static function trace_summary($title, $class_name = 'Zukit') {
+		$trace = str_replace(',', PHP_EOL, wp_debug_backtrace_summary());
+		$ajax = wp_doing_ajax() ? 'DOING AJAX' : 'NOT AJAX';
+		$cron = wp_doing_cron() ? 'DOING CRON' : 'NOT CRON';
+		$exists = class_exists('Zukit') ? 'class exists' : 'class NOT exists';
+		$log = sprintf(
+			'### %7$s ### : %1$s, %2$s, "%5$s" %6$s%4$s%3$s%4$s',
+			$ajax,
+			$cron,
+			$trace,
+			PHP_EOL,
+			$class_name,
+			$exists,
+			$title
+		);
 		error_log($log);
 	}
 }
