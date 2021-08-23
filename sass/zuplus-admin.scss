@@ -120,6 +120,13 @@ $notice-dark-color: darken($notice-color, 20%);
 	}
 }
 
+// чтобы блок 'shortcode' позволял изменять размер поля ввода
+.blocks-shortcode__textarea {
+    min-height: 120px !important;
+    resize: vertical !important;
+	font-size: 1.5em;
+}
+
 // #wp-admin-bar-site-name {
 // 	min-width: 160px;
 // }
