@@ -26,7 +26,7 @@
 
 				lodash.forEach(messages, function(value) {
 					if(lodash.includes(text, value)) {
-						$notice.find('.components-notice__dismiss').click();
+						$notice.find('.components-notice__dismiss').trigger('click');
 						// eslint-disable-next-line no-console
 						console.info('REMOVED (at ' +  (click_attempt + 1) + ' try): ' + value);
 						removed = true;
