@@ -180,7 +180,7 @@ class zu_PlusDebugBar extends zukit_Singleton {
 			sprintf(
 				'<dt class="__context %s">%s',
 				$context_class,
-				preg_replace('/^[!|?|*]/', '', htmlentities($context) . $context_end_marker)
+				preg_replace('/^[!|?|*]/', '', $context . $context_end_marker) // htmlentities($context)
 			),
 			$source
 		);

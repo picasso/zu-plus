@@ -154,6 +154,7 @@ class zu_PlusDebug extends zukit_Addon {
 				$this->debug_log($label . $log);
 			}
 			if($this->is_option('debug_bar')) {
+				$context = htmlentities($context);
 				array_unshift($params, $context);
 				$log = $this->kint_log($params, true);
 				$this->bar_log($log, true, $context, $called_class);
