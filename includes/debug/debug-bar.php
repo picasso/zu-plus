@@ -14,7 +14,7 @@ class zu_PlusDebugBar extends zukit_Singleton {
 
 	private $dlogs = [];
 
-	function config_singleton($params) {
+	function singleton_config($params) {
 		$this->convert_html_from_string = $params['convert_html'] ?? $this->convert_html_from_string;
 		$this->use_kint = $params['use_kint'] ?? $this->use_kint;
 		$this->dump_method = $params['dump_method'] ?? $this->dump_method;
@@ -38,7 +38,6 @@ class zu_PlusDebugBar extends zukit_Singleton {
 	public function panel_callback() {
 		$this->current_ip = $this->get_request_ip();
 		$this->dlogs = self::get_logs();
-
 		$logkind = zu_sprintf(
 			'<em>%s</em> %s',
 			empty($this->dlogs) ? 'No logs found.' : ($this->use_kint ? 'KINT' : 'Zu Plus'),
