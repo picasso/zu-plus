@@ -45,15 +45,15 @@ const debug = {
 	},
 	avoid_ajax: {
 		label: 	__('Avoid AJAX calls', 'zu-plus'),
-		help:	__('If checked, all logging inside AJAX calls (via **admin-ajax.php**) will be ignored.', 'zu-plus'),
+		help:	__('All logging inside AJAX calls (via **admin-ajax.php**) will be ignored.', 'zu-plus'),
 	},
 	debug_menus: {
 		label: 	__('Output menu order', 'zu-plus'),
-		help: 	__('If checked, the current order of items in **menus** and **submenus** will be logged.', 'zu-plus'),
+		help: 	__('The current order of items in **menus** and **submenus** will be logged.', 'zu-plus'),
 	},
 	debug_caching: {
 		label: 	__('Debug Caching', 'zu-plus'),
-		help: 	__('If checked, all calls to cache functions will be logged.', 'zu-plus'),
+		help: 	__('All calls to cache functions will be logged.', 'zu-plus'),
 	},
 	debug_bar: {
 		label: 	__('Use Debug Bar', 'zu-plus'),
@@ -66,8 +66,8 @@ const debug = {
 		depends: 'debug_bar',
 	},
 	convert_html: {
-		label: 	__('Convert to HTML entities in Debug Bar', 'zu-plus'),
-		help: 	__('If checked, all characters which have HTML character entity equivalents are translated into these entities.', 'zu-plus'),
+		label: 	__('HTML entities in Debug Bar', 'zu-plus'),
+		help: 	__('All characters which have HTML character entity equivalents are translated into these entities.', 'zu-plus'),
 		depends: 'debug_bar',
 	},
 	write_file: {
@@ -75,13 +75,13 @@ const debug = {
 		help: 	__('If unchecked, only the information for `Debug Bar` will be saved.', 'zu-plus'),
 	},
 	flywheel_log: {
-		label: 	__('Use Local logfile location', 'zu-plus'),
+		label: 	__('Use `Local` logfile location', 'zu-plus'),
 		help: __('[Local by Flywheel](https://localwp.com//) is a free development application to develop WordPress locally.', 'zu-plus'),
 		depends: 'write_file',
 	},
 	overwrite: {
 		label: 	__('Overwrite logs', 'zu-plus'),
-		help: 	__('If checked, the log data will be **overwritten on every reload**, otherwise it will be appended to the file/Debug Bar.', 'zu-plus'),
+		help: 	__('The log data will be **overwritten on every reload**, otherwise it will be appended to the file/Debug Bar.', 'zu-plus'),
 		depends: ['||', 'debug_bar', 'write_file'],
 	},
 	// ajax_log: {
