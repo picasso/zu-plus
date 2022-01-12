@@ -22,7 +22,7 @@ const options = {
 	disable_cached: {
 		divider: 2,
 		label: 	__('Disable Cached Shortcodes?', 'zu-plus'),
-		help: __('Disabling caching will result in memory savings, but very small (**not recommended**).', 'zu-plus'),
+		help: __('Disabling caching will result in memory savings, but relatively small (**not recommended**).', 'zu-plus'),
 	},
 	remove_autosave: {
 		label: 	__('Remove Autosave Notices?', 'zu-plus'),
@@ -41,7 +41,7 @@ const debug = {
 	},
 	classname_only: {
 		label: 	__('Log only class names', 'zu-plus'),
-		help:	__('Only *class names* will be logged instead of a detailed data of the class instance (including its props and methods).', 'zu-plus'),
+		help:	__('Only *class names* will be logged instead of a detailed data of the class instance (its props and methods).', 'zu-plus'),
 	},
 	avoid_ajax: {
 		label: 	__('Avoid AJAX calls', 'zu-plus'),
