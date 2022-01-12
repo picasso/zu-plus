@@ -55,12 +55,12 @@ class zu_Plus extends zukit_Plugin  {
 	}
 
 	protected function construct_more() {
-		$this->options();
 		// we need to register 'Debug Addon' earlier, otherwise its methods will not be available until 'init'
 		if($this->is_option('debug_mode')) {
 			$this->dbug = $this->register_addon(new zu_PlusDebug());
 			// zu()->set_debug_cache($this->check_option('debug_cache'));
 		}
+		$this->load_first();
 	}
 
 	protected function extend_info() {
@@ -74,6 +74,11 @@ class zu_Plus extends zukit_Plugin  {
 		// we use a fake element that will never be displayed since the 'value' is null
 		// but will cause the hook to fire when the value of the 'debug_mode' option changes
 		['fake' => ['value' => null, 'depends' => 'debug_mode']]);
+	}
+
+	protected function extend_metadata($metadata) {
+		$metadata['description'] = str_replace('Zukit', '**Zukit**', $metadata['description']);
+		return $metadata;
 	}
 
 	protected function extend_actions() {
@@ -296,6 +301,34 @@ class zu_Plus extends zukit_Plugin  {
 		if(!$is_frontend && $autosave_allowed) {
 			$this->admin_enqueue_script('rm-autosave', ['deps'	=> 'jquery']);
 		}
+	}
+
+	// load Zu Plus first -----------------------------------------------------]
+
+	// When activated this plugin will reorder the plugin load list
+	private function load_first() {
+		// $plugins2 = get_option('active_plugins');
+		// _zu_logc('data', $plugins2, $this->data, $this->is_origin(true));
+		add_action('activated_plugin', function() {
+			$zuplus_key = str_replace('/plugins/', '', $this->data['File']);
+			$plugins = get_option('active_plugins');
+			// _zu_log($plugins, $zuplus_key);
+			if($plugins) {
+				$index = array_search($zuplus_key, $plugins);
+				if($index) {
+					array_splice($plugins, $index, 1);
+					// if the first position occupies a 'query-monitor',
+					// then we leave it there and occupy the second position
+					$position = strpos($plugins[0], 'query-monitor') !== false ? 1 : 0;
+					// if the first/second position occupies a 'zu-debug',
+					// then we leave it there and occupy the second/third position
+					$position += strpos($plugins[$position], 'zu-debug') !== false ? 1 : 0;
+					array_splice($plugins, $position, 0, $zuplus_key);
+					// _zu_log('after shift', $plugins, $position);
+					update_option('active_plugins', $plugins);
+				}
+			}
+		});
 	}
 }
 

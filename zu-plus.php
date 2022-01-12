@@ -16,7 +16,8 @@ Requires PHP: 7.4.1
 // Prohibit direct script loading
 defined('ABSPATH') || die('No direct script access allowed!');
 
-// add_action('plugins_loaded', function() { 	// DEBUG ONLY
+// DEBUG ONLY
+add_action('plugins_loaded', function() {
 
 // Always load Zukit even if we don't use it later ('wp_doing_ajax' or 'wp_doing_cron')
 // as other plugins or themes may want to use it
@@ -35,7 +36,8 @@ if(Zukit::is_compatible(__FILE__, array('min_php' => '7.4.1') )) {
 	zuplus(__FILE__);
 }
 
-// });
+// DEBUG ONLY
+});
 
 // Hides the internal actions of Query Monitor in the output info from the plugin itself
 define('QM_HIDE_SELF', true);
