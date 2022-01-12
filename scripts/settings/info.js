@@ -1,6 +1,6 @@
 // WordPress dependencies
 
-const { get, defaults, forEach } = lodash;
+const { get, defaults, forEach, isEmpty } = lodash;
 const { useCallback, useState, useEffect } = wp.element;
 const { Spinner } = wp.components;
 
@@ -24,6 +24,52 @@ const ZuplusCoreInfo = ({
 	const [activeVersion, setActiveVersion] = useState(null);
 	const [instVersions, setInstVersions] = useState({});
 	const [dynamicCells, updateCells] = ZukitTable.useDynamicCells();
+
+	// get version from GitHub via AJAX (from package.json file)
+	const getGitHubVersion = useCallback((uri, id, version, linkedRef) => {
+		const github = uri === null ? 'https://github.com/picasso/zukit' : uri;
+		const matches = String(github).match(/https?:\/\/github.com\/(.*?)\/?$/mi);
+		const repo = get(matches, [1], null);
+		if(repo === null) return updateCells('repository not found', id, 'content');
+
+		const url = `https://api.github.com/repos/${repo}/contents/package.json`;
+		fetch(url)
+			.then(response => {
+				// 404 often means that the repo is 'private'
+				if(response.status === 404) {
+					if(uri === null) {
+						setCoreVersion('repo unavailable');
+					} else {
+						updateCells('repo unavailable (private?)', id, 'content');
+					}
+					return {};
+				}
+				return response.json();
+			}).then(data => {
+				if(!isEmpty(data)) {
+					const content = get(data, 'content', '{}');
+					const repoPackage = JSON.parse(atob(content));
+					const repoVersion = get(repoPackage, 'version', '?');
+					if(uri === null) {
+						setCoreVersion(repoVersion);
+					} else {
+						const isGreat = compareVersions(repoVersion, version) > 0;
+						const message = isGreat ? `update available \`${repoVersion}\`` : 'lastest version';
+						updateCells(message, id, 'content');
+						updateCells(isGreat ? 'less' : 'great', linkedRef, 'className');
+					}
+				}
+			})
+			.catch(error => {
+				const request = url.replace('https://api.github.com/repos', '...');
+				createNotice({
+					status: 'error',
+					content: simpleMarkdown(`${labels.error} [*${request}*]: **${error}**`, { raw: true }),
+					isDismissible: true,
+					__unstableHTML: true,
+				});
+			});
+	}, [updateCells, createNotice, labels.error]);
 
 	// load info from server on Open
 	const onToggle = useCallback(() => {
@@ -60,40 +106,6 @@ const ZuplusCoreInfo = ({
 		const isGreat = compareVersions(core, current) > 0;
 		updateCells(isGreat ? 'less' : 'great', ref, 'className');
 	}, [updateCells]);
-
-	// get version from GitHub via AJAX (from package.json file)
-	const getGitHubVersion = useCallback((uri, id, version, linkedRef) => {
-		const github = uri === null ? 'https://github.com/picasso/zukit' : uri;
-		const matches = String(github).match(/https?:\/\/github.com\/(.*?)\/?$/mi);
-		const repo = get(matches, [1], null);
-		if(repo === null) return updateCells('repository not found', id, 'content');
-
-		const url = `https://api.github.com/repos/${repo}/contents/package.json`;
-		fetch(url)
-			.then(response => response.json())
-			.then(data => {
-				const content = get(data, 'content', '{}');
-				const repoPackage = JSON.parse(atob(content));
-				const repoVersion = get(repoPackage, 'version', '?');
-				if(uri === null) {
-					setCoreVersion(repoVersion);
-				} else {
-					const isGreat = compareVersions(repoVersion, version) > 0;
-					const message = isGreat ? `update available \`${repoVersion}\`` : 'lastest version';
-					updateCells(message, id, 'content');
-					updateCells(isGreat ? 'less' : 'great', linkedRef, 'className');
-				}
-			})
-			.catch((error) => {
-				const request = url.replace('https://api.github.com/repos', '...');
-				createNotice({
-					status: 'error',
-					content: simpleMarkdown(`${labels.error} [*${request}*]: **${error}**`, { raw: true }),
-					isDismissible: true,
-					__unstableHTML: true,
-				});
-			});
-	}, [updateCells, createNotice, labels.error]);
 
 	// update classes for instances if the framework version was obtained later
 	// than the initialization of dynamic cells
