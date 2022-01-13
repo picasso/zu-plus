@@ -39,6 +39,7 @@ class zu_Plus extends zukit_Plugin  {
 				'cookie_notice'		=> false,
 				'dup_page'			=> false,
 				'disable_cached'	=> false,
+				'disable_admenu'	=> false,
 			],
 
 			'admin'				=> [
@@ -60,7 +61,17 @@ class zu_Plus extends zukit_Plugin  {
 			$this->dbug = $this->register_addon(new zu_PlusDebug());
 			// zu()->set_debug_cache($this->check_option('debug_cache'));
 		}
+		// reorder the plugin load list
 		$this->load_first();
+		// output in log the current order of items in Admin menus and submenus
+		if($this->is_option('debug_mode') && $this->is_option('zuplus_debug_options.debug_menus')) {
+			$this->toggle_menu_debug(true);
+		}
+		// disable all changes in Admin menus and submenus
+		if($this->is_option('disable_admenu')) {
+			$this->toggle_menu_disable(true);
+		}
+
 	}
 
 	protected function extend_info() {
@@ -179,11 +190,6 @@ class zu_Plus extends zukit_Plugin  {
 		return empty($this->dbug) ? false : true;
 	}
 
-	// output in log the current order of items in menus and submenus
-	protected function custom_menu_debug() {
-		return $this->is_debug() ? $this->dbug->is('debug_menus') : false;
-	}
-
 	protected function file_log($log) {
 		if($this->is_debug()) $this->dbug->debug_log($log);
 		// if 'debug mode' is not activated, then all such calls should be muted
@@ -242,37 +248,23 @@ class zu_Plus extends zukit_Plugin  {
 		return [
 			'reorder'	=>	[
 				[
-					'menu'				=> 	'zuplus-settings',
-					'new_index'			=>	$this->from_split_index(12),
+					'menu'		=> 'zuplus-settings',
+					'after'		=> 'zutranslate-settings',
 				],
 				[
-					'menu'				=> 	'options-permalink.php',
-					'after_index'		=>	'options-discussion.php',
-				],
-			],
-			'rename'	=>	[
-				[
-					'menu'				=> 	'watermark-options',
-					'new_name'			=>	'Watermark',
+					'onfail'	=> true,
+					'menu'		=> 'zuplus-settings',
+					'after'		=> 'zumedia-settings',
 				],
 				[
-					'menu'				=> 	'ewww-image-optimizer-cloud/ewww-image-optimizer-cloud.php',
-					'new_name'			=>	'EWWW Optimiser',
-				],
-			],
-			'remove'	=>	[
-				[
-					'menu'				=>	'bbq_settings',
-				],
-				[
-					'menu'				=>	'itsec-go-pro',
-					'parent'			=>	'itsec',
+					'onfail'	=> true,
+					'menu'		=> 'zuplus-settings',
+					'after'		=> 'options-privacy.php',
 				],
 			],
 			'separator'	=>	[
-				[
-					'before_index'		=>	'zuplus-settings',
-				],
+					'before'	=> 'zuplus-settings',
+					'after'		=> 'zuplus-settings',
 			],
 		];
 	}

@@ -6,26 +6,30 @@ const { __ } = wp.i18n;
 
 const options = {
 	debug_mode: {
-		label: 	__('Activate Debug Mode?', 'zu-plus'),
+		label: 	__('Activate Debug Mode', 'zu-plus'),
 		help:	__('All debug functions like *zu_log()* will be activated. Otherwise all calls will be muted.', 'zu-plus'),
 	},
 	dup_page: {
-		label: 	__('Activate Duplicate Page & Post?', 'zu-plus'),
+		label: 	__('Activate Duplicate Page & Post', 'zu-plus'),
 		help:	__('Allows duplicate Posts, Pages and Custom Posts using single click.', 'zu-plus'),
 	},
 	cookie_notice: {
-		label: 	__('Activate Cookie Notice?', 'zu-plus'),
+		label: 	__('Activate Cookie Notice', 'zu-plus'),
 		help:	__('Allows you to inform users that the site uses cookies and to comply with the EU GDPR regulations.', 'zu-plus'),
 		// temporarily remove - not yet implemented
 		depends: false,
 	},
 	disable_cached: {
 		divider: 2,
-		label: 	__('Disable Cached Shortcodes?', 'zu-plus'),
+		label: 	__('Disable Cached Shortcodes', 'zu-plus'),
 		help: __('Disabling caching will result in memory savings, but relatively small (**not recommended**).', 'zu-plus'),
 	},
+	disable_admenu: {
+		label: 	__('Disable Admin Menu Changes', 'zu-plus'),
+		help: __('Disable position changes and renaming items in the **Admin** menu.', 'zu-plus'),
+	},
 	remove_autosave: {
-		label: 	__('Remove Autosave Notices?', 'zu-plus'),
+		label: 	__('Remove Autosave Notices', 'zu-plus'),
 		help:	__('Removes Wordpress *autosave* and *backup* notices which could be very annoying.\nYou should understand what you are doing.', 'zu-plus'),
 	},
 };
