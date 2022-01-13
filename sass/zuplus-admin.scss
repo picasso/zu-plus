@@ -23,6 +23,8 @@ $context-warn-color: darken($orange-color, 20%);
 $context-warn-border-color: darken($context-warn-color, 10%);
 $context-hlt-color: darken($green-color, 10%);
 $context-hlt-border-color: darken($context-hlt-color, 10%);
+$context-if-color: darken($violet-color, 10%);
+$context-if-border-color: darken($context-if-color, 10%);
 
 $notice-color: #aad5ff;
 $notice-dark-color: darken($notice-color, 20%);
@@ -58,6 +60,13 @@ $notice-dark-color: darken($notice-color, 20%);
 		border-color: $context-hlt-border-color !important;
 		&:hover {
 			border-color: $context-hlt-border-color !important;
+		}
+	}
+	&.__if {
+		background-color: $context-if-color !important;
+		border-color: $context-if-border-color !important;
+		&:hover {
+			border-color: $context-if-border-color !important;
 		}
 	}
 }
