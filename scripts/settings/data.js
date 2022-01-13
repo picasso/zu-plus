@@ -6,30 +6,30 @@ const { __ } = wp.i18n;
 
 const options = {
 	debug_mode: {
-		label: 	__('Activate Debug Mode', 'zu-plus'),
+		label: 	__('Activate "Debug Mode"', 'zu-plus'),
 		help:	__('All debug functions like *zu_log()* will be activated. Otherwise all calls will be muted.', 'zu-plus'),
 	},
 	dup_page: {
-		label: 	__('Activate Duplicate Page & Post', 'zu-plus'),
+		label: 	__('Activate "Duplicate Page & Post"', 'zu-plus'),
 		help:	__('Allows duplicate Posts, Pages and Custom Posts using single click.', 'zu-plus'),
 	},
 	cookie_notice: {
-		label: 	__('Activate Cookie Notice', 'zu-plus'),
+		label: 	__('Activate "Cookie Notice"', 'zu-plus'),
 		help:	__('Allows you to inform users that the site uses cookies and to comply with the EU GDPR regulations.', 'zu-plus'),
 		// temporarily remove - not yet implemented
 		depends: false,
 	},
 	disable_cached: {
 		divider: 2,
-		label: 	__('Disable Cached Shortcodes', 'zu-plus'),
+		label: 	__('Disable cached shortcodes', 'zu-plus'),
 		help: __('Disabling caching will result in memory savings, but relatively small (**not recommended**).', 'zu-plus'),
 	},
 	disable_admenu: {
-		label: 	__('Disable Admin Menu Changes', 'zu-plus'),
+		label: 	__('Disable admin menu changes', 'zu-plus'),
 		help: __('Disable position changes and renaming items in the **Admin** menu.', 'zu-plus'),
 	},
 	remove_autosave: {
-		label: 	__('Remove Autosave Notices', 'zu-plus'),
+		label: 	__('Remove "autosave" notices', 'zu-plus'),
 		help:	__('Removes Wordpress *autosave* and *backup* notices which could be very annoying.\nYou should understand what you are doing.', 'zu-plus'),
 	},
 };
@@ -40,7 +40,7 @@ const debug = {
 		help: __('[Kint for PHP](https://kint-php.github.io/kint/) is a tool designed to present debugging data in the best way possible graphically.', 'zu-plus'),
 	},
 	debug_rsjs: {
-		label: 	__('Activate `Responsive JS` debug info', 'zu-plus'),
+		label: 	__('Activate "Responsive JS" debug info', 'zu-plus'),
 		help:	__('Adds class *debug* to BODY and displays info for responsive elements (only if the theme supports it).', 'zu-plus'),
 	},
 	classname_only: {
@@ -52,15 +52,19 @@ const debug = {
 		help:	__('All logging inside AJAX calls (via **admin-ajax.php**) will be ignored.', 'zu-plus'),
 	},
 	debug_menus: {
-		label: 	__('Output menu order', 'zu-plus'),
+		label: 	__('Debug menu order', 'zu-plus'),
 		help: 	__('The current order of items in **menus** and **submenus** will be logged.', 'zu-plus'),
 	},
+	debug_plugins: {
+		label: 	__('Debug plugins order', 'zu-plus'),
+		help: 	__('The current order of all activated **plugins** will be logged.', 'zu-plus'),
+	},
 	debug_caching: {
-		label: 	__('Debug Caching', 'zu-plus'),
+		label: 	__('Debug caching', 'zu-plus'),
 		help: 	__('All calls to cache functions will be logged.', 'zu-plus'),
 	},
 	debug_bar: {
-		label: 	__('Use Debug Bar', 'zu-plus'),
+		label: 	__('Use "Debug Bar"', 'zu-plus'),
 		help:	__('Works only if [Query Monitor](https://github.com/johnbillion/query-monitor) is activated.', 'zu-plus'),
 		divider: 2,
 	},
@@ -70,7 +74,7 @@ const debug = {
 		depends: 'debug_bar',
 	},
 	convert_html: {
-		label: 	__('HTML entities in Debug Bar', 'zu-plus'),
+		label: 	__('HTML entities in "Debug Bar"', 'zu-plus'),
 		help: 	__('All characters which have HTML character entity equivalents are translated into these entities.', 'zu-plus'),
 		depends: 'debug_bar',
 	},
@@ -79,7 +83,7 @@ const debug = {
 		help: 	__('If unchecked, only the information for `Debug Bar` will be saved.', 'zu-plus'),
 	},
 	flywheel_log: {
-		label: 	__('Use `Local` logfile location', 'zu-plus'),
+		label: 	__('Use "Local" logfile location', 'zu-plus'),
 		help: __('[Local by Flywheel](https://localwp.com//) is a free development application to develop WordPress locally.', 'zu-plus'),
 		depends: 'write_file',
 	},

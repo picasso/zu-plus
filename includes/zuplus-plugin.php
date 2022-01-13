@@ -67,11 +67,17 @@ class zu_Plus extends zukit_Plugin  {
 		if($this->is_option('debug_mode') && $this->is_option('zuplus_debug_options.debug_menus')) {
 			$this->toggle_menu_debug(true);
 		}
+		// output in log the current order of all acivated plugins
+		if($this->is_option('debug_mode') && $this->is_option('zuplus_debug_options.debug_plugins')) {
+			add_action('admin_init', function() {
+				$plugins = get_option('active_plugins');
+				zu_logc('*Activated Plugins Order', $plugins);
+			});
+		}
 		// disable all changes in Admin menus and submenus
 		if($this->is_option('disable_admenu')) {
 			$this->toggle_menu_disable(true);
 		}
-
 	}
 
 	protected function extend_info() {
@@ -229,10 +235,6 @@ class zu_Plus extends zukit_Plugin  {
 		return [
 			'reorder'	=>	[
 				[
-					'menu'			=> 	'upload.php',
-					'before_index'	=>	'upload.php',
-				],
-				[
 					'menu'			=> 	'edit.php',
 					'after_index'	=>	'upload.php',
 				],
@@ -299,8 +301,6 @@ class zu_Plus extends zukit_Plugin  {
 
 	// When activated this plugin will reorder the plugin load list
 	private function load_first() {
-		// $plugins2 = get_option('active_plugins');
-		// _zu_logc('data', $plugins2, $this->data, $this->is_origin(true));
 		add_action('activated_plugin', function() {
 			$zuplus_key = str_replace('/plugins/', '', $this->data['File']);
 			$plugins = get_option('active_plugins');
