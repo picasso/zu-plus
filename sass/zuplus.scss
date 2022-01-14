@@ -160,7 +160,7 @@ $info-border-color-dark-opacity: 0.3;
 		}
 
 		.cell__origin {
-			padding-right: 0;
+			padding: 0 6px 0 12px;
 			em {
 				font-style: normal;
 				font-size: 12px;
@@ -172,6 +172,9 @@ $info-border-color-dark-opacity: 0.3;
 				border-radius: 10px !important;
 				border: 1px solid rgba($violet-color, $info-border-color-dark-opacity) !important;
 			}
+		}
+		.cell__settings {
+			padding: 0 16px;
 		}
 		.cell__lastest {
 			color: rgba($kint-theme-text-light, 0.7);

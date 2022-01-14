@@ -27,6 +27,8 @@ const ZuplusCoreInfo = ({
 
 	// get version from GitHub via AJAX (from package.json file)
 	const getGitHubVersion = useCallback((uri, id, version, linkedRef) => {
+		// use it for debug because GitHub has request limit per hour
+		// if(uri || !uri) return;
 		const github = uri === null ? 'https://github.com/picasso/zukit' : uri;
 		const matches = String(github).match(/https?:\/\/github.com\/(.*?)\/?$/mi);
 		const repo = get(matches, [1], null);

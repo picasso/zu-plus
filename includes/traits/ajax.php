@@ -16,9 +16,7 @@ trait zu_PlusAjax {
 
 	public function zukit_info() {
 		$version = method_exists($this, 'zukit_ver') ? $this->zukit_ver() : null;
-		$content_path = wp_normalize_path(dirname(WP_CONTENT_DIR) . '/wp-content');
-		$from = $zukit_origin = str_replace($content_path, '<ROOT>', $this->zukit_dirname());
-
+		$from = Zukit::keypath($this->zukit_dirname(), '<ROOT>', null);
 		return $this->create_notice('data', null, [
 			'version'	=> $version,
 			'from'		=> $from,
@@ -27,6 +25,7 @@ trait zu_PlusAjax {
 	}
 
 	private function generate_zukit_table($active_version) {
+		$origin_marker = '*framework origin*';
 
 		function asKind($wp, $zu, $is_modified, $icon) {
 			$tooltip = $wp ?
@@ -47,14 +46,14 @@ trait zu_PlusAjax {
 		$table->align(['origin', 'version'], 'center');
 		$table->strong('name');
 		$table->as_icon('logo');
-		$table->shrink(['logo', 'version', 'settings']);
-		$table->fix_width(['origin', 'name', 'framework'], [null, '100px', '200px']);
+		$table->fit_content(['origin', 'logo', 'version', 'lastest', 'framework', 'settings']);
 
 		$rows = [];
 		$instances = $this->instance_by_router();
 		$zukit_origin = rtrim($this->zukit_dirname(), '/zukit');
 		$zukit_version = preg_replace('/[^\d|.]+/', '', $active_version);
 
+		$origin_found = false;
 		foreach($instances as $router => $instance) {
 			$info = $instance->info();
 
@@ -62,10 +61,10 @@ trait zu_PlusAjax {
 			$zuver = $this->detect_zukit_version($instance->dir);
 			$zuver_fixed = preg_replace('/[^\d|.]+/', '', $zuver);
 
-			$table->markdown_cell('origin', $zukit_origin === $instance->dir ? '*framework origin*' : '');
+			$origin_found = $origin_found || $zukit_origin === $instance->dir;
+			$table->markdown_cell('origin', $zukit_origin === $instance->dir ? $origin_marker : '');
 			$table->cell('name', $info['title']);
-			$table->icon_cell('logo', ['svg' => $info['icon']]);
-			$table->cell('name', $info['title']);
+			$table->icon_cell('logo', ['svg' => $info['icon'] ?? $this->get_default_icon()]);
 			$table->dynamic_cell('version',[
 					'markdown'	=> true
 				],
@@ -87,6 +86,37 @@ trait zu_PlusAjax {
 			$table->link_cell('settings', $link[0], $link[1]);
 
 			$table->next_row();
+		}
+
+		// if origin is not found, we have a special case ('Zu Debug' plugin?)
+		if($origin_found === false) {
+			$origin_fullpath = Zukit::get_file($zukit_origin);
+	// _zu_log($path_parts, $path_parts2, $origin_fullpath, dirname($zukit_origin));
+			$data = Zukit::get_file_metadata($origin_fullpath);
+			if(!empty($data['Name']) && !empty($data['Version'])) {
+				$table->markdown_cell('origin', $origin_marker);
+				$table->cell('name', $data['Name']);
+				$table->icon_cell('logo', ['svg' => $this->get_default_icon()]);
+				$table->dynamic_cell('version',[
+						'markdown'	=> true
+					],
+					sprintf('Version `%s`', $data['Version'])
+				);
+				$table->dynamic_cell('lastest', [
+					'markdown'	=> true,
+					'github'	=> $data['GitHubURI'],
+					'current'	=> $data['Version'],
+					'linked'	=> 'version',
+				]);
+				$table->dynamic_cell('framework', [
+						'markdown'	=> true,
+						'current'	=> $zukit_version,
+					],
+					sprintf('Zukit Version `%s`', $this->zukit_ver()), // $this->zukit_ver()
+					'active'
+				);
+				$table->next_row();
+			}
 		}
 
 		return $table->get(false);
@@ -118,5 +148,14 @@ trait zu_PlusAjax {
 			}
 		}
 		return $version;
+	}
+
+	private function get_default_icon() {
+		return (
+			'<svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0" y="0" width="100" height="80" viewBox="0,0,100,80">
+				<path d="M100,10 C100,4.48 95.52,0 90,0 L10,0 C4.48,0 0,4.48 0,10 L0,70 C0,75.52 4.48,80 10,80 L90,
+				80 C95.52,80 100,75.52 100,70 L100,10 z M90,70 L10,70 L10,10 L90.015,10 L90,70 z" fill="#444444"/>
+			</svg>'
+		);
 	}
 }
