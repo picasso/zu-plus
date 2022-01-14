@@ -1,3 +1,8 @@
+// using '/' for division is deprecated and will be removed in Dart Sass 2.0.0
+// this function is more convenient to use than math.div
+@use 'sass:math';
+@function div($be-divided, $by) { @return math.div($be-divided, $by); }
+
 @mixin breakpoint-width($point) {
 	@media all and (max-width: $point)  { @content; }
 }

@@ -122,21 +122,21 @@ $caret-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5
 
   dt.kint-parent:hover > nav,
   > footer > nav:hover {
-    background-position: 0 (1 / 4 * 100%) !important;
+    background-position: 0 (div(1, 4) * 100%) !important;
   }
 
   dt.kint-parent.kint-show > nav,
   > footer.kint-show > nav {
-    background-position: 0 (2 / 4 * 100%) !important;
+    background-position: 0 (div(2, 4) * 100%) !important;
   }
 
   dt.kint-parent.kint-show:hover > nav,
   > footer.kint-show > nav:hover {
-    background-position: 0 (3 / 4 * 100%) !important;
+    background-position: 0 (div(3, 4) * 100%) !important;
   }
 
   dt.kint-parent.kint-locked > nav {
-    background-position: 0 (4 / 4 * 100%) !important;
+    background-position: 0 (div(4, 4) * 100%) !important;
   }
 
   dt.kint-parent + dd {
@@ -334,7 +334,7 @@ $caret-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5
         cursor: pointer !important;
         display: inline-block !important;
         height: $spacing * 6px !important;
-        margin: round($spacing / 2) * 1px !important;
+        margin: round(div($spacing, 2)) * 1px !important;
         padding: 0 (2px + round($spacing * 2.5px)) !important;
         vertical-align: top !important;
 
@@ -407,7 +407,7 @@ $caret-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5
 
     dt {
       background: none !important;
-      padding: $spacing / 2 * 1px !important;
+      padding: div($spacing, 2) * 1px !important;
 
       .kint-parent {
         min-width: 100% !important;
@@ -420,7 +420,7 @@ $caret-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5
     td,
     th {
       border: $border !important;
-      padding: $spacing / 2 * 1px !important;
+      padding: div($spacing, 2) * 1px !important;
       vertical-align: center !important;
     }
 
