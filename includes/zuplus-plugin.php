@@ -235,12 +235,12 @@ class zu_Plus extends zukit_Plugin  {
 		return [
 			'reorder'	=>	[
 				[
-					'menu'			=> 	'edit.php',
-					'after_index'	=>	'upload.php',
+					'menu'		=> 'edit.php',
+					'after'		=> 'upload.php',
 				],
 				[
-					'menu'			=> 	'genesis',
-					'after_index'	=>	'options-general.php',
+					'menu'		=> 'genesis',
+					'after'		=> 'options-general.php',
 				],
 			],
 		];
