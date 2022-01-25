@@ -7,7 +7,7 @@ trait zukit_Scripts {
     // We needed the ability to async or defer our scripts
     private $async_defer = [];
 
-    protected function config_singleton_scripts() {
+    protected function singleton_config_scripts() {
         $this->dir = get_stylesheet_directory();
         $this->uri = get_stylesheet_directory_uri();
         // maybe add attributes for asynchronously loading or deferring scripts.
@@ -33,6 +33,11 @@ trait zukit_Scripts {
     public function get_filepath($is_style, $is_frontend, $file) {
         $dir = $is_frontend ? ($is_style ? 'css' : 'js') : ($is_style ? 'admin/css' : 'admin/js');
 		return sprintf($is_style ? '/%2$s/%1$s.css' : '/%2$s/%1$s.min.js', $file, $dir);
+	}
+
+    public function get_full_filepath($file, $is_style = false, $is_frontend = false) {
+        $filepath = $this->get_filepath($is_style, $is_frontend, $file);
+		return $this->sprintf_dir($filepath);
 	}
 
     public function get_version($filename = '', $refresh = false) {

@@ -3,21 +3,26 @@
 const { get, set, map, has, forEach, defaultsDeep } = lodash;
 const { __ } = wp.i18n;
 const { render, Fragment } = wp.element;
-const { ToggleControl, SelectControl, Button } = wp.components;
+const { SelectControl, Button } = wp.components;
 
 // Internal dependencies
 
 import { externalData, checkDependency, simpleMarkdown } from './utils.js';
-import { setRestRouter } from './fetch.js';
+import { setRestBasics } from './fetch.js';
 import ZukitSkeleton from './components/skeleton.js'
 import ZukitDivider from './components/divider.js'
+import ZukitToggle from './components/toggle.js';
+
+export function externalDataSettings(pageId) {
+	return externalData(`${pageId}_settings`);
+}
 
 export function renderPage(pageId, settings = {}) {
 
-	const pageData = externalData(`${pageId}_settings`);
+	const pageData = externalDataSettings(pageId);
 
 	// restRouter serves to identify the plugin/theme that currently uses the REST API
-	setRestRouter(pageData.router);
+	setRestBasics(pageData);
 
 	if(get(settings, 'panels') !== undefined) {
 		// Get 'debug' options key
@@ -52,19 +57,14 @@ export function toggleOption(toggleData, options, updateOptions, withPath = null
 	const optionValue = k => get(options, fullKey(k)); //  withPath ? `${withPath}.${k}` : k
 
 	return map(toggleData, (item, key) => checkDependency(item, options, false, withPath) &&
-		<Fragment key={ key }>
-			{ checkDivider(item) &&
-				<ZukitDivider
-					size={ item.divider }
-				/>
-			}
-			<ToggleControl
-				label={ item.label }
-				help={ simpleMarkdown(item.help, { br: true }) }
-				checked={ !!optionValue(key) }
-				onChange={ () => updateOptions({ [fullKey(key)]: !optionValue(key) }) }
-			/>
-		</Fragment>
+		<ZukitToggle
+			key={ key }
+			withDivider={ checkDivider(item) && item.divider }
+			label={ item.label }
+			help={ item.help }
+			checked={ !!optionValue(key) }
+			onChange={ () => updateOptions({ [fullKey(key)]: !optionValue(key) }) }
+		/>
 	);
 }
 

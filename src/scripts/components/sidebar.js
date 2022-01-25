@@ -3,12 +3,13 @@
 const { get, map, isEmpty, isNil, omitBy, pickBy, some } = lodash;
 const { __ } = wp.i18n;
 const { useCallback } = wp.element;
-const { createSlotFill, PanelBody, PanelRow, Button, ExternalLink, ToggleControl, Spinner } = wp.components;
+const { createSlotFill, PanelBody, PanelRow, Button, ExternalLink, Spinner } = wp.components;
 
 // Internal dependencies
 
 import { mergeClasses, checkDependency, simpleMarkdown } from './../utils.js';
 import ZukitActionButton from './action-button.js';
+import ZukitToggle from './toggle.js';
 
 // Zukit Sidebar Component
 
@@ -60,7 +61,7 @@ const ZukitSidebar = ({
 		updateOptions({ [`${debugSet}.${key}`]: !get(options, `${debugSet}.${key}`) })
 	}, [debugSet, options, updateOptions]);
 
-	const resetOptions = useCallback(() => {
+	const resetAllOptions = useCallback(() => {
 		ajaxAction('reset_options', options => updateOptions(options, true));
 	}, [ajaxAction, updateOptions]);
 
@@ -72,8 +73,8 @@ const ZukitSidebar = ({
 					<h2 className="block-editor-block-card__title">
 						{ title }
 					</h2>
-					<span className="block-editor-block-card__description">
-					{ description }
+					<span className="block-editor-block-card__description __zu_markdown">
+					{ simpleMarkdown(description, { br: true, json: true }) }
 					</span>
 				</div>
 			</div>
@@ -101,7 +102,7 @@ const ZukitSidebar = ({
 						className="__plugin_actions admin-blue"
 						icon={ 'admin-settings' }
 						isSecondary
-						onClick={ resetOptions }
+						onClick={ resetAllOptions }
 					>
 						{ __('Reset Plugin Options', 'zukit') }
 					</Button>
@@ -127,7 +128,7 @@ const ZukitSidebar = ({
 			{ hasPanels &&
 				<PanelBody title={ __('Screen Options', 'zukit') } initialOpen={ false }>
 					{ map(panels, ({ label, value, help }, panelKey) =>
-						<ToggleControl
+						<ZukitToggle
 							key={ panelKey }
 							label={ label }
 							help={ help  }
@@ -140,7 +141,7 @@ const ZukitSidebar = ({
 			{ hasDebug &&
 				<PanelBody title={ getPanel({ type: 'title', id: debugSet }) } initialOpen={ false }>
 					{ map(debugOptions, ({ label, help }, key) =>
-						<ToggleControl
+						<ZukitToggle
 							key={ key }
 							label={ label }
 							help={ help  }

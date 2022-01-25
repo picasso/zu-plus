@@ -1,3 +1,181 @@
+#### 1.5.0 / 2022-01-25
+* color modifiers support for opaque colors in `Debug` module
+* some helpers for input/textarea manipulations (compatible with React) in `JQ` module
+* minify JS output
+
+#### 1.4.9 / 2022-01-20
+
+##### Core
+* refactoring `AdminMenu` methods (*docs update required*)
+* implemented `keep_file` and `get_file` static methods to keep file paths
+* added `File` field to plugin/theme meta
+
+##### Components
+* refactoring `zukit_Table` class and `ZukitTable` component to support CSS Grid layout
+* added `ZukitToggle` component with simple markdown support
+* use `ZukitToggle` instead of `ToggleControl`
+
+##### Debug
+* added simple `__log` method - for debugging without any classes
+* added support for `Color Modifiers` in `info` method
+* disable __Zukit__ scripts caching with static `zukit_debug` method
+* removed `package.json` import (and `ver` getter) in `Debug` module
+
+##### Other
+* updated NPM package dependencies
+* logo experiments
+* improved CSS
+
+#### 1.4.8 / 2022-01-11
+
+* refactoring how __Zukit__ color palette can be extended
+* added key `extended_colors` in section `blocks` for config
+* added `getColorGetter` that creates custom color getter for plugin/theme
+
+#### 1.4.7 / 2022-01-09
+
+* added `get_full_filepath` scripts helper
+
+#### 1.4.6 / 2022-01-04
+
+##### Core
+* added `has_snippet` method
+* added `get_callable` method which allows you to use functions as configuration values
+* all `set_option` for Ajax requests are now running with the option `rewrite_array` equal to true
+* fixed bug in method `set_option` when `rewrite_array` is true and `key` is path
+
+##### Components
+* added `onKeyEnter` prop for `AdvTextControl` component
+* added `isSideBySide` prop to `ListInputControl` and `AdvTextControl` components
+* some CSS fix and `htmlFor` support when `isSideBySide` is true for `ListInputControl` and `AdvTextControl` components
+* added `isOpen` and `isNotEmptyLabel` props for `ListInput` Component
+* added `more` argument in `transformValue` function for `SelectItemControl` component
+* disable animation in `ListInputControl` component when `isOpen` is true
+
+##### Other
+* added `scrollTop` DOM helper
+* added `jquery-helpers` to global export for Settings Page
+* added `noColon` check for `messageWithError` function
+
+#### 1.4.4 / 2021-12-29
+
+* added a new version number that forgot in the past release
+* changed the title font for the `Settings Page`
+* changed the first section header to the `General Settings`
+* small improvements
+
+#### 1.4.3 / 2021-12-28
+
+##### Core
+* added `useForceUpdater` custom hook
+* fixed bug in `set_option` method when `$value` is array and `$key` is path
+* made `path_autocreated` = `true` by default
+* added explanation (*in comments*) when `simpleMarkdown` does not work
+
+##### Blocks & Components
+* added `TitleIndicator` component
+* added `withPlugin` and `withPluginMeta` HOCs to work with predefined WP slots (*PluginDocumentSettingPanel*, *PluginSidebar* and etc.)
+* exported `debug` module for __Zukit__ settings
+
+##### CSS
+* fix styles of some `standard` controls (checkbox, toggle)
+* small improvements
+
+#### 1.4.2 / 2021-12-10
+
+##### Core
+* changed parser to ecmaVersion 11
+* implemented `do_with_instances` to iterate all __Zukit__ instances for given method
+* refactoring `do_addons` to work with `options` and `collect` results
+* added `extend_metadata` method which allows you to modify the name, description and other information about the plugin/theme
+* refactoring `ConditionalWrap` after understanding how the JSX works with the `createEelement` function
+* added custom hooks - `useRefInit` and `useRefDefaults`
+* refactoring React custom hooks for `folders`
+* added `safe` transformation for path in `sprintf_dir` and `sprintf_uri`
+* added `safe` replacement for some formatting characters
+* added `externalDataSettings` function in `render` set
+* added warning when `getExternalData` was not called
+* added `container` option for `simpleMarkdown` function
+* added `findWithClientId` jQuery helper
+* replacing deprecated jQuery methods
+* implemented `getAttrWithClientId` and `getCssWithClientId` jQuery helpers
+
+##### Debug
+* refactoring `debug` module with new knowledge about React hooks
+* improved `useTraceUpdate`, implemented check for `added` and `removed` keys
+* improved `colored` console for Safari
+* changed codes for `colored console` blocks
+
+##### REST &  AJAX
+* fixed bug with `zudata` Ajax request
+* grouped the keys for the REST API
+* refactoring REST settings (implemented `setRestBasics` and `restRequestURL` methods)
+
+##### CSS
+* converted `instyle` SASS to SCSS
+* renaming some colors
+* improved `getColorOptions` to work with a list of slugs to be excluded
+* added `extend_block_colors` to modify the default __Zukit__ color palette
+* modified css for `__code` in markdown
+* added `__zu_markdown` class to plugin/theme description
+* implemented `markdown` in plugin/theme description
+* small improvements
+
+##### Snippets
+* improved `array_flatten` snippet to work with associative arrays
+
+#### 1.4.0 / 2021-10-16
+* adapted to WP 5.8.1
+
+##### Core
+* implemented `zukit_ExchangeWithMagic` trait
+* refactoring redirect to parent methods with PHP `__call`
+* added `construct_more_inner` method to free `construct_more` for users
+* implemented `initial_options` method
+* renaming `config_singleton` to `singleton_config`
+* renaming `call` method to `call_parent`
+* redefined `array_with_defaults` method from snippets for convenience
+* improved `extend snippets`, `frontend_handles`, `trace_summary` and `prefix_it` methods
+* split the `init` for plugins and themes
+* added logic to the `do_addons` method for passing the return value and for swap between the parameter and the return value
+* arguments `$script_code` and `$js_file` can be arrays
+* simplified the error checking method
+* fixed bug when closing tag has no space after attribute value in `zu_sprintf`
+* refactoring dependencies for scripts and styles to fix errors in WP 5.8 (widgets.php)
+
+##### REST &  AJAX
+* renaming `ajax.php` trait to `ajax-rest.php`
+* implemented `default_options` AJAX response
+* logic of `set_options_ajax` method is changed - if at least one call returns `true`, then the overall result will also be `true`
+* refactoring `sanitize helpers`, added `rest_response` and `maybe_fix_sanitize` methods
+
+##### Blocks & Components
+* improved `SelectItemControl` component - added `fillNull` option and `smart style` support
+* refactoring `zukit_Blocks` to allow use `config` from the class that was inherited from `zukit_Blocks`
+* added the ability to create an instance of the `zukit_Blocks` class by name
+* added `id` prop to pass it to `<TextControl>`
+* implemented `resetOptions` callback and passed it to `<EditComponent>`
+* added `afterUpdateCallback` to `updateOptions` helper
+* renaming internal `resetOptions` callback to `resetAllOptions`
+* improved `svgRef` and `getColor` helpers
+
+##### CSS
+* refactoring SASS with `div()` function because using `/` for division is deprecated
+* small fixes for Safari browser
+* added `__note` global class
+
+##### Snippets
+* moving `arrays` methods to separate trait
+* added `cast_array`, `array_zip_merge`, `add_inline_script_now`, `build_style` methods
+* added `null_on_failure` arg for `to_bool` function
+* added `minify` argument for inline styles and scripts
+* added `as_array` argument for `get_background_color` method
+* added `$reindex` argument to `array_pick_keys`, `array_without_keys` and `array_without_null` methods
+* fixed bug in `get_excerpt` function
+
+##### Other
+* The Wiki was last updated on Apr 16 2021.
+
 #### 1.3.0 / 2021-08-10
 * supports `version` property
 * implemented `Extend` trait to dynamically extend snippets with new methods

@@ -1,4 +1,5 @@
 <?php
+include_once('traits/arrays.php');
 include_once('traits/classes.php');
 include_once('traits/content.php');
 include_once('traits/curve.php');
@@ -15,7 +16,8 @@ include_once('traits/useful.php');
 
 class zukit_Snippets extends zukit_SingletonLogging {
 
-	use zusnippets_Classes,
+	use zusnippets_Arrays,
+		zusnippets_Classes,
 		zusnippets_Content,
 		zusnippets_Curve,
 		zusnippets_Date,
@@ -31,7 +33,7 @@ class zukit_Snippets extends zukit_SingletonLogging {
 
 	protected function construct_more() {
 		$this->prefix = 'zu_snippets';
-        $this->version = '1.3.4';
+        $this->version = '1.4.0';
 		$this->init_inline_style_scripts();
 	}
 }
@@ -66,7 +68,8 @@ if(!function_exists('zu_sprintf')) {
 		// %2$s
 		// that is, if the format directives are divided by spaces - it is intentionally,
 		// and if they are simply located on different rows - then  it's just resulting from the 'human-readable' template
-		$format = preg_replace('/\$s\n\s+\%/', '$s%', $format);
+		$format = preg_replace('/\$s\n\s+\%/', '$s %', $format);
+
 		array_unshift($params, $format);
 		$output = call_user_func_array('sprintf', $params);
 
@@ -76,6 +79,8 @@ if(!function_exists('zu_sprintf')) {
 				  $tag_compressed = preg_replace('/\s+/', ' ', $tag);
 				  $tag_compressed = preg_replace('/\s+>/', '>', $tag_compressed);
 				  $tag_compressed = preg_replace('/\s+\/>/', '/>', $tag_compressed);
+				  // add a space before the closing tag if there are no quotes or no space
+				  $tag_compressed = preg_replace('/([^\s|\"])\/>/', '$1 />', $tag_compressed);
 				  $output = str_replace($tag, $tag_compressed, $output);
 			  }
 		  }
