@@ -8,7 +8,7 @@ trait zukit_Options {
 		if($with_check) {
 			$options = get_option($this->options_key);
 			// Check whether we need to install an option, used during installation of plugin
-			if($options === false || $this->get('debug_options')) $options = $this->reset_options(false);
+			if($options === false || $this->get('debug_defaults')) $options = $this->reset_options(false);
 			$this->options = $options;
 		}
 		return $this->options;
@@ -18,11 +18,18 @@ trait zukit_Options {
 		return update_option($this->options_key, $options ?? $this->options);
 	}
 
-	public function reset_options($withAddons = true) {
+	public function initial_options($with_addons = true) {
+		$options = $this->get('options') ?? [];
+		if($with_addons) $this->extend_from_addons($options);
+		// remove non-existing options from add-ons
+		return $this->snippets('array_without_null', $options);
+	}
+
+	public function reset_options($with_addons = true) {
 		$options = $this->get('options') ?? [];
 		$this->update_options($options);
 		$this->options = $options;
-		if($withAddons) $this->reset_addons();
+		if($with_addons) $this->reset_addons();
 		return $this->options;
 	}
 
@@ -41,21 +48,23 @@ trait zukit_Options {
 		return $result === false ? false : $options;
 	}
 
-	// If 'key' contains 'path' - then resolve it before update
-	// When $this->path_autocreated is true then if a portion of path doesn't exist, it's created
-	// If we set value for the options belonging to the add-on, then after the operation
+	// if 'key' contains 'path' - then resolve it before update
+	// when $this->path_autocreated is true then if a portion of path doesn't exist, it's created
+	// if we set value for the options belonging to the add-on, then after the operation
 	// we do not update the options - add-on will take care of this
+	// if 'rewrite_array' is true then when assigning 'value' which is an array, we just assign it to the 'key'
+	// but if 'rewrite_array' is false, then instead of assignment, we merge the values using 'array_replace_recursive'
 	public function set_option($key, $value, $rewrite_array = false, $addon_options = null) {
 		// $value cannot be undefined or null!
 		if(!isset($value) || is_null($value)) return $options;
-
 		$result = true;
 		$options = is_null($addon_options) ? $this->options : $addon_options;
-		if(!$rewrite_array && is_array($value)) $options[$key] = array_replace_recursive($options[$key] ?? [], $value);
-		else {
-			// sets a value in a nested array based on path (if presented)
-			$pathParts = explode('.', $key);
-			$pathCount = count($pathParts);
+		// sets a value in a nested array based on path (if presented)
+		$pathParts = explode('.', $key);
+		$pathCount = count($pathParts);
+		if($pathCount === 1 && !$rewrite_array && is_array($value)) {
+			$options[$key] = array_replace_recursive($options[$key] ?? [], $value);
+		} else {
 			if($pathCount === 1) {
 				$options[$key] = $value;
 			} else {
@@ -74,7 +83,11 @@ trait zukit_Options {
 					if($this->path_autocreated) $current = [];
 					else return false;
 				}
-				$current[$lastKey] = $value;
+				if(!$rewrite_array && is_array($value)) {
+					$current[$lastKey] = array_replace_recursive($current[$lastKey] ?? [], $value);
+				} else {
+					$current[$lastKey] = $value;
+				}
 			}
 		}
 
