@@ -78,6 +78,14 @@ class zu_Plus extends zukit_Plugin  {
 		if($this->is_option('disable_admenu')) {
 			$this->toggle_menu_disable(true);
 		}
+		// disable Wordpress 'autosave' and 'backup' in Block Editor
+		if($this->is_option('remove_autosave')) {
+			add_action('enqueue_block_editor_assets', function() {
+				$this->admin_enqueue_script('zuplus-remove-backups', [
+					'deps' => ['wp-editor', zukit_Blocks::$zukit_handle]
+				]);
+			});
+		}
 	}
 
 	protected function extend_info() {
@@ -124,28 +132,6 @@ class zu_Plus extends zukit_Plugin  {
 				'hasMoreActions'	=> true,
 			],
 		];
-	}
-
-	protected function extend_debug_options() {
-		return [];
-		// return [
-		// 	'show_id'	=> [
-		// 		'label'		=> __('Display Attachment Id', 'zu-media'),
-		// 		'value'		=> false,
-		// 	],
-		// ];
-	}
-
-	protected function extend_debug_actions() {
-		return [];
-		// return $this->folders ? [
-		// 	[
-		// 		'label'		=> __('Fix Orphaned Attachments', 'zu-media'),
-		// 		'value'		=> 'zumedia_fix_orphaned',
-		// 		'icon'		=> 'hammer',
-		// 		'color'		=> 'blue',
-		// 	],
-		// ] : [];
 	}
 
 	// Actions & Add-ons ------------------------------------------------------]
@@ -196,13 +182,13 @@ class zu_Plus extends zukit_Plugin  {
 		return empty($this->dbug) ? false : true;
 	}
 
+	protected function dump_log($log) {
+		return $this->is_debug() ? $this->dbug->dump($log) : '';
+	}
+
 	protected function file_log($log) {
 		if($this->is_debug()) $this->dbug->debug_log($log);
 		// if 'debug mode' is not activated, then all such calls should be muted
-	}
-
-	protected function dump_log($log) {
-		return $this->is_debug() ? $this->dbug->dump($log) : '';
 	}
 
 	public function dlog($args, $called_class = null) {
@@ -286,15 +272,15 @@ class zu_Plus extends zukit_Plugin  {
 
 	protected function enqueue_more($is_frontend, $hook) {
 		$frontend_allowed = !empty($this->dbug) && $this->dbug->is('debug_frontend');
-		$autosave_allowed = $this->is_option('remove_autosave') && in_array($hook, ['post.php', 'post-new.php']);
+		// $autosave_allowed = $this->is_option('remove_autosave') && in_array($hook, ['post.php', 'post-new.php']);
 
 		if(!$is_frontend || $frontend_allowed) {
 			$this->admin_enqueue_style('zuplus-admin');
 		}
 
-		if(!$is_frontend && $autosave_allowed) {
-			$this->admin_enqueue_script('rm-autosave', ['deps'	=> 'jquery']);
-		}
+		// if(!$is_frontend && $autosave_allowed) {
+		// 	$this->admin_enqueue_script('rm-autosave', ['deps'	=> 'jquery']);
+		// }
 	}
 
 	// load Zu Plus first -----------------------------------------------------]
