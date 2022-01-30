@@ -1,7 +1,21 @@
+#### 2.2.0 / 2022-01-30
+* implemented __load Zu Plus first__ approach
+* added option to log the current order of all __acivated__ plugins
+* refactoring `Framework Info` table to support CSS Grid and `Zu Debug` plugin
+* added `disable_admenu` option
+* use new keys (refactored) for `custom_admin_menu` options
+* __Zukit__ updated to version 1.5.1
+* remove `/` for division because is deprecated and will be removed in Dart Sass 2.0.0
+* fixed bug when `config_singleton` name was changed to `singleton_config`
+* fixed KINT output for `conditionally logged` records
+* fixed bug with `htmlentities` in context when `Kint` used
+* fixed bug when the repo is unavailable or private
+* replaced jQuery deprecated `click` function
+
 #### 2.1.1 / 2021-08-10
 * for the logging functions, the `classname_only` option is implemented, which allows you to display only the class name without properties and methods - which speeds up logging and reduces the amount of logs
 * fixed bug with `zu_logc` in KINT mode
-* always load __Zukit__ even if we don't use it later
+* always load __Zukit__ even if we do not use it later
 * changed loading order for Zukit
 * __Zukit__ updated to version 1.3.0
 * improved support `zu_log_if` function

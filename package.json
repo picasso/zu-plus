@@ -1,7 +1,7 @@
 {
     "name": "zuplus",
-    "version": "2.1.1",
-    "testedWP": "5.7.2",
+    "version": "2.2.0",
+    "testedWP": "5.9.0",
     "requiresPHP": ">=7.4.1",
     "repository": {
         "type": "git",
