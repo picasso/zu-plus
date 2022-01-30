@@ -39,10 +39,10 @@ const debug = {
 		label: 	__('Use KINT', 'zu-plus'),
 		help: __('[Kint for PHP](https://kint-php.github.io/kint/) is a tool designed to present debugging data in the best way possible graphically.', 'zu-plus'),
 	},
-	debug_rsjs: {
-		label: 	__('Activate "Responsive JS" debug info', 'zu-plus'),
-		help:	__('Adds class *debug* to BODY and displays info for responsive elements (only if the theme supports it).', 'zu-plus'),
-	},
+	// debug_rsjs: {
+	// 	label: 	__('Activate "Responsive JS" debug info', 'zu-plus'),
+	// 	help:	__('Adds class *debug* to BODY and displays info for responsive elements (only if the theme supports it).', 'zu-plus'),
+	// },
 	classname_only: {
 		label: 	__('Log only class names', 'zu-plus'),
 		help:	__('Only *class names* will be logged instead of a detailed data of the class instance (its props and methods).', 'zu-plus'),
@@ -52,24 +52,24 @@ const debug = {
 		help:	__('All logging inside AJAX calls (via **admin-ajax.php**) will be ignored.', 'zu-plus'),
 	},
 	debug_menus: {
-		label: 	__('Debug menu order', 'zu-plus'),
+		label: 	__('Log menu order', 'zu-plus'),
 		help: 	__('The current order of items in **menus** and **submenus** will be logged.', 'zu-plus'),
 	},
 	debug_plugins: {
-		label: 	__('Debug plugins order', 'zu-plus'),
+		label: 	__('Log plugins order', 'zu-plus'),
 		help: 	__('The current order of all activated **plugins** will be logged.', 'zu-plus'),
 	},
-	debug_caching: {
-		label: 	__('Debug caching', 'zu-plus'),
-		help: 	__('All calls to cache functions will be logged.', 'zu-plus'),
-	},
+	// debug_caching: {
+	// 	label: 	__('Log caching', 'zu-plus'),
+	// 	help: 	__('All calls to cache functions will be logged.', 'zu-plus'),
+	// },
 	debug_bar: {
 		label: 	__('Use "Debug Bar"', 'zu-plus'),
 		help:	__('Works only if [Query Monitor](https://github.com/johnbillion/query-monitor) is activated.', 'zu-plus'),
 		divider: 2,
 	},
 	debug_frontend: {
-		label: 	__('Support front-end debugging?', 'zu-plus'),
+		label: 	__('Support "Debug Bar" on front-end', 'zu-plus'),
 		help:	__('Enable debugging JS & CSS on the front side. Used only with Debug Bar.', 'zu-plus'),
 		depends: 'debug_bar',
 	},
