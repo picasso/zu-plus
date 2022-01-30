@@ -21,7 +21,7 @@ Unfortunately, when developing in PHP for WordPress, it is not always possible t
 * Output of logs using __Kint__
 * Output of logs to __Query Monitor__
 * Output of debug info about the menu and submenu of Wordpress
-* Debug output for `Responsive JS` (for __Zu__ theme)
+<!-- * Debug output for `Responsive JS` (for __Zu__ theme) -->
 * Support for logging on the front-end
 * Management of the location of the log file and automatic overwriting
 * Displays summary information about the __Zukit__ framework and all themes and plugins using it in this instance
@@ -30,8 +30,8 @@ Unfortunately, when developing in PHP for WordPress, it is not always possible t
 
 * Duplicate WordPress menu
 * Duplicate Wordpress Posts, Pages and Custom Posts
-* Caching the code generated in shortcode (*not yet recovered after refactoring*)
-* Cookie Notice to inform users that the site uses cookies and to comply with the EU GDPR regulations (*not yet recovered after refactoring*)
+<!-- * Caching the code generated in shortcode (*not yet recovered after refactoring*)
+* Cookie Notice to inform users that the site uses cookies and to comply with the EU GDPR regulations (*not yet recovered after refactoring*) -->
 
 ## Download
 
