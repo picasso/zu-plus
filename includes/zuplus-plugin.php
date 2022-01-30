@@ -151,9 +151,9 @@ class zu_Plus extends zukit_Plugin  {
 			// $this->cnotice = $this->register_addon(new zu_PlusCookieNotice());
 		}
 
-		// Some internal 'inits' ----------------------------------------------]
+		// zu_logc("*Options", $this->options);
 
-		// $this->init_??();
+		// Some internal 'inits' ----------------------------------------------]
 
 		// не совсем понятно зачем это? скорее чтобы из плагина управлять опциями темы...
 		// устарелое решение, но нужно разобраться прежде чем удалять
@@ -270,8 +270,6 @@ class zu_Plus extends zukit_Plugin  {
 
 	protected function should_load_css($is_frontend, $hook) {
 		// here we load only 'zuplus' for the Settings Page
-		// 'zuplus-admin' which is needed for all pages is loaded via 'enqueue_more'
-		// return false;
 		return $is_frontend ? false : $this->ends_with_slug($hook);
 	}
 
@@ -281,15 +279,9 @@ class zu_Plus extends zukit_Plugin  {
 
 	protected function enqueue_more($is_frontend, $hook) {
 		$frontend_allowed = !empty($this->dbug) && $this->dbug->is('debug_frontend');
-		// $autosave_allowed = $this->is_option('remove_autosave') && in_array($hook, ['post.php', 'post-new.php']);
-
 		if(!$is_frontend || $frontend_allowed) {
-			$this->admin_enqueue_style('zuplus-admin');
+			$this->admin_enqueue_style('zuplus-debugbar');
 		}
-
-		// if(!$is_frontend && $autosave_allowed) {
-		// 	$this->admin_enqueue_script('rm-autosave', ['deps'	=> 'jquery']);
-		// }
 	}
 
 	// load Zu Plus first -----------------------------------------------------]

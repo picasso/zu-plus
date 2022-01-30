@@ -18,7 +18,7 @@
 { display: none !important;}
 
 // BBQ Firewall
-tr[data-slug*="block-bad-queries"] .row-actions span:first-child
+tr[data-slug*="block-bad-queries"] .row-actions span:first-child:not(.activate):not(.delete):not(.deactivate)
 
 // a[title*="BBQ Firewall"],
 // a[href*="bbq_settings"]
