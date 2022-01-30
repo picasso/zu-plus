@@ -85,6 +85,15 @@ class zu_Plus extends zukit_Plugin  {
 					'deps' => ['wp-editor', zukit_Blocks::$zukit_handle]
 				]);
 			});
+			// 'write_your_story' filter will be called before the moment when 'autosave' will be added to '$editor_settings'
+			// this is a convenient time to intervene and remove 'autosave' (if it was found)
+			add_filter('write_your_story', function($story, $post) {
+				$autosave = wp_get_post_autosave($post->ID);
+				if($autosave) {
+					wp_delete_post_revision($autosave->ID);
+				}
+				return $story;
+			}, 10, 2);
 		}
 	}
 
