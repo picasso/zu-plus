@@ -1,0 +1,38 @@
+// Remove advertisements ------------------------------------------------------]
+
+// #gfw-hosting-meta-box,
+// #gfw-news-meta-box,
+// .wpe-dify-posts,
+// .image-watermark-settings .df-credits
+
+// iThemes Security
+// #itsec-sidebar-widget-pro-upsell,
+// #itsec-sidebar-widget-mail-list-signup,
+// #itsec-sidebar-widget-form-backupbuddy-cross-promo,
+// #itsec-sidebar-widget-form-malware-scan,
+// #itsec-sidebar-widget-form-sync-cross-promo,
+// #itsec-sidebar-widget-form-support,
+// .itsec-module-pro-upsell,
+.itsec-promo,
+#toplevel_page_itsec ul li:not(.wp-first-item)
+{ display: none !important;}
+
+// BBQ Firewall
+tr[data-slug*="block-bad-queries"] .row-actions span:first-child
+
+// a[title*="BBQ Firewall"],
+// a[href*="bbq_settings"]
+{ display: none !important;}
+
+// Improvements ---------------------------------------------------------------]
+
+// чтобы блок 'shortcode' позволял изменять размер поля ввода
+.blocks-shortcode__textarea {
+    min-height: 120px !important;
+    resize: vertical !important;
+	font-size: 1.5em;
+}
+
+// #wp-admin-bar-site-name {
+// 	min-width: 160px;
+// }

@@ -1,4 +1,5 @@
 @import "vars";
+@import "noads";
 
 .zuplus_red { color: $red-color;}
 .zuplus_green { color: $green-color;}
@@ -128,33 +129,3 @@ $notice-dark-color: darken($notice-color, 20%);
 		text-align: center !important;
 	}
 }
-
-// чтобы блок 'shortcode' позволял изменять размер поля ввода
-.blocks-shortcode__textarea {
-    min-height: 120px !important;
-    resize: vertical !important;
-	font-size: 1.5em;
-}
-
-// #wp-admin-bar-site-name {
-// 	min-width: 160px;
-// }
-
-// Remove advertisements ------------------------------------------------------]
-
-#gfw-hosting-meta-box,
-#gfw-news-meta-box,
-.wpe-dify-posts,
-#itsec-sidebar-widget-pro-upsell,
-#itsec-sidebar-widget-mail-list-signup,
-#itsec-sidebar-widget-form-backupbuddy-cross-promo,
-#itsec-sidebar-widget-form-malware-scan,
-#itsec-sidebar-widget-form-sync-cross-promo,
-#itsec-sidebar-widget-form-support,
-.itsec-module-pro-upsell,
-#toplevel_page_itsec ul li:nth-child(5),
-a[title*="BBQ Pro"],
-a[title*="BBQ Firewall"],
-a[href*="bbq_settings"],
-.image-watermark-settings .df-credits
-{ display: none !important;}
