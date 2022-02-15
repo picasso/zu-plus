@@ -40,7 +40,7 @@ class zu_Plus extends zukit_Plugin  {
 				'dup_page'			=> false,
 				'disable_cached'	=> false,
 				'disable_admenu'	=> false,
-				'more_actions'		=> false,
+				'more_actions'		=> [],
 			],
 
 			'admin'				=> [
