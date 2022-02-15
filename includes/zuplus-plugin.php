@@ -40,6 +40,7 @@ class zu_Plus extends zukit_Plugin  {
 				'dup_page'			=> false,
 				'disable_cached'	=> false,
 				'disable_admenu'	=> false,
+				'more_actions'		=> false,
 			],
 
 			'admin'				=> [
@@ -143,6 +144,28 @@ class zu_Plus extends zukit_Plugin  {
 		];
 	}
 
+	// protected function extend_debug_options() {
+	// 	return [
+	// 		'show_id'	=> [
+	// 			'label'		=> __('Display Attachment Id', 'zu-media'),
+	// 			'value'		=> false,
+	// 		],
+	// 	];
+	// }
+
+	protected function extend_debug_actions() {
+		zu_logc('taxonomy_exists', taxonomy_exists('wpmf-category'));
+		$taxo_exists = $this->obsolete_taxo_exists();
+		return function_exists('zumedia') ? [
+			[
+				'label'		=> $taxo_exists ? __('Remove Obsolete Taxonomy', 'zu-plus') : __('Add Obsolete Taxonomy', 'zu-plus'),
+				'value'		=> 'zuplus_obsolete_taxo',
+				'icon'		=> $taxo_exists ? 'trash' : 'hammer',
+				'color'		=> 'blue',
+			],
+		] : [];
+	}
+
 	// Actions & Add-ons ------------------------------------------------------]
 
 	public function init() {
@@ -154,6 +177,13 @@ class zu_Plus extends zukit_Plugin  {
 		// zu_logc("*Options", $this->options);
 
 		// Some internal 'inits' ----------------------------------------------]
+
+		// 'more_actions' is array of internal methods that should be called on 'init'
+		$more_actions = $this->get_option('more_actions', []);
+		foreach($more_actions as $func) {
+			$callback = [$this, $func];
+			if(is_callable($callback)) call_user_func($callback);
+		}
 
 		// не совсем понятно зачем это? скорее чтобы из плагина управлять опциями темы...
 		// устарелое решение, но нужно разобраться прежде чем удалять
@@ -183,6 +213,13 @@ class zu_Plus extends zukit_Plugin  {
 		if($this->is_option('dup_page')) {
 			$this->dupost = $this->register_addon(new zu_PlusDuplicatePage());
 		}
+	}
+
+	private function more_action($action, $remove = false) {
+		$more_actions = $this->get_option('more_actions', []);
+		if($remove) unset($more_actions[array_search($action, $more_actions)]);
+		else $more_actions[] = $action;
+		$this->set_option('more_actions', $more_actions, true);
 	}
 
 	// Debug logging helpers --------------------------------------------------]

@@ -4,11 +4,13 @@
 
 trait zu_PlusAjax {
 
+	private $obsolete_taxonomies = ['wpmf-category'];
+
 	public function ajax_more($action, $value) {
 		if($action === 'zuplus_zukit_info') return $this->zukit_info();
 		if($action === 'zuplus_duplicate_menu') return $this->duplicate_menu($value);
 		// if($action === 'zuplus_revoke_cookie') return ['info'	=> sprintf('Cookie "<strong>%1$s</strong>" was deleted', $ajax_value)];
-
+		if($action === 'zuplus_obsolete_taxo') return $this->obsolete_taxo();
 		if($action === 'zuplus_reset_cached') return $this->reset_cached();
 
 		return null;
@@ -22,6 +24,36 @@ trait zu_PlusAjax {
 			'from'		=> $from,
 			'plugins'	=> $this->generate_zukit_table($version),
 		]);
+	}
+
+	private function obsolete_taxo() {
+		$taxo_exists = $this->obsolete_taxo_exists();
+		$this->more_action('register_obsolete_taxonomy', $taxo_exists);
+		return $this->create_notice(
+			'success',
+			sprintf(
+				'Obsolete taxonomies were %1$s: `%2$s`',
+				$taxo_exists ? 'unregistered' : 'registered',
+				implode(', ', $this->obsolete_taxonomies)
+			)
+		);
+	}
+
+	private function obsolete_taxo_exists() {
+		foreach($this->obsolete_taxonomies as $taxonomy) {
+			if(taxonomy_exists($taxonomy)) return true;
+		}
+		return false;
+	}
+
+	private function register_obsolete_taxonomy() {
+		foreach($this->obsolete_taxonomies as $taxonomy) {
+			register_taxonomy($taxonomy, 'attachment', [
+				'hierarchical' => true,
+				'show_in_nav_menus' => false,
+				'show_ui' => false
+			]);
+		}
 	}
 
 	private function generate_zukit_table($active_version) {
@@ -91,7 +123,6 @@ trait zu_PlusAjax {
 		// if origin is not found, we have a special case ('Zu Debug' plugin?)
 		if($origin_found === false) {
 			$origin_fullpath = Zukit::get_file($zukit_origin);
-	// _zu_log($path_parts, $path_parts2, $origin_fullpath, dirname($zukit_origin));
 			$data = Zukit::get_file_metadata($origin_fullpath);
 			if(!empty($data['Name']) && !empty($data['Version'])) {
 				$table->markdown_cell('origin', $origin_marker);
@@ -112,7 +143,7 @@ trait zu_PlusAjax {
 						'markdown'	=> true,
 						'current'	=> $zukit_version,
 					],
-					sprintf('Zukit Version `%s`', $this->zukit_ver()), // $this->zukit_ver()
+					sprintf('Zukit Version `%s`', $this->zukit_ver()),
 					'active'
 				);
 				$table->next_row();
