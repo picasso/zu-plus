@@ -1,3 +1,8 @@
+#### 2.2.1 / 2022-02-15
+* hide non-implemented options on `Settings Page`
+* added `more_actions` option to register internal methods that should be called on `init`
+* added `Obsolete Taxonomy` debug action
+
 #### 2.2.0 / 2022-01-30
 * implemented __load Zu Plus first__ approach
 * added option to log the current order of all __acivated__ plugins
