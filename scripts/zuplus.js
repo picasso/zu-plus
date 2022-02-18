@@ -14,6 +14,14 @@ import ZuplusDebug from './settings/debug.js';
 import ZuplusDupMenu from './settings/duplicate-menu.js';
 import ZuplusCoreInfo from './settings/info.js';
 
+const {
+	options: optionsLabels,
+	debug: debugOptionsLabels,
+	debugSelect: debugSelectLabels,
+	duplicate: duplicateLabels,
+	info: coreInfoLabels,
+} = zuplus;
+
 const EditZuplus = ({
 		wp,
 		title,
@@ -24,14 +32,6 @@ const EditZuplus = ({
 		moreData,
 		noticeOperations,
 }) => {
-
-	const {
-		options: optionsLabels,
-		debug: debugOptionsLabels,
-		debugSelect: debugSelectLabels,
-		duplicate: duplicateLabels,
-		info: coreInfoLabels,
-	} = zuplus;
 
 	return (
 			<>
