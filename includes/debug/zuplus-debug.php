@@ -37,6 +37,7 @@ class zu_PlusDebug extends zukit_Addon {
 				'convert_html'		=> true,
 				'dump_method'		=> 'var_export',
 				'avoid_ajax'		=> true,
+				'instant_caching'	=> true,
 				'debug_menus'		=> false,
 				'debug_plugins'		=> false,
 				'classname_only'	=> false,

@@ -51,18 +51,7 @@ const debug = {
 		label: 	__('Avoid AJAX calls', 'zu-plus'),
 		help:	__('All logging inside AJAX calls (via **admin-ajax.php**) will be ignored.', 'zu-plus'),
 	},
-	debug_menus: {
-		label: 	__('Log menu order', 'zu-plus'),
-		help: 	__('The current order of items in **menus** and **submenus** will be logged.', 'zu-plus'),
-	},
-	debug_plugins: {
-		label: 	__('Log plugins order', 'zu-plus'),
-		help: 	__('The current order of all activated **plugins** will be logged.', 'zu-plus'),
-	},
-	// debug_caching: {
-	// 	label: 	__('Log caching', 'zu-plus'),
-	// 	help: 	__('All calls to cache functions will be logged.', 'zu-plus'),
-	// },
+
 	debug_bar: {
 		label: 	__('Use "Debug Bar"', 'zu-plus'),
 		help:	__('Works only if [Query Monitor](https://github.com/johnbillion/query-monitor) is activated.', 'zu-plus'),
@@ -78,6 +67,10 @@ const debug = {
 		help: 	__('All characters which have HTML character entity equivalents are translated into these entities.', 'zu-plus'),
 		depends: 'debug_bar',
 	},
+	instant_caching: {
+		label: 	__('Сaching for one page only', 'zu-plus'),
+		help:	__('All logs will be stored in the memory of **the current page** and will not be available after the refresh.', 'zu-plus'),
+	},
 	write_file: {
 		label: 	__('Write log to file', 'zu-plus'),
 		help: 	__('If unchecked, only the information for `Debug Bar` will be saved.', 'zu-plus'),
@@ -92,6 +85,20 @@ const debug = {
 		help: 	__('The log data will be **overwritten on every reload**, otherwise it will be appended to the file/Debug Bar.', 'zu-plus'),
 		depends: ['||', 'debug_bar', 'write_file'],
 	},
+
+	debug_menus: {
+		label: 	__('Log menu order', 'zu-plus'),
+		help: 	__('The current order of items in **menus** and **submenus** will be logged.', 'zu-plus'),
+		divider: 2,
+	},
+	debug_plugins: {
+		label: 	__('Log plugins order', 'zu-plus'),
+		help: 	__('The current order of all activated **plugins** will be logged.', 'zu-plus'),
+	},
+	// debug_caching: {
+	// 	label: 	__('Log caching', 'zu-plus'),
+	// 	help: 	__('All calls to cache functions will be logged.', 'zu-plus'),
+	// },
 	// ajax_log: {
 	// 	label: 	__('Activate AJAX Logging', 'zu-plus'),
 	// 	help: 	__('You should make `AJAX calls` from your JS.', 'zu-plus'),

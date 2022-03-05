@@ -154,7 +154,6 @@ class zu_Plus extends zukit_Plugin  {
 	// }
 
 	protected function extend_debug_actions() {
-		zu_logc('taxonomy_exists', taxonomy_exists('wpmf-category'));
 		$taxo_exists = $this->obsolete_taxo_exists();
 		return function_exists('zumedia') ? [
 			[

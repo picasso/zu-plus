@@ -9,15 +9,18 @@ class zu_PlusDebugBar extends zukit_Singleton {
 	private $dump_method = 'var_export';
 	private $use_kint = true;
 
+	private $dlogs = [];
+
 	private static $cache_time = HOUR_IN_SECONDS;
 	private static $cache_id = 'zu_debug_bar_dlogs';
-
-	private $dlogs = [];
+	private static $instant_caching = true;
+	private static $store = null;
 
 	function singleton_config($params) {
 		$this->convert_html_from_string = $params['convert_html'] ?? $this->convert_html_from_string;
 		$this->use_kint = $params['use_kint'] ?? $this->use_kint;
 		$this->dump_method = $params['dump_method'] ?? $this->dump_method;
+		self::$instant_caching = $params['instant_caching'] ?? self::$instant_caching;
 		self::$cache_time = $params['cache_time'] ?? self::$cache_time;
 		add_filter('debug_bar_panels', [$this, 'debug_bar_panels'], 9000);
 	}
@@ -246,19 +249,21 @@ class zu_PlusDebugBar extends zukit_Singleton {
 	// working with cache -----------------------------------------------------]
 
 	private static function add_log($log) {
-		$values = get_transient(self::$cache_id);
+		$values = self::$instant_caching ? self::$store : get_transient(self::$cache_id);
 		$values = empty($values) ? [] : $values;
 		$values[] = $log;
-		set_transient(self::$cache_id, $values, self::$cache_time);
+		if(self::$instant_caching) self::$store = $values;
+		else set_transient(self::$cache_id, $values, self::$cache_time);
 	}
 
 	private static function get_logs() {
-		$values = get_transient(self::$cache_id);
-		return ($values === false) ? [] : $values;
+		$values = self::$instant_caching ? self::$store : get_transient(self::$cache_id);
+		return empty($values) ? [] : $values;
 	}
 
 	public static function reset_logs() {
-		return delete_transient(self::$cache_id);
+		if(self::$instant_caching) self::$store = null;
+		else delete_transient(self::$cache_id);
 	}
 
 	private function get_request_ip() { return zu_get_server_value('REMOTE_ADDR'); }
