@@ -1,3 +1,8 @@
+#### 2.2.3 / 2022-03-07
+* __Zukit__ updated to version 1.5.5
+* added `instant_caching` option for `zu_PlusDebug` addon
+* fix initial option bug
+
 #### 2.2.1 / 2022-02-15
 * hide non-implemented options on `Settings Page`
 * added `more_actions` option to register internal methods that should be called on `init`
