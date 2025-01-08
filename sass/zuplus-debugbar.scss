@@ -1,11 +1,12 @@
-@import "vars";
-@import "noads";
+@use "sass:color";
+@use "vars";
+@use "noads";
 
-.zuplus_red { color: $red-color;}
-.zuplus_green { color: $green-color;}
-.zuplus_magenta { color: $magenta-color;}
-.zuplus_gold { color: $orange-bright-color;}
-.zuplus_blue { color: $blue-color;}
+.zuplus_red { color: vars.$red-color;}
+.zuplus_green { color: vars.$green-color;}
+.zuplus_magenta { color: vars.$magenta-color;}
+.zuplus_gold { color: vars.$orange-bright-color;}
+.zuplus_blue { color: vars.$blue-color;}
 
 ._bold { font-weight: 600; letter-spacing: 0.5pt;}
 ._grand { font-weight: 600; font-size: 110%; letter-spacing: 1pt; text-transform: uppercase;}
@@ -14,23 +15,23 @@
 ._shift { margin-left: 1.5em;}
 
 $context-text-color: white;
-$context-text-shadow: $text-shadow-for-white;
+$context-text-shadow: vars.$text-shadow-for-white;
 
-$context-color: darken($blue-color, 20%);
-$context-border-color: darken($context-color, 10%);
-$context-err-color: darken($red-bright-color, 20%);
-$context-err-border-color: darken($context-err-color, 10%);
-$context-warn-color: darken($orange-color, 20%);
-$context-warn-border-color: darken($context-warn-color, 10%);
-$context-hlt-color: darken($green-color, 10%);
-$context-hlt-border-color: darken($context-hlt-color, 10%);
-$context-if-color: darken($violet-color, 10%);
-$context-if-border-color: darken($context-if-color, 10%);
+$context-color: color.adjust(vars.$blue-color, $lightness: -20%);
+$context-border-color: color.adjust($context-color, $lightness: -10%);
+$context-err-color: color.adjust(vars.$red-bright-color, $lightness: -20%);
+$context-err-border-color: color.adjust($context-err-color, $lightness: -10%);
+$context-warn-color: color.adjust(vars.$orange-color, $lightness: -20%);
+$context-warn-border-color: color.adjust($context-warn-color, $lightness: -10%);
+$context-hlt-color: color.adjust(vars.$green-color, $lightness: -10%);
+$context-hlt-border-color: color.adjust($context-hlt-color, $lightness: -10%);
+$context-if-color: color.adjust(vars.$violet-color, $lightness: -10%);
+$context-if-border-color: color.adjust($context-if-color, $lightness: -10%);
 
 $notice-color: #aad5ff;
-$notice-dark-color: darken($notice-color, 20%);
+$notice-dark-color: color.adjust($notice-color, $lightness: -20%);
 
-#{$zu-custom-logs-selector} dt, #{$debug-bar-selector} div.kint-rich dt {
+#{vars.$zu-custom-logs-selector} dt, #{vars.$debug-bar-selector} div.kint-rich dt {
 	&.__context {
 		letter-spacing: 1px !important;
 		background-color: $context-color !important;
@@ -72,7 +73,7 @@ $notice-dark-color: darken($notice-color, 20%);
 	}
 }
 
-#{$zu-custom-logs-selector} {
+#{vars.$zu-custom-logs-selector} {
 	.qm-boxed {
 		padding: 10px 15px !important;
 		.qm-notice {
@@ -91,8 +92,8 @@ $notice-dark-color: darken($notice-color, 20%);
 	}
 	.__var {
 		margin: 5px !important;
-		color: $kint-theme-var-color !important;
-		background-color: $kint-theme-var-bg-color !important;
+		color: vars.$kint-theme-var-color !important;
+		background-color: vars.$kint-theme-var-bg-color !important;
 		padding: 0 5px !important;
 		border-radius: 3px !important;
 		letter-spacing: 1px !important;
@@ -101,11 +102,11 @@ $notice-dark-color: darken($notice-color, 20%);
 	}
 	.__value {
 		letter-spacing: 0.5px !important;
-		color: $kint-theme-text-dark !important;
+		color: vars.$kint-theme-text-dark !important;
 		font-weight: 600 !important;
 		pre {
-			background-color: $kint-theme-main !important;
-			color: $kint-theme-text-dark !important;
+			background-color: vars.$kint-theme-main !important;
+			color: vars.$kint-theme-text-dark !important;
 			max-width: 70em !important;
 			overflow: hidden !important;
 			text-overflow: ellipsis !important;
@@ -113,14 +114,14 @@ $notice-dark-color: darken($notice-color, 20%);
 				font-style: normal !important;
 				padding: 1px !important;
 				border-radius: 3px !important;
-				background-color: $kint-theme-var-bg-internal-color !important;
+				background-color: vars.$kint-theme-var-bg-internal-color !important;
 				letter-spacing: 0.5px;
 				color: #222 !important;
 			}
 		}
 	}
 	.__time, .__file {
-		color: $kint-theme-text-light !important;
+		color: vars.$kint-theme-text-light !important;
 		max-width: 40em !important;
 		overflow: hidden !important;
 		text-overflow: ellipsis !important;

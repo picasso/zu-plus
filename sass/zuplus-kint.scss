@@ -1,57 +1,45 @@
-@import "vars";
-@import "icons";
-$spacing: 5;
+@use "sass:color";
+@use "vars";
+// не обновлять!! _kintbase.scss потому что он модифицирован добавлением !important плюс некоторые другие изменения
+// нужно только проконтролировать что верхний селектор в "kintbase" соответствует текущему
+// сейчас этот селектор = $debug-bar-selector: '#qm-debug_bar_zu_plusdebugbarpanel'
+@use "kintbase";
 
-$text-color: $kint-theme-text;
-$text-color-light: $kint-theme-text-light;
-$text-color-dark: $kint-theme-text-dark;
+$text-color-light: vars.$kint-theme-text-light;
+$text-color-dark: vars.$kint-theme-text-dark;
 
-$main-background: $kint-theme-main;
-$secondary-background: $kint-theme-secondary;
-$main-font-family: $font-family;
+$main-font-family: vars.$font-family;
 
-$variable-type-color: #B24512;
-$variable-type-color-hover: #B24512;
 $tab-inactive-color-hover: #FFF7BE;
-$error-color: $red-bright-color;
-
-$border-color: lighten(#9A8049, 10%);
-$border-color-hover: darken($kint-theme-main, 20%);
+$error-color: vars.$red-bright-color;
 
 $footer-color: #4C3D1E;
 $footer-bg-color: #FFF7E6;
 
-$var-color: $kint-theme-var-color;
-$var-bg-color: $kint-theme-var-bg-color;
-$var-bg-internal-color: $kint-theme-var-bg-internal-color;
-$var-font-family: $font-family;
+$var-color: vars.$kint-theme-var-color;
+$var-bg-color: vars.$kint-theme-var-bg-color;
+$var-bg-internal-color: vars.$kint-theme-var-bg-internal-color;
+$var-font-family: vars.$font-family;
 
-$context-color: darken($kint-theme-secondary, 20%);
+$context-color: color.adjust(vars.$kint-theme-secondary, $lightness: -20%);
 $context-text-color: white;
-$context-text-shadow: $text-shadow-for-white;
-$context-border-color: darken($context-color, 10%);
+$context-text-shadow: vars.$text-shadow-for-white;
+$context-border-color: color.adjust($context-color, $lightness: -10%);
 
-$trigger-bg-color: darken($kint-theme-secondary, 20%);
-$trigger-color: $kint-theme-main;
-$trigger-hover-bg-color: darken($kint-theme-main, 10%);
+$trigger-bg-color: color.adjust(vars.$kint-theme-secondary, $lightness: -20%);
+$trigger-color: vars.$kint-theme-main;
+$trigger-hover-bg-color: color.adjust(vars.$kint-theme-main, $lightness: -10%);
 $trigger-hover-color: $text-color-light;
 
-$ip-color: darken($violet-color, 10%);
-$func-color: darken($orange-color, 30%);
-$class-color: darken($red-color, 30%);
-
-$caret-image: $nav-icon;
-
-// не обновлять!! _kintbase.scss потому что он модифицирован добавлением !important плюс некоторые другие изменения
-// нужно только проконтролировать что верхний селектор в "kintbase" соответствует текущему
-// сейчас этот селектор = $debug-bar-selector: '#qm-debug_bar_zu_plusdebugbarpanel'
-@import "kintbase";
+$ip-color: color.adjust(vars.$violet-color, $lightness: -10%);
+$func-color: color.adjust(vars.$orange-color, $lightness: -30%);
+$class-color: color.adjust(vars.$red-color, $lightness: -30%);
 
 // #qm-debug_bar_zu_plusdebugbarpanel
-#{$debug-bar-selector} {
+#{vars.$debug-bar-selector} {
     .kint-rich {
         padding: 10px 10px 5px !important;
-        background: $kint-theme-secondary !important;
+        background: vars.$kint-theme-secondary !important;
         font-family: $main-font-family !important;
         margin-top: 0 !important;
 
@@ -66,7 +54,7 @@ $caret-image: $nav-icon;
         }
         dt {
             letter-spacing: 0.5px !important;
-            #{$query-monitor-selector} &.__context.__dbg {
+            #{vars.$query-monitor-selector} &.__context.__dbg {
                 background-color: $context-color !important;
                 color: $context-text-color !important;
                 border-color: $context-border-color !important;

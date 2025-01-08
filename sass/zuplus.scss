@@ -1,9 +1,10 @@
-@import "vars";
+@use "sass:color";
+@use "vars";
 
 $duplicate-menu-selector: '.zuplus_dup_menu';
 $coreinfo-selector: '.zuplus_core_info';
 
-// Settings Page --------------------------------------------------------------]
+// Settings Page ----------------------------------------------------------------------------------]
 
 $help-markdown-code-opacity: 0.25;
 
@@ -12,12 +13,12 @@ $dup-item-padding: 8px;
 
 $info-font-family: Roboto,Ubuntu,"Helvetica Neue",sans-serif;
 $info-font-size: 13px;
-$info-last-ver-color: darken($green-color, 20%);
-$info-last-ver-bg-color: rgba($green-color, 0.2);
-$info-active-ver-color: darken($blue-color, 20%);
-$info-active-ver-bg-color: rgba($blue-color, 0.2);
-$info-old-ver-color: darken($orange-color, 20%);
-$info-old-ver-bg-color: rgba($orange-color, 0.3);
+$info-last-ver-color: color.adjust(vars.$green-color, $lightness: -20%);
+$info-last-ver-bg-color: rgba(vars.$green-color, 0.2);
+$info-active-ver-color: color.adjust(vars.$blue-color, $lightness: -20%);
+$info-active-ver-bg-color: rgba(vars.$blue-color, 0.2);
+$info-old-ver-color: color.adjust(vars.$orange-color, $lightness: -20%);
+$info-old-ver-bg-color: rgba(vars.$orange-color, 0.3);
 
 $info-border-color-opacity: 0.2;
 $info-border-color-dark-opacity: 0.3;
@@ -27,10 +28,10 @@ $info-border-color-dark-opacity: 0.3;
 	margin-left: 10px;
 	padding: 1px 8px !important;
 	background-color: transparent !important;
-	color: $kint-theme-text !important;
+	color: vars.$kint-theme-text !important;
 	padding: 1px 8px !important;
 	display: block !important;
-	border: 1px solid rgba($kint-theme-text-light, $info-border-color-dark-opacity) !important;
+	border: 1px solid rgba(vars.$kint-theme-text-light, $info-border-color-dark-opacity) !important;
 }
 %version-less {
 	background-color: $info-old-ver-bg-color !important;
@@ -49,11 +50,11 @@ $info-border-color-dark-opacity: 0.3;
 }
 
 .components-base-control__help {
-	color: $kint-theme-text !important;
+	color: vars.$kint-theme-text !important;
 	font-style: normal !important;
 	em {
-		background-color: rgba($kint-theme-main, $help-markdown-code-opacity) !important;
-		color: $kint-theme-text !important;
+		background-color: rgba(vars.$kint-theme-main, $help-markdown-code-opacity) !important;
+		color: vars.$kint-theme-text !important;
 		font-style: normal !important;
 	}
 }
@@ -72,27 +73,27 @@ $info-border-color-dark-opacity: 0.3;
 		width: 100%;
 	}
 	.__title {
-		padding: div($dup-padding, 2) $dup-padding;
+		padding: vars.div($dup-padding, 2) $dup-padding;
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		border-bottom: 1px solid $wp-gray-400;
-		background-color: $wp-light-gray-500;
+		border-bottom: 1px solid vars.$wp-gray-400;
+		background-color: vars.$wp-light-gray-500;
 		.__close {
 			padding-right: 0;
 			margin-right: -5px;
 		}
 	}
 	.__menu {
-		border-bottom: 1px solid $wp-gray-200;
+		border-bottom: 1px solid vars.$wp-gray-200;
 		.components-menu-item__button {
 			transition: background-color 0.2s ease-in;
-			border-bottom: 1px solid rgba($wp-gray-200, 0.5);
+			border-bottom: 1px solid rgba(vars.$wp-gray-200, 0.5);
 			&:last-child {
 				border-bottom-color: transparent;
 			}
 			&:hover {
-				background-color: $wp-blue-medium-100;
+				background-color: vars.$wp-blue-medium-100;
 			}
 		}
 	}
@@ -139,10 +140,10 @@ $info-border-color-dark-opacity: 0.3;
 		}
 		.__path {
 			font-weight: 400;
-			color: darken($blue-color, 20%);
+			color: color.adjust(vars.$blue-color, $lightness: -20%);
 		}
 		.components-spinner {
-			background-color: rgba($kint-theme-text-light, 0.8);
+			background-color: rgba(vars.$kint-theme-text-light, 0.8);
 			margin: 0;
 			transform: scale(0.9);
 			top: 5px;
@@ -155,7 +156,7 @@ $info-border-color-dark-opacity: 0.3;
 		margin-left: 30px;
 
 		.cell .components-spinner {
-			background-color: rgba($kint-theme-text-light, 0.8);
+			background-color: rgba(vars.$kint-theme-text-light, 0.8);
 			margin: 0; //0 auto;
 		}
 
@@ -165,19 +166,19 @@ $info-border-color-dark-opacity: 0.3;
 				font-style: normal;
 				font-size: 12px;
 				letter-spacing: 1px;
-				background-color: rgba($violet-color, 0.05) !important;
-				color: $violet-color !important;
+				background-color: rgba(vars.$violet-color, 0.05) !important;
+				color: vars.$violet-color !important;
 				padding: 2px 8px !important;
 				display: block !important;
 				border-radius: 10px !important;
-				border: 1px solid rgba($violet-color, $info-border-color-dark-opacity) !important;
+				border: 1px solid rgba(vars.$violet-color, $info-border-color-dark-opacity) !important;
 			}
 		}
 		.cell__settings {
 			padding: 0 16px;
 		}
 		.cell__lastest {
-			color: rgba($kint-theme-text-light, 0.7);
+			color: rgba(vars.$kint-theme-text-light, 0.7);
 		}
 		.cell__version, .cell__lastest, .cell__framework {
 			.__code { @extend %version; }
