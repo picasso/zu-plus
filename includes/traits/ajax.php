@@ -1,17 +1,17 @@
 <?php
 
-// Ajax/REST API helpers ------------------------------------------------------]
+// Ajax/REST API helpers --------------------------------------------------------------------------]
 
 trait zu_PlusAjax {
 
 	private $obsolete_taxonomies = ['wpmf-category'];
 
 	public function ajax_more($action, $value) {
-		if($action === 'zuplus_zukit_info') return $this->zukit_info();
-		if($action === 'zuplus_duplicate_menu') return $this->duplicate_menu($value);
+		if ($action === 'zuplus_zukit_info') return $this->zukit_info();
+		if ($action === 'zuplus_duplicate_menu') return $this->duplicate_menu($value);
 		// if($action === 'zuplus_revoke_cookie') return ['info'	=> sprintf('Cookie "<strong>%1$s</strong>" was deleted', $ajax_value)];
-		if($action === 'zuplus_obsolete_taxo') return $this->obsolete_taxo();
-		if($action === 'zuplus_reset_cached') return $this->reset_cached();
+		if ($action === 'zuplus_obsolete_taxo') return $this->obsolete_taxo();
+		if ($action === 'zuplus_reset_cached') return $this->reset_cached();
 
 		return null;
 	}
@@ -40,14 +40,14 @@ trait zu_PlusAjax {
 	}
 
 	private function obsolete_taxo_exists() {
-		foreach($this->obsolete_taxonomies as $taxonomy) {
-			if(taxonomy_exists($taxonomy)) return true;
+		foreach ($this->obsolete_taxonomies as $taxonomy) {
+			if (taxonomy_exists($taxonomy)) return true;
 		}
 		return false;
 	}
 
 	private function register_obsolete_taxonomy() {
-		foreach($this->obsolete_taxonomies as $taxonomy) {
+		foreach ($this->obsolete_taxonomies as $taxonomy) {
 			register_taxonomy($taxonomy, 'attachment', [
 				'hierarchical' => true,
 				'show_in_nav_menus' => false,
@@ -61,8 +61,9 @@ trait zu_PlusAjax {
 
 		function asKind($wp, $zu, $is_modified, $icon) {
 			$tooltip = $wp ?
-				($is_modified ? __('Wordpress [modified]', 'zu-media') : __('Wordpress', 'zu-media')) :
-				($zu ? __('Zu Media', 'zu-media') : __('Third Party', 'zu-media'));
+				($is_modified ?
+					__('Wordpress [modified]', 'zu-media') : __('Wordpress', 'zu-media'))
+				: ($zu ? __('Zu Media', 'zu-media') : __('Third Party', 'zu-media'));
 
 			return [
 				'tooltip'	=> $tooltip,
@@ -73,7 +74,15 @@ trait zu_PlusAjax {
 		}
 
 		// define table columns and styles
-		$table = new zukit_Table(['origin', 'logo', 'name', 'version', 'lastest', 'framework', 'settings']);
+		$table = new zukit_Table([
+			'origin',
+			'logo',
+			'name',
+			'version',
+			'lastest',
+			'framework',
+			'settings'
+		]);
 
 		$table->align(['origin', 'version'], 'center');
 		$table->strong('name');
@@ -86,7 +95,7 @@ trait zu_PlusAjax {
 		$zukit_version = preg_replace('/[^\d|.]+/', '', $active_version);
 
 		$origin_found = false;
-		foreach($instances as $router => $instance) {
+		foreach ($instances as $router => $instance) {
 			$info = $instance->info();
 
 			$link = $instance->admin_settings_link(null, true);
@@ -97,7 +106,9 @@ trait zu_PlusAjax {
 			$table->markdown_cell('origin', $zukit_origin === $instance->dir ? $origin_marker : '');
 			$table->cell('name', $info['title']);
 			$table->icon_cell('logo', ['svg' => $info['icon'] ?? $this->get_default_icon()]);
-			$table->dynamic_cell('version',[
+			$table->dynamic_cell(
+				'version',
+				[
 					'markdown'	=> true
 				],
 				sprintf('Version `%s`', $info['version'])
@@ -108,7 +119,9 @@ trait zu_PlusAjax {
 				'current'	=> $info['version'],
 				'linked'	=> 'version',
 			]);
-			$table->dynamic_cell('framework', [
+			$table->dynamic_cell(
+				'framework',
+				[
 					'markdown'	=> true,
 					'current'	=> $zuver,
 				],
@@ -121,14 +134,16 @@ trait zu_PlusAjax {
 		}
 
 		// if origin is not found, we have a special case ('Zu Debug' plugin?)
-		if($origin_found === false) {
+		if ($origin_found === false) {
 			$origin_fullpath = Zukit::get_file($zukit_origin);
 			$data = Zukit::get_file_metadata($origin_fullpath);
-			if(!empty($data['Name']) && !empty($data['Version'])) {
+			if (!empty($data['Name']) && !empty($data['Version'])) {
 				$table->markdown_cell('origin', $origin_marker);
 				$table->cell('name', $data['Name']);
 				$table->icon_cell('logo', ['svg' => $this->get_default_icon()]);
-				$table->dynamic_cell('version',[
+				$table->dynamic_cell(
+					'version',
+					[
 						'markdown'	=> true
 					],
 					sprintf('Version `%s`', $data['Version'])
@@ -139,7 +154,9 @@ trait zu_PlusAjax {
 					'current'	=> $data['Version'],
 					'linked'	=> 'version',
 				]);
-				$table->dynamic_cell('framework', [
+				$table->dynamic_cell(
+					'framework',
+					[
 						'markdown'	=> true,
 						'current'	=> $zukit_version,
 					],
@@ -163,18 +180,18 @@ trait zu_PlusAjax {
 			'/public\s+function\s+force_frontend_enqueue\(/m' => '1.1.1',
 
 		];
-		if(file_exists($file)) {
+		if (file_exists($file)) {
 			$content = file_get_contents($file);
-			if($content !== false) {
+			if ($content !== false) {
 				$version_regex = '/private\s+static\s+\$zukit_version\s*=\s*[\'|"]([^\'|"]+)/m';
 				$version = preg_match($version_regex, $content, $matches) ? $matches[1] : null;
-				if($version === null) {
-					foreach($tokens as $regex => $ver) {
-						if(!preg_match($regex, $content)) continue;
+				if ($version === null) {
+					foreach ($tokens as $regex => $ver) {
+						if (!preg_match($regex, $content)) continue;
 						$version = $ver;
 						break;
 					}
-					if($version === null) $version = '1.1.0';
+					if ($version === null) $version = '1.1.0';
 				}
 			}
 		}

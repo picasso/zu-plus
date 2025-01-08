@@ -27,7 +27,7 @@ class zu_PlusDuplicatePage extends zukit_Addon {
 		global $wpdb;
 
 		// check post ID for duplicating
-		if(!(
+		if (!(
 			isset($_GET['post'])
 			|| isset($_POST['post'])
 			|| (isset($_REQUEST['action']) && $_REQUEST['action'] === $this->duplicate_action)
@@ -38,7 +38,7 @@ class zu_PlusDuplicatePage extends zukit_Addon {
 
 		// check nonce and user rights
 		$nonce = $_REQUEST['nonce'] ?? null;
-		if(!wp_verify_nonce($nonce, $this->ajax_nonce()) || !current_user_can('edit_posts')) {
+		if (!wp_verify_nonce($nonce, $this->ajax_nonce()) || !current_user_can('edit_posts')) {
 			zu_logc('!Security issue during post duplicating', $nonce, current_user_can('edit_posts'));
 			wp_die('Security issue, please try again!');
 		}
@@ -53,7 +53,7 @@ class zu_PlusDuplicatePage extends zukit_Addon {
 		// tplus_modify_content($post->post_title, '', $suffix) : zu()->modify_content($post->post_title, '', $suffix);
 
 		// if post data exists, create the post duplicate
-		if(isset($post) && $post !== null) {
+		if (isset($post) && $post !== null) {
 			$args = [
 				'post_title' 		=> $new_post_title,
 				'post_author' 		=> $new_post_author,
@@ -73,10 +73,10 @@ class zu_PlusDuplicatePage extends zukit_Addon {
 			// insert the post by wp_insert_post() function
 			$new_post_id = wp_insert_post($args);
 
-			 //	get all current post terms ad set them to the new post draft
+			//	get all current post terms ad set them to the new post draft
 			$taxonomies = get_object_taxonomies($post->post_type);
-			if(!empty($taxonomies) && is_array($taxonomies)) {
-				foreach($taxonomies as $taxonomy) {
+			if (!empty($taxonomies) && is_array($taxonomies)) {
+				foreach ($taxonomies as $taxonomy) {
 					$post_terms = wp_get_object_terms($post_id, $taxonomy, ['fields' => 'slugs']);
 					wp_set_object_terms($new_post_id, $post_terms, $taxonomy, false);
 				}
@@ -84,9 +84,9 @@ class zu_PlusDuplicatePage extends zukit_Addon {
 
 			// duplicate all post meta
 			$post_meta_infos = $wpdb->get_results("SELECT meta_key, meta_value FROM $wpdb->postmeta WHERE post_id=$post_id");
-			if(count($post_meta_infos) !== 0) {
+			if (count($post_meta_infos) !== 0) {
 				$sql_query = "INSERT INTO $wpdb->postmeta (post_id, meta_key, meta_value) ";
-				foreach($post_meta_infos as $meta_info) {
+				foreach ($post_meta_infos as $meta_info) {
 					$meta_key = sanitize_text_field($meta_info->meta_key);
 					$meta_value = addslashes($meta_info->meta_value);
 					$sql_query_sel[] = "SELECT $new_post_id, '$meta_key', '$meta_value'";
@@ -97,7 +97,7 @@ class zu_PlusDuplicatePage extends zukit_Addon {
 
 			// finally, redirecting
 			$redirect_url = $this->duplicate_redirect === 'list' ?
-				admin_url('edit.php' . ($post->post_type !== 'post' ? '?post_type='.$post->post_type : '')) :
+				admin_url('edit.php' . ($post->post_type !== 'post' ? '?post_type=' . $post->post_type : '')) :
 				admin_url('post.php?action=edit&post=' . $new_post_id);
 
 			// if($post->post_type != 'post') $returnpage = '?post_type='.$post->post_type;
@@ -107,7 +107,6 @@ class zu_PlusDuplicatePage extends zukit_Addon {
 
 			wp_redirect($redirect_url);
 			exit;
-
 		} else {
 			zu_logc('!Could not find original post during duplicating', $post_id, $post);
 			wp_die('Post creation failed, could not find original post: ' . $post_id);
@@ -116,11 +115,11 @@ class zu_PlusDuplicatePage extends zukit_Addon {
 
 	// Add the duplicate link to action list for post_row_actions
 	public function duplicate_post_link($actions, $post) {
-		if(current_user_can('edit_posts')) {
+		if (current_user_can('edit_posts')) {
 			$link = __('Duplicate', 'zu-plus');
 			$title = __('Duplicate this %s as draft', 'zu-plus');
 			$post_type = get_post_type_object($post->post_type);
-			if($post_type !== null) {
+			if ($post_type !== null) {
 				// use 'name_admin_bar' instead of 'singular_name'
 				// because this name is already in the correct declension form
 				$name = $post_type->labels->name_admin_bar;
@@ -180,7 +179,7 @@ class zu_PlusDuplicatePage extends zukit_Addon {
 	// 	'Select any post redirection after click on <strong>"Duplicate This"</strong> link.'
 	// );
 	//
-    // $form->text('dup_suffix', 'Duplicate Post Suffix', 'Add a suffix for duplicate post as Copy, Clone etc. It will show after title.');
+	// $form->text('dup_suffix', 'Duplicate Post Suffix', 'Add a suffix for duplicate post as Copy, Clone etc. It will show after title.');
 	// echo $form->fields('Duplicate Page Settings.');
 
 	// 'dup_status'	=> 	[

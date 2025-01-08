@@ -1,6 +1,16 @@
 <?php
 
-// Debug Output helpers -------------------------------------------------------]
+// Debug Output helpers ---------------------------------------------------------------------------]
+
+class Kint {
+	const MODE_RICH = 'r';
+	const MODE_TEXT = 't';
+	// const MODE_CLI = 'c';
+	// const MODE_PLAIN = 'p';
+	public static $enabled_mode = true;
+	public static $return;
+	public static $aliases = [];
+}
 
 trait zu_PlusDebugOutput {
 
@@ -20,16 +30,16 @@ trait zu_PlusDebugOutput {
 		$stash = Kint::$enabled_mode;
 		Kint::$enabled_mode = $rich_mode ? Kint::MODE_RICH : Kint::MODE_TEXT;
 		$log = call_user_func_array(['Kint', 'dump'], $args);
-		if($args[0] === '!context!') {
+		if ($args[0] === '!context!') {
 			$hit_regex = '/┌─[\S|\s]*?!context![\'|\"]\n/m';
 			$log = preg_replace($hit_regex, '', $log);
 		}
-		if($args[0] === '!condition hit!') {
+		if ($args[0] === '!condition hit!') {
 			$hit_regex = '/┌─[\S|\s]*?!condition hit![\'|\"]/m';
 			$log = preg_replace($hit_regex, '* * * conditionally logged * * *', $log);
 		}
 		// fix KINT JS to overcome 'important' priority
-		if($rich_mode) {
+		if ($rich_mode) {
 			$js_regex = '/style\.display\s*=\s*["|\']block["|\']/m';
 			$js_replace = 'style.setProperty("display", "block", "important")';
 			$log = preg_replace($js_regex, $js_replace, $log);
@@ -40,7 +50,7 @@ trait zu_PlusDebugOutput {
 			);
 		}
 		Kint::$enabled_mode = $stash;
-		return $log.PHP_EOL;
+		return $log . PHP_EOL;
 	}
 
 	private function log_lineshift() {
@@ -50,15 +60,15 @@ trait zu_PlusDebugOutput {
 	}
 
 	private function bar_log($params, $kint_log = false, $context = null, $called_class = null) {
-		if($kint_log) {
+		if ($kint_log) {
 			$log = $this->is_option('classname_only') ? $this->fix_class_instance($params, true) : $params;
 			$this->dbar->save($log, $context, null, $called_class);
 		} else {
-			if($context) {
+			if ($context) {
 				$this->dbar->save($context);
 			}
 			$data = $this->plugin->get_log_data($params, $this->log_lineshift(), $context);
-			foreach($data['args'] as $var) {
+			foreach ($data['args'] as $var) {
 				$this->dbar->save($var['name'], $var['value'], $data['log_line'], $called_class);
 			}
 			return $data;
@@ -73,7 +83,7 @@ trait zu_PlusDebugOutput {
 		$output = ob_get_contents();
 		ob_end_clean();
 
-		if($keep_tags) return preg_replace($remove_refline_regex, '', $output);
+		if ($keep_tags) return preg_replace($remove_refline_regex, '', $output);
 
 		$text_output = html_entity_decode(strip_tags($output));
 		$text_output = preg_replace($remove_refline_regex, '', $text_output);
@@ -81,11 +91,11 @@ trait zu_PlusDebugOutput {
 	}
 
 	private function stub_class_instance($args) {
-		foreach($args as $key => $value) {
-			if(is_array($value)) $args[$key] = $this->stub_class_instance($value);
+		foreach ($args as $key => $value) {
+			if (is_array($value)) $args[$key] = $this->stub_class_instance($value);
 			else {
 				$name = is_object($value) ? get_class($value) : false;
-				if($name !== false) $args[$key] = "instance of $name";
+				if ($name !== false) $args[$key] = "instance of $name";
 				// $this->is_option('use_kint') ? "!instance!$name" :  "instance of $name";
 			}
 		}
@@ -93,7 +103,7 @@ trait zu_PlusDebugOutput {
 	}
 
 	private function fix_class_instance($log, $bar = false) {
-		if($bar) {
+		if ($bar) {
 			$log = preg_replace(
 				'/td\s+title=\"string\s\(\d+\)\">instance\sof\s([^\s|<]+)/m',
 				'td title="class instance">instance of <dfn>$1</dfn>',
@@ -104,7 +114,7 @@ trait zu_PlusDebugOutput {
 				'<var>class instance</var> $1',
 				$log
 			);
-		} elseif($this->is_option('use_kint')) {
+		} elseif ($this->is_option('use_kint')) {
 			$log = preg_replace('/string\s\(\d+\)\s+\"instance\sof\s([^\"]+)\"/m', 'instance of $1', $log);
 		}
 		return $log;
@@ -135,22 +145,22 @@ trait zu_PlusDebugOutput {
 function zu_get_server_value($name) {
 	global $_zu_debug_site_url;
 
-	if(empty($_debug_site_url)) $_zu_debug_site_url = get_bloginfo('url');
+	if (empty($_debug_site_url)) $_zu_debug_site_url = get_bloginfo('url');
 
 	$get_ajax = preg_match('/AJAX/i', $name) ? true : false;
 	$request = $_SERVER['REQUEST_URI'] ?? '';
 	$value = $_SERVER[$name] ?? '';
 	$is_ajax = stripos($request, 'admin-ajax.php') !== false;
 
-	if($name == 'HTTP_REFERER') {
+	if ($name == 'HTTP_REFERER') {
 
-		if(empty($value) || $is_ajax)	{
-			if(in_array('doing_wp_cron', array_keys($_REQUEST))) $new_value = 'doing_wp_cron';
-			else if(isset($_REQUEST['data'])) $new_value = array_keys($_REQUEST['data'])[0];
-			else if(isset($_REQUEST['action'])) $new_value = $_REQUEST['action'];
+		if (empty($value) || $is_ajax) {
+			if (in_array('doing_wp_cron', array_keys($_REQUEST))) $new_value = 'doing_wp_cron';
+			else if (isset($_REQUEST['data'])) $new_value = array_keys($_REQUEST['data'])[0];
+			else if (isset($_REQUEST['action'])) $new_value = $_REQUEST['action'];
 		}
 
-		if($is_ajax && empty($new_value)) return null;
+		if ($is_ajax && empty($new_value)) return null;
 
 		$value = $is_ajax ? $value : (empty($new_value) ? $request : '');
 		$value = trim(sprintf('%1$s %2$s %3$s',  $value, $is_ajax ? '<strong>-ajax-</strong>' : '', empty($new_value) ? '' : $new_value));

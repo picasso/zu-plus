@@ -1,11 +1,11 @@
 <?php
-// Includes all traits --------------------------------------------------------]
+// Includes all traits ----------------------------------------------------------------------------]
 
 include_once('traits/ajax.php');
 include_once('traits/duplicate-menu.php');
 // include_once('traits/cache.php');
 
-class zu_Plus extends zukit_Plugin  {
+class zu_Plus extends zukit_Plugin {
 
 	// Plugin addons
 	private $dbug = null;
@@ -48,49 +48,49 @@ class zu_Plus extends zukit_Plugin  {
 			],
 
 			// add menu data for the Settings Page
-	        'settings_script'	=> [
-	            'data'  => [
-	                'menus'	=> $this->get_menus(),
-	            ],
-	        ],
+			'settings_script'	=> [
+				'data'  => [
+					'menus'	=> $this->get_menus(),
+				],
+			],
 		];
 	}
 
 	protected function construct_more() {
 		// we need to register 'Debug Addon' earlier, otherwise its methods will not be available until 'init'
-		if($this->is_option('debug_mode')) {
+		if ($this->is_option('debug_mode')) {
 			$this->dbug = $this->register_addon(new zu_PlusDebug());
 			// zu()->set_debug_cache($this->check_option('debug_cache'));
 		}
 		// reorder the plugin load list
 		$this->load_first();
 		// output in log the current order of items in Admin menus and submenus
-		if($this->is_option('debug_mode') && $this->is_option('zuplus_debug_options.debug_menus')) {
+		if ($this->is_option('debug_mode') && $this->is_option('zuplus_debug_options.debug_menus')) {
 			$this->toggle_menu_debug(true);
 		}
 		// output in log the current order of all acivated plugins
-		if($this->is_option('debug_mode') && $this->is_option('zuplus_debug_options.debug_plugins')) {
-			add_action('admin_init', function() {
+		if ($this->is_option('debug_mode') && $this->is_option('zuplus_debug_options.debug_plugins')) {
+			add_action('admin_init', function () {
 				$plugins = get_option('active_plugins');
 				zu_logc('*Activated Plugins Order', $plugins);
 			});
 		}
 		// disable all changes in Admin menus and submenus
-		if($this->is_option('disable_admenu')) {
+		if ($this->is_option('disable_admenu')) {
 			$this->toggle_menu_disable(true);
 		}
 		// disable Wordpress 'autosave' and 'backup' in Block Editor
-		if($this->is_option('remove_autosave')) {
-			add_action('enqueue_block_editor_assets', function() {
+		if ($this->is_option('remove_autosave')) {
+			add_action('enqueue_block_editor_assets', function () {
 				$this->admin_enqueue_script('zuplus-remove-backups', [
 					'deps' => ['wp-editor', zukit_Blocks::$zukit_handle]
 				]);
 			});
 			// 'write_your_story' filter will be called before the moment when 'autosave' will be added to '$editor_settings'
 			// this is a convenient time to intervene and remove 'autosave' (if it was found)
-			add_filter('write_your_story', function($story, $post) {
+			add_filter('write_your_story', function ($story, $post) {
 				$autosave = wp_get_post_autosave($post->ID);
-				if($autosave) {
+				if ($autosave) {
 					wp_delete_post_revision($autosave->ID);
 				}
 				return $story;
@@ -106,9 +106,9 @@ class zu_Plus extends zukit_Plugin  {
 			// 		'depends' 	=> ['folders', 'disable_cache'],
 			// ],
 		], $this->dbug ? $this->dbug->debug_info() :
-		// we use a fake element that will never be displayed since the 'value' is null
-		// but will cause the hook to fire when the value of the 'debug_mode' option changes
-		['fake' => ['value' => null, 'depends' => 'debug_mode']]);
+			// we use a fake element that will never be displayed since the 'value' is null
+			// but will cause the hook to fire when the value of the 'debug_mode' option changes
+			['fake' => ['value' => null, 'depends' => 'debug_mode']]);
 	}
 
 	protected function extend_metadata($metadata) {
@@ -123,8 +123,9 @@ class zu_Plus extends zukit_Plugin  {
 				'value'				=> 'zuplus_reset_cached',
 				'icon'				=> 'backup',
 				'color'				=> 'magenta',
-				'help'				=> __('Clear all cached data referenced to shortcodes (**gallery** and **select**). '.
-									'Needs if something went wrong.', 'zu-plus'),
+				'help'				=>
+				__('Clear all cached data referenced to shortcodes (**gallery** and **select**). ' .
+					'Needs if something went wrong.', 'zu-plus'),
 				'depends'			=> '!disable_cached',
 			],
 			// [
@@ -157,7 +158,9 @@ class zu_Plus extends zukit_Plugin  {
 		$taxo_exists = $this->obsolete_taxo_exists();
 		return function_exists('zumedia') ? [
 			[
-				'label'		=> $taxo_exists ? __('Remove Obsolete Taxonomy', 'zu-plus') : __('Add Obsolete Taxonomy', 'zu-plus'),
+				'label'		=> $taxo_exists ?
+					__('Remove Obsolete Taxonomy', 'zu-plus')
+					: __('Add Obsolete Taxonomy', 'zu-plus'),
 				'value'		=> 'zuplus_obsolete_taxo',
 				'icon'		=> $taxo_exists ? 'trash' : 'hammer',
 				'color'		=> 'blue',
@@ -165,11 +168,11 @@ class zu_Plus extends zukit_Plugin  {
 		] : [];
 	}
 
-	// Actions & Add-ons ------------------------------------------------------]
+	// Actions & Add-ons --------------------------------------------------------------------------]
 
 	public function init() {
 		// Cookie Notice Addon
-		if($this->is_option('cookie_notice')) {
+		if ($this->is_option('cookie_notice')) {
 			// $this->cnotice = $this->register_addon(new zu_PlusCookieNotice());
 		}
 
@@ -179,9 +182,9 @@ class zu_Plus extends zukit_Plugin  {
 
 		// 'more_actions' is array of internal methods that should be called on 'init'
 		$more_actions = $this->get_option('more_actions', []);
-		foreach($more_actions as $func) {
+		foreach ($more_actions as $func) {
 			$callback = [$this, $func];
-			if(is_callable($callback)) call_user_func($callback);
+			if (is_callable($callback)) call_user_func($callback);
 		}
 
 		// не совсем понятно зачем это? скорее чтобы из плагина управлять опциями темы...
@@ -209,19 +212,19 @@ class zu_Plus extends zukit_Plugin  {
 
 	public function admin_init() {
 		// Duplicate Page Addon
-		if($this->is_option('dup_page')) {
+		if ($this->is_option('dup_page')) {
 			$this->dupost = $this->register_addon(new zu_PlusDuplicatePage());
 		}
 	}
 
 	private function more_action($action, $remove = false) {
 		$more_actions = $this->get_option('more_actions', []);
-		if($remove) unset($more_actions[array_search($action, $more_actions)]);
+		if ($remove) unset($more_actions[array_search($action, $more_actions)]);
 		else $more_actions[] = $action;
 		$this->set_option('more_actions', $more_actions, true);
 	}
 
-	// Debug logging helpers --------------------------------------------------]
+	// Debug logging helpers ----------------------------------------------------------------------]
 
 	public function is_debug() {
 		return empty($this->dbug) ? false : true;
@@ -232,25 +235,25 @@ class zu_Plus extends zukit_Plugin  {
 	}
 
 	protected function file_log($log) {
-		if($this->is_debug()) $this->dbug->debug_log($log);
+		if ($this->is_debug()) $this->dbug->debug_log($log);
 		// if 'debug mode' is not activated, then all such calls should be muted
 	}
 
 	public function dlog($args, $called_class = null) {
-		if($this->is_debug()) $this->dbug->expanded_log($args, $called_class);
+		if ($this->is_debug()) $this->dbug->expanded_log($args, $called_class);
 		// if 'debug mode' is not activated, then all such calls should be muted
 	}
 
 	// logging with context
 	public function dlogc($context, $args, $called_class = null) {
-		if($this->is_debug()) $this->dbug->expanded_log_with_context($context, $args, $called_class);
+		if ($this->is_debug()) $this->dbug->expanded_log_with_context($context, $args, $called_class);
 		// if 'debug mode' is not activated, then all such calls should be muted
 	}
 
 	// log location management
 	public function dlog_location($path, $priority = 1) {
-		if($this->is_debug()) {
-			if(is_null($path)) return $this->dbug->log_location();
+		if ($this->is_debug()) {
+			if (is_null($path)) return $this->dbug->log_location();
 			else return $this->dbug->change_log_location($path, $priority);
 		}
 		return null;
@@ -260,7 +263,7 @@ class zu_Plus extends zukit_Plugin  {
 		return $this->is_debug() ? $this->dbug->clear_log() : null;
 	}
 
-	// Custom menu position ---------------------------------------------------]
+	// Custom menu position -----------------------------------------------------------------------]
 
 	protected function custom_admin_menu() {
 		return [
@@ -296,13 +299,13 @@ class zu_Plus extends zukit_Plugin  {
 				],
 			],
 			'separator'	=>	[
-					'before'	=> 'zuplus-settings',
-					'after'		=> 'zuplus-settings',
+				'before'	=> 'zuplus-settings',
+				'after'		=> 'zuplus-settings',
 			],
 		];
 	}
 
-	// Script enqueue ---------------------------------------------------------]
+	// Script enqueue -----------------------------------------------------------------------------]
 
 	protected function should_load_css($is_frontend, $hook) {
 		// here we load only 'zuplus' for the Settings Page
@@ -315,22 +318,22 @@ class zu_Plus extends zukit_Plugin  {
 
 	protected function enqueue_more($is_frontend, $hook) {
 		$frontend_allowed = !empty($this->dbug) && $this->dbug->is('debug_frontend');
-		if(!$is_frontend || $frontend_allowed) {
+		if (!$is_frontend || $frontend_allowed) {
 			$this->admin_enqueue_style('zuplus-debugbar');
 		}
 	}
 
-	// load Zu Plus first -----------------------------------------------------]
+	// load Zu Plus first -------------------------------------------------------------------------]
 
 	// When activated this plugin will reorder the plugin load list
 	private function load_first() {
-		add_action('activated_plugin', function() {
+		add_action('activated_plugin', function () {
 			$zuplus_key = str_replace('/plugins/', '', $this->data['File']);
 			$plugins = get_option('active_plugins');
 			// _zu_log($plugins, $zuplus_key);
-			if($plugins) {
+			if ($plugins) {
 				$index = array_search($zuplus_key, $plugins);
-				if($index) {
+				if ($index) {
 					array_splice($plugins, $index, 1);
 					// if the first position occupies a 'query-monitor',
 					// then we leave it there and occupy the second position
@@ -347,13 +350,13 @@ class zu_Plus extends zukit_Plugin  {
 	}
 }
 
-// Entry Point ----------------------------------------------------------------]
+// Entry Point ------------------------------------------------------------------------------------]
 
 function zuplus($file = null) {
 	return zu_Plus::instance($file);
 }
 
-// Additional Classes & Functions ---------------------------------------------]
+// Additional Classes & Functions -----------------------------------------------------------------]
 
 require_once('debug/zuplus-debug.php');
 require_once('addons/duplicate-page.php');

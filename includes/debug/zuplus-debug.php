@@ -1,8 +1,9 @@
 <?php
 
-// Debug Bar support ----------------------------------------------------------]
+// Debug Bar support ------------------------------------------------------------------------------]
 
 require_once('kint.phar');
+// для отладки
 // include_once('kint-debug/init_phar.php');
 
 include_once('debug-bar.php');
@@ -53,14 +54,14 @@ class zu_PlusDebug extends zukit_Addon {
 
 		$this->init_kint();
 
-		if($this->is_option('debug_bar')) {
+		if ($this->is_option('debug_bar')) {
 			$this->dbar = zu_PlusDebugBar::instance($this->options);
 			$this->dbar->link($this);
 		}
 
 		// remove previous logs if 'overwrite' is true
 		// skip ajax and REST calls or the log can be unintentionally cleared before reading
-		if($this->is_option('overwrite') && !wp_doing_ajax() && !$this->plugin->doing_rest()) {
+		if ($this->is_option('overwrite') && !wp_doing_ajax() && !$this->plugin->doing_rest()) {
 			$this->clear_file($this->log_location());
 			zu_PlusDebugBar::reset_logs();
 		}
@@ -71,25 +72,25 @@ class zu_PlusDebug extends zukit_Addon {
 		$use_kint = $this->is_option('use_kint');
 		return [
 			'kint_link'	=> [
-					'label'		=> __('Used Tools', 'zu-plus'),
-					'value'		=> $use_kint ? __('Kint for PHP', 'zu-plus') : null,
-					'link'		=> 'https://kint-php.github.io/kint/',
-					'depends' 	=> "$this->options_key.use_kint",
+				'label'		=> __('Used Tools', 'zu-plus'),
+				'value'		=> $use_kint ? __('Kint for PHP', 'zu-plus') : null,
+				'link'		=> 'https://kint-php.github.io/kint/',
+				'depends' 	=> "$this->options_key.use_kint",
 			],
 			'kint_version'	=> [
-					'label'		=> __('Kint for PHP version', 'zu-plus'),
-					'value'		=> $use_kint ? $this->kint_version : null,
-					'depends' 	=> "$this->options_key.use_kint",
+				'label'		=> __('Kint for PHP version', 'zu-plus'),
+				'value'		=> $use_kint ? $this->kint_version : null,
+				'depends' 	=> "$this->options_key.use_kint",
 			],
 			'logfile'		=> [
-					'label'		=> __('Logfile', 'zu-plus'),
-					'value'		=> $stats['file'],
-					'depends' 	=> ['debug_mode', "$this->options_key.flywheel_log"],
+				'label'		=> __('Logfile', 'zu-plus'),
+				'value'		=> $stats['file'],
+				'depends' 	=> ['debug_mode', "$this->options_key.flywheel_log"],
 			],
 			'logsize'		=> [
-					'label'		=> __('Logfile Size', 'zu-plus'),
-					'value'		=> $stats['size'],
-					'depends' 	=> 'debug_mode',
+				'label'		=> __('Logfile Size', 'zu-plus'),
+				'value'		=> $stats['size'],
+				'depends' 	=> 'debug_mode',
 			],
 		];
 	}
@@ -107,30 +108,30 @@ class zu_PlusDebug extends zukit_Addon {
 	public function admin_enqueue($hook) {
 		// add kint styles if needed
 		// prefix will be added to script name automatically
-		if($this->is_option('use_kint')) $this->admin_enqueue_style('kint');
+		if ($this->is_option('use_kint')) $this->admin_enqueue_style('kint');
 	}
 
 	public function enqueue() {
 		// add kint styles if needed on front-end
 		// use 'admin_enqueue_style' because the KINT styles are located in 'admin' folder
-		if($this->is_option('debug_frontend')) {
-			if($this->is_option('use_kint')) $this->admin_enqueue_style('kint');
+		if ($this->is_option('debug_frontend')) {
+			if ($this->is_option('use_kint')) $this->admin_enqueue_style('kint');
 		}
 	}
 
-	// Debug logging ----------------------------------------------------------]
+	// Debug logging ------------------------------------------------------------------------------]
 
 	public function expanded_log($params, $called_class) {
 
-		if($this->is_option('avoid_ajax') && wp_doing_ajax()) return;
-		if($this->is_option('classname_only')) $params = $this->stub_class_instance($params);
+		if ($this->is_option('avoid_ajax') && wp_doing_ajax()) return;
+		if ($this->is_option('classname_only')) $params = $this->stub_class_instance($params);
 
-		if($this->is_option('use_kint')) {
-			if($this->is_option('write_file')) {
+		if ($this->is_option('use_kint')) {
+			if ($this->is_option('write_file')) {
 				$log = $this->kint_log($params);
 				$this->debug_log($log);
 			}
-			if($this->is_option('debug_bar')) {
+			if ($this->is_option('debug_bar')) {
 				$log = $this->kint_log($params, true);
 				$this->bar_log($log, true, null, $called_class);
 			}
@@ -138,16 +139,16 @@ class zu_PlusDebug extends zukit_Addon {
 			$data = $this->is_option('debug_bar') ? $this->bar_log($params, false, null, $called_class) : null;
 			$this->plugin->log_with(is_null($data) ? $this->log_lineshift() : $data, null, ...$params);
 		}
-    }
+	}
 
 	// logging with context
 	public function expanded_log_with_context($context, $params, $called_class) {
 
-		if($this->is_option('avoid_ajax') && wp_doing_ajax()) return;
-		if($this->is_option('classname_only')) $params = $this->stub_class_instance($params);
+		if ($this->is_option('avoid_ajax') && wp_doing_ajax()) return;
+		if ($this->is_option('classname_only')) $params = $this->stub_class_instance($params);
 
-		if($this->is_option('use_kint')) {
-			if($this->is_option('write_file')) {
+		if ($this->is_option('use_kint')) {
+			if ($this->is_option('write_file')) {
 				$label = $this->plugin->get_log_label($context);
 				// in order not to modify $params, create a copy of it before modifying
 				$params_with_context = array_merge([], $params);
@@ -155,7 +156,7 @@ class zu_PlusDebug extends zukit_Addon {
 				$log = $this->kint_log($params_with_context);
 				$this->debug_log($label . $log);
 			}
-			if($this->is_option('debug_bar')) {
+			if ($this->is_option('debug_bar')) {
 				$context = htmlentities($context);
 				array_unshift($params, $context);
 				$log = $this->kint_log($params, true);
@@ -167,30 +168,30 @@ class zu_PlusDebug extends zukit_Addon {
 		}
 	}
 
-	// Logfile management -----------------------------------------------------]
+	// Logfile management -------------------------------------------------------------------------]
 
 	public function debug_log($log) {
-		if($this->is_option('avoid_ajax') && wp_doing_ajax()) return;
-		if($this->is_option('classname_only')) $log = $this->fix_class_instance($log);
-		if($this->is_option('write_file')) error_log($log, 3, $this->log_location());
+		if ($this->is_option('avoid_ajax') && wp_doing_ajax()) return;
+		if ($this->is_option('classname_only')) $log = $this->fix_class_instance($log);
+		if ($this->is_option('write_file')) error_log($log, 3, $this->log_location());
 	}
 
 	public function dump($log, $keep_tags = false) {
 		$dump_func = $this->get_option('dump_method', 'var_export');
-		if($dump_func === 'print_r') return preg_replace('/\n$/m', '', print_r($log, true));
-		if($dump_func === 'dump_var') return $this->dump_value($log, $keep_tags);
+		if ($dump_func === 'print_r') return preg_replace('/\n$/m', '', print_r($log, true));
+		if ($dump_func === 'dump_var') return $this->dump_value($log, $keep_tags);
 		return var_export($log, true);
 	}
 
 	public function log_location($filename = null) {
 		$filename = $filename ?? $this->logfile;
-		return ($this->is_option('flywheel_log') ? $this->flywheel_path : trailingslashit($this->location)).$filename;
+		return ($this->is_option('flywheel_log') ? $this->flywheel_path : trailingslashit($this->location)) . $filename;
 	}
 
 	public function clear_log($filename = null) {
 		$file =  $this->log_location($filename ?? $this->logfile);
 		$size = file_exists($file) ? filesize($file) : 0;
-		if($this->clear_file($file)) {
+		if ($this->clear_file($file)) {
 			// unlink($file);
 			return $this->create_notice('success', sprintf(
 				htmlentities('**Debug log** [*%2$s*] was deleted at `<ROOT>%1$s`'),
@@ -212,8 +213,8 @@ class zu_PlusDebug extends zukit_Addon {
 	}
 
 	public function change_log_location($path, $priority = 1) {
-		if(stripos($path, '.php') !== false) $path = dirname($path);
-		if($priority > $this->location_priority) {
+		if (stripos($path, '.php') !== false) $path = dirname($path);
+		if ($priority > $this->location_priority) {
 			$this->location = $path;
 			$this->location_priority = $priority;
 		}
@@ -221,13 +222,13 @@ class zu_PlusDebug extends zukit_Addon {
 	}
 
 	private function short_location($file) {
-		if($this->is_option('flywheel_log')) return preg_replace('/.+\/logs\/php\//', '/logs/php/', $file);
+		if ($this->is_option('flywheel_log')) return preg_replace('/.+\/logs\/php\//', '/logs/php/', $file);
 		else return str_replace($this->content_path, '/', $file);
 	}
 
 	private function clear_file($file) {
 		$handle = fopen($file, 'w');
-		if($handle !== false) fclose($handle);
+		if ($handle !== false) fclose($handle);
 		return $handle !== false;
 	}
 }
