@@ -186,5 +186,8 @@ $info-border-color-dark-opacity: 0.3;
 			&.active .__code { @extend %version-active; }
 			&.great .__code { @extend %version-great; }
 		}
+		.components-external-link__icon {
+			font-family: -apple-system,Roboto,Ubuntu,sans-serif;
+		}
 	}
 }
