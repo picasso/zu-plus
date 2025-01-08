@@ -1,20 +1,20 @@
-@use "sass:color";
-@use "vars";
+@use 'sass:color';
+@use 'vars';
 // не обновлять!! _kintbase.scss потому что он модифицирован добавлением !important плюс некоторые другие изменения
 // нужно только проконтролировать что верхний селектор в "kintbase" соответствует текущему
 // сейчас этот селектор = $debug-bar-selector: '#qm-debug_bar_zu_plusdebugbarpanel'
-@use "kintbase";
+@use 'kintbase';
 
 $text-color-light: vars.$kint-theme-text-light;
 $text-color-dark: vars.$kint-theme-text-dark;
 
 $main-font-family: vars.$font-family;
 
-$tab-inactive-color-hover: #FFF7BE;
+$tab-inactive-color-hover: #fff7be;
 $error-color: vars.$red-bright-color;
 
-$footer-color: #4C3D1E;
-$footer-bg-color: #FFF7E6;
+$footer-color: #4c3d1e;
+$footer-bg-color: #fff7e6;
 
 $var-color: vars.$kint-theme-var-color;
 $var-bg-color: vars.$kint-theme-var-bg-color;
@@ -37,133 +37,134 @@ $class-color: color.adjust(vars.$red-color, $lightness: -30%);
 
 // #qm-debug_bar_zu_plusdebugbarpanel
 #{vars.$debug-bar-selector} {
-    .kint-rich {
-        padding: 10px 10px 5px !important;
-        background: vars.$kint-theme-secondary !important;
-        font-family: $main-font-family !important;
-        margin-top: 0 !important;
+	.kint-rich {
+		padding: 10px 10px 5px !important;
+		background: vars.$kint-theme-secondary !important;
+		font-family: $main-font-family !important;
+		margin-top: 0 !important;
 
-        .kint-focused {
-            box-shadow: 0 0 3px 2px #859900 inset !important;
-            border-radius: 7px !important;
-        }
-        var {
-            font-weight: 500 !important;
-            letter-spacing: 1px !important;
-            cursor: pointer;
-        }
-        dt {
-            letter-spacing: 0.5px !important;
-            #{vars.$query-monitor-selector} &.__context.__dbg {
-                background-color: $context-color !important;
-                color: $context-text-color !important;
-                border-color: $context-border-color !important;
-                &:hover {
-                    border-color: $context-border-color !important;
-                }
-            }
-        }
-        dfn {
-            color: $var-color !important;
-            background-color: $var-bg-color;
-            padding: 0 5px !important;
-            border-radius: 3px !important;
-            letter-spacing: 1px !important;
-            font-weight: 500 !important;
-            font-family: $var-font-family !important;
-            font-size: 12px !important;
-        }
-        nav + dfn, nav + var {
-            margin-left: 5px !important;
-        }
-        dd {
-            dfn {
-                color: $text-color-light !important;
-                background-color: $var-bg-internal-color;
-            }
-            pre {
-                background-color: white !important;
-            }
-        }
+		.kint-focused {
+			box-shadow: 0 0 3px 2px #859900 inset !important;
+			border-radius: 7px !important;
+		}
+		var {
+			font-weight: 500 !important;
+			letter-spacing: 1px !important;
+			cursor: pointer;
+		}
+		dt {
+			letter-spacing: 0.5px !important;
+			#{vars.$query-monitor-selector} &.__context.__dbg {
+				background-color: $context-color !important;
+				color: $context-text-color !important;
+				border-color: $context-border-color !important;
+				&:hover {
+					border-color: $context-border-color !important;
+				}
+			}
+		}
+		dfn {
+			color: $var-color !important;
+			background-color: $var-bg-color;
+			padding: 0 5px !important;
+			border-radius: 3px !important;
+			letter-spacing: 1px !important;
+			font-weight: 500 !important;
+			font-family: $var-font-family !important;
+			font-size: 12px !important;
+		}
+		nav + dfn,
+		nav + var {
+			margin-left: 5px !important;
+		}
+		dd {
+			dfn {
+				color: $text-color-light !important;
+				background-color: $var-bg-internal-color;
+			}
+			pre {
+				background-color: white !important;
+			}
+		}
 
-        > dl > dt,
-        ul.kint-tabs {
-            box-shadow: none;
-        }
+		> dl > dt,
+		ul.kint-tabs {
+			box-shadow: none;
+		}
 
-        ul.kint-tabs li.kint-active-tab {
-            padding-top: 7px !important;
-            height: 34px !important;
-        }
+		ul.kint-tabs li.kint-active-tab {
+			padding-top: 7px !important;
+			height: 34px !important;
+		}
 
-        ul.kint-tabs {
-            li:hover {
-                color: $tab-inactive-color-hover !important;
-            }
-        }
+		ul.kint-tabs {
+			li:hover {
+				color: $tab-inactive-color-hover !important;
+			}
+		}
 
-        .kint-search-trigger,
-        .kint-popup-trigger,
-        .kint-access-path-trigger {
-            background-color: $trigger-bg-color !important;
-            color:$trigger-color !important;
-            line-height: 15px !important;
-            font-size: 13px !important;
-            font-weight: 500 !important;
-            height: 17px !important;
-            width: 18px !important;
-            &:hover {
-                background-color: $trigger-hover-bg-color !important;
-                color:$trigger-hover-color !important;
-            }
-        }
-        .kint-search-trigger {
-            font-size: 19px !important;
-            line-height: 17px !important;
-        }
+		.kint-search-trigger,
+		.kint-popup-trigger,
+		.kint-access-path-trigger {
+			background-color: $trigger-bg-color !important;
+			color: $trigger-color !important;
+			line-height: 15px !important;
+			font-size: 13px !important;
+			font-weight: 500 !important;
+			height: 17px !important;
+			width: 18px !important;
+			&:hover {
+				background-color: $trigger-hover-bg-color !important;
+				color: $trigger-hover-color !important;
+			}
+		}
+		.kint-search-trigger {
+			font-size: 19px !important;
+			line-height: 17px !important;
+		}
 
-        dt.kint-parent > .kint-popup-trigger {
-            line-height: 16px !important;
-        }
+		dt.kint-parent > .kint-popup-trigger {
+			line-height: 16px !important;
+		}
 
-        footer {
-            .kint-popup-trigger {
-                background-color: transparent !important;
-                color:$trigger-hover-color !important;
-                &:hover {
-                    background-color: $trigger-hover-bg-color !important;
-                }
-            }
-            .kint-popup-trigger + nav {
-                margin-top: -3px !important;
-            }
-            ol {
-                margin-top: 10px !important;
-                padding: 10px !important;
-                background-color: $footer-bg-color !important;
-                li {
-                    color: $footer-color !important;
-                    letter-spacing: 1px !important;
-                    margin-bottom: 5px !important;
-                }
-            }
+		footer {
+			.kint-popup-trigger {
+				background-color: transparent !important;
+				color: $trigger-hover-color !important;
+				&:hover {
+					background-color: $trigger-hover-bg-color !important;
+				}
+			}
+			.kint-popup-trigger + nav {
+				margin-top: -3px !important;
+			}
+			ol {
+				margin-top: 10px !important;
+				padding: 10px !important;
+				background-color: $footer-bg-color !important;
+				li {
+					color: $footer-color !important;
+					letter-spacing: 1px !important;
+					margin-bottom: 5px !important;
+				}
+			}
 
-            em {
-                font-style: normal !important;
-                &.__ip {
-                    color: $ip-color !important;
-                }
-                &.__func {
-                    font-weight: 600;
-                    letter-spacing: 0.5px !important;
-                    color: $func-color !important;
-                }
-                &.__class {
-                    font-weight: 600;
-                    letter-spacing: 0.8px !important;
-                    color: $class-color !important;
-                }
-            }
-        }
-    }
+			em {
+				font-style: normal !important;
+				&.__ip {
+					color: $ip-color !important;
+				}
+				&.__func {
+					font-weight: 600;
+					letter-spacing: 0.5px !important;
+					color: $func-color !important;
+				}
+				&.__class {
+					font-weight: 600;
+					letter-spacing: 0.8px !important;
+					color: $class-color !important;
+				}
+			}
+		}
+	}
 }

@@ -1,5 +1,5 @@
-@use "sass:color";
-@use "vars";
+@use 'sass:color';
+@use 'vars';
 
 $duplicate-menu-selector: '.zuplus_dup_menu';
 $coreinfo-selector: '.zuplus_core_info';
@@ -11,7 +11,7 @@ $help-markdown-code-opacity: 0.25;
 $dup-padding: 10px;
 $dup-item-padding: 8px;
 
-$info-font-family: Roboto,Ubuntu,"Helvetica Neue",sans-serif;
+$info-font-family: Roboto, Ubuntu, 'Helvetica Neue', sans-serif;
 $info-font-size: 13px;
 $info-last-ver-color: color.adjust(vars.$green-color, $lightness: -20%);
 $info-last-ver-bg-color: rgba(vars.$green-color, 0.2);
@@ -22,7 +22,6 @@ $info-old-ver-bg-color: rgba(vars.$orange-color, 0.3);
 
 $info-border-color-opacity: 0.2;
 $info-border-color-dark-opacity: 0.3;
-
 
 %version {
 	margin-left: 10px;
@@ -62,7 +61,9 @@ $info-border-color-dark-opacity: 0.3;
 #{$duplicate-menu-selector} {
 	min-width: 17em;
 
-	.__title, .__menu, .__input {
+	.__title,
+	.__menu,
+	.__input {
 		padding: $dup-padding;
 	}
 	.components-menu-group__label {
@@ -132,9 +133,15 @@ $info-border-color-dark-opacity: 0.3;
 		}
 		.__ver {
 			@extend %version;
-			&.less { @extend %version-less; }
-			&.active { @extend %version-active; }
-			&.great { @extend %version-great; }
+			&.less {
+				@extend %version-less;
+			}
+			&.active {
+				@extend %version-active;
+			}
+			&.great {
+				@extend %version-great;
+			}
 			display: inline-block !important;
 			margin-left: 0;
 		}
@@ -180,14 +187,24 @@ $info-border-color-dark-opacity: 0.3;
 		.cell__lastest {
 			color: rgba(vars.$kint-theme-text-light, 0.7);
 		}
-		.cell__version, .cell__lastest, .cell__framework {
-			.__code { @extend %version; }
-			&.less .__code { @extend %version-less; }
-			&.active .__code { @extend %version-active; }
-			&.great .__code { @extend %version-great; }
+		.cell__version,
+		.cell__lastest,
+		.cell__framework {
+			.__code {
+				@extend %version;
+			}
+			&.less .__code {
+				@extend %version-less;
+			}
+			&.active .__code {
+				@extend %version-active;
+			}
+			&.great .__code {
+				@extend %version-great;
+			}
 		}
 		.components-external-link__icon {
-			font-family: -apple-system,Roboto,Ubuntu,sans-serif;
+			font-family: -apple-system, Roboto, Ubuntu, sans-serif;
 		}
 	}
 }

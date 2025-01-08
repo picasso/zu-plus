@@ -1,18 +1,45 @@
-@use "sass:color";
-@use "vars";
-@use "noads";
+@use 'sass:color';
+@use 'vars';
+@use 'noads';
 
-.zuplus_red { color: vars.$red-color;}
-.zuplus_green { color: vars.$green-color;}
-.zuplus_magenta { color: vars.$magenta-color;}
-.zuplus_gold { color: vars.$orange-bright-color;}
-.zuplus_blue { color: vars.$blue-color;}
+.zuplus_red {
+	color: vars.$red-color;
+}
+.zuplus_green {
+	color: vars.$green-color;
+}
+.zuplus_magenta {
+	color: vars.$magenta-color;
+}
+.zuplus_gold {
+	color: vars.$orange-bright-color;
+}
+.zuplus_blue {
+	color: vars.$blue-color;
+}
 
-._bold { font-weight: 600; letter-spacing: 0.5pt;}
-._grand { font-weight: 600; font-size: 110%; letter-spacing: 1pt; text-transform: uppercase;}
-._uppercase { text-transform: uppercase; font-size: 0.8em;}
-._uppercase2 { font-weight: 500; text-transform: uppercase; letter-spacing: 0.5pt;}
-._shift { margin-left: 1.5em;}
+._bold {
+	font-weight: 600;
+	letter-spacing: 0.5pt;
+}
+._grand {
+	font-weight: 600;
+	font-size: 110%;
+	letter-spacing: 1pt;
+	text-transform: uppercase;
+}
+._uppercase {
+	text-transform: uppercase;
+	font-size: 0.8em;
+}
+._uppercase2 {
+	font-weight: 500;
+	text-transform: uppercase;
+	letter-spacing: 0.5pt;
+}
+._shift {
+	margin-left: 1.5em;
+}
 
 $context-text-color: white;
 $context-text-shadow: vars.$text-shadow-for-white;
@@ -31,7 +58,8 @@ $context-if-border-color: color.adjust($context-if-color, $lightness: -10%);
 $notice-color: #aad5ff;
 $notice-dark-color: color.adjust($notice-color, $lightness: -20%);
 
-#{vars.$zu-custom-logs-selector} dt, #{vars.$debug-bar-selector} div.kint-rich dt {
+#{vars.$zu-custom-logs-selector} dt,
+#{vars.$debug-bar-selector} div.kint-rich dt {
 	&.__context {
 		letter-spacing: 1px !important;
 		background-color: $context-color !important;
@@ -120,13 +148,15 @@ $notice-dark-color: color.adjust($notice-color, $lightness: -20%);
 			}
 		}
 	}
-	.__time, .__file {
+	.__time,
+	.__file {
 		color: vars.$kint-theme-text-light !important;
 		max-width: 40em !important;
 		overflow: hidden !important;
 		text-overflow: ellipsis !important;
 	}
-	.__time, .__ip {
+	.__time,
+	.__ip {
 		text-align: center !important;
 	}
 }

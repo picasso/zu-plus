@@ -1,7 +1,7 @@
-@use "sass:color";
-@use "sass:math";
-@use "vars";
-@use "icons";
+@use 'sass:color';
+@use 'sass:math';
+@use 'vars';
+@use 'icons';
 
 // Variables for themes to override
 $spacing: 4 !default;
@@ -25,7 +25,7 @@ $foldout-zindex: 999999 !important;
 
 // IE flat out refuses to work with url mode unless it's base64 encoded... Stupid IE.
 // <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 150"><g stroke-width="2" fill="#FFF"><path d="M1 1h28v28H1zm5 14h18m-9 9V6M1 61h28v28H1zm5 14h18" stroke="#379"/><path d="M1 31h28v28H1zm5 14h18m-9 9V36M1 91h28v28H1zm5 14h18" stroke="#5A3"/><path d="M1 121h28v28H1zm5 5l18 18m-18 0l18-18" stroke="#CCC"/></g></svg>
-$caret-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMCAxNTAiPjxnIHN0cm9rZS13aWR0aD0iMiIgZmlsbD0iI0ZGRiI+PHBhdGggZD0iTTEgMWgyOHYyOEgxem01IDE0aDE4bS05IDlWNk0xIDYxaDI4djI4SDF6bTUgMTRoMTgiIHN0cm9rZT0iIzM3OSIvPjxwYXRoIGQ9Ik0xIDMxaDI4djI4SDF6bTUgMTRoMThtLTkgOVYzNk0xIDkxaDI4djI4SDF6bTUgMTRoMTgiIHN0cm9rZT0iIzVBMyIvPjxwYXRoIGQ9Ik0xIDEyMWgyOHYyOEgxem01IDVsMTggMThtLTE4IDBsMTgtMTgiIHN0cm9rZT0iI0NDQyIvPjwvZz48L3N2Zz4=") !default;
+$caret-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMCAxNTAiPjxnIHN0cm9rZS13aWR0aD0iMiIgZmlsbD0iI0ZGRiI+PHBhdGggZD0iTTEgMWgyOHYyOEgxem01IDE0aDE4bS05IDlWNk0xIDYxaDI4djI4SDF6bTUgMTRoMTgiIHN0cm9rZT0iIzM3OSIvPjxwYXRoIGQ9Ik0xIDMxaDI4djI4SDF6bTUgMTRoMThtLTkgOVYzNk0xIDkxaDI4djI4SDF6bTUgMTRoMTgiIHN0cm9rZT0iIzVBMyIvPjxwYXRoIGQ9Ik0xIDEyMWgyOHYyOEgxem01IDVsMTggMThtLTE4IDBsMTgtMTgiIHN0cm9rZT0iI0NDQyIvPjwvZz48L3N2Zz4=') !default;
 
 // redefine some vars -----------------------------------------------------------------------------]
 
@@ -33,491 +33,495 @@ $spacing: 5;
 $text-color: vars.$kint-theme-text;
 $main-background: vars.$kint-theme-main;
 $secondary-background: vars.$kint-theme-secondary;
-$variable-type-color: #B24512;
-$variable-type-color-hover: #B24512;
-$border-color: color.adjust(#9A8049, $lightness: 10%);
+$variable-type-color: #b24512;
+$variable-type-color-hover: #b24512;
+$border-color: color.adjust(#9a8049, $lightness: 10%);
 $border-color-hover: color.adjust(vars.$kint-theme-main, $lightness: -20%);
 $caret-image: icons.$nav-icon;
 
 #qm-debug_bar_zu_plusdebugbarpanel {
-.kint-rich {
-  font-size: 13px !important;
-  overflow-x: auto !important;
-  white-space: nowrap !important;
-  background: $backdrop-color !important;
-
-  &.kint-folder {
-    position: fixed !important;
-    bottom: 0 !important;
-    left: 0 !important;
-    right: 0 !important;
-    z-index: $foldout-zindex !important;
-    width: 100% !important;
-    margin: 0 !important;
-    display: block !important;
-
-    dd.kint-foldout {
-      max-height: $foldout-max-size !important;
-      padding-right: $spacing * 2px !important;
-      overflow-y: scroll !important;
-      display: none !important;
-
-      &.kint-show {
-        display: block !important;
-      }
-    }
-  }
-
-  &::selection,
-  &::-moz-selection,
-  &::-webkit-selection {
-    background: $border-color-hover !important;
-    color: $text-color !important;
-  }
-
-  .kint-focused {
-    box-shadow: 0 0 3px 2px $variable-type-color-hover !important;
-  }
-
-  &,
-  &::before,
-  &::after,
-  & *,
-  & *::before,
-  & *::after {
-    box-sizing: border-box !important;
-    border-radius: 0 !important;
-    color: $text-color !important;
-    float: none !important;
-    // font-family: Consolas, Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif !important;
-    line-height: 15px !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    text-align: left !important;
-  }
-
-  & {
-    margin: ($spacing * 2px) 0 !important;
-  }
-
-  dt,
-  dl {
-    width: auto !important;
-  }
-
-  dt,
-  div.access-path {
-    background: $main-background !important;
-    border: $border !important;
-    color: $text-color !important;
-    display: block !important;
-    font-weight: bold !important;
-    list-style: none outside none !important;
-    overflow: auto !important;
-    padding: $spacing * 1px !important;
-
-    &:hover {
-      border-color: $border-color-hover !important;
-    }
-  }
-
-  > dl dl {
-    padding: 0 0 0 ($spacing * 3px) !important;
-  }
-
-  // Caret styles
-  dt.kint-parent > nav,
-  > footer > nav {
-    background: $caret-image no-repeat scroll 0 0 / 15px 75px transparent !important;
-    cursor: pointer !important;
-    display: inline-block !important;
-    height: 15px !important;
-    width: 15px !important;
-    margin-right: 3px !important;
-    vertical-align: middle !important;
-  }
-
-  dt.kint-parent:hover > nav,
-  > footer > nav:hover {
-    background-position: 0 (math.div(1, 4) * 100%) !important;
-  }
-
-  dt.kint-parent.kint-show > nav,
-  > footer.kint-show > nav {
-    background-position: 0 (math.div(2, 4) * 100%) !important;
-  }
-
-  dt.kint-parent.kint-show:hover > nav,
-  > footer.kint-show > nav:hover {
-    background-position: 0 (math.div(3, 4) * 100%) !important;
-  }
-
-  dt.kint-parent.kint-locked > nav {
-    background-position: 0 (math.div(4, 4) * 100%) !important;
-  }
-
-  dt.kint-parent + dd {
-    display: none !important;
-    border-left: 1px dashed $border-color !important;
-  }
-
-  dt.kint-parent.kint-show + dd {
-    display: block !important;
-  }
-
-  // Other styles
-  var,
-  var a {
-    color: $variable-type-color !important;
-    font-style: normal !important;
-  }
-
-  dt:hover var,
-  dt:hover var a {
-    color: $variable-type-color-hover !important;
-  }
-
-  dfn {
-    font-style: normal !important;
-    font-family: monospace !important;
-    color: $variable-name-color !important;
-  }
-
-  pre {
-    color: $text-color !important;
-    margin: 0 0 0 ($spacing * 3px) !important;
-    padding: 5px !important;
-    overflow-y: hidden !important;
-    border-top: 0 !important;
-    border: $border !important;
-    background: $main-background !important;
-    display: block !important;
-    word-break: normal !important;
-  }
-
-  .kint-popup-trigger,
-  .kint-access-path-trigger,
-  .kint-search-trigger {
-    background: rgba($text-color, 0.8) !important;
-    border-radius: 3px !important;
-    height: ($color_size * 1px) !important;
-    font-size: ($color_size * 1px) !important;
-    margin-left: 5px !important;
-    font-weight: bold !important;
-    width: ($color_size * 1px) !important;
-    text-align: center !important;
-    float: right !important;
-    cursor: pointer !important;
-    color: $main-background !important;
-    position: relative !important;
-    overflow: hidden !important;
-
-    // Carefully balanced on multiple browsers
-    line-height: ($color_size * 1.1 * 1px) !important;
-
-    &:hover {
-      color: $text-color !important;
-      // background: $main-background !important;
-      background: color.adjust($main-background, $lightness: 10%) !important;
-    }
-  }
-
-  // The &boxbox !important; icon is slightly higher than the &lrarr !important; icon,
-  // so increase the line height to make it line out better
-  dt.kint-parent > .kint-popup-trigger {
-    line-height: $color_size * 1.2 * 1px !important;
-  }
-
-  // The &telrec !important; icon is slightly smaller than the &lrarr !important; icon,
-  // so make it a bit bigger to line it out better
-  .kint-search-trigger {
-    font-size: $color_size * 1.25 * 1px !important;
-  }
-
-  input.kint-search {
-    display: none !important;
-    border: $border !important;
-    border-top-width: 0 !important;
-    border-bottom-width: 0 !important;
-    padding: $spacing * 1px !important;
-    float: right !important;
-    margin: ($spacing * -1px) 0 !important;
-    color: $variable-name-color !important;
-    background: $secondary-background !important;
-    height: $color_size * 1px + $spacing * 2px !important;
-    width: $color_size * 10px !important;
-    position: relative !important;
-    z-index: 100 !important;
-
-    &.kint-show {
-      display: block !important;
-    }
-  }
-
-  .kint-search-root ul.kint-tabs > li:not(.kint-search-match) {
-    background: color.adjust($secondary-background, $saturation: -100%) !important;
-    opacity: 0.5 !important;
-  }
-
-  .kint-search-root dl:not(.kint-search-match) {
-    opacity: 0.5 !important;
-
-    > dt {
-      background: color.adjust($main-background, $saturation: -100%) !important;
-    }
-
-    dl,
-    ul.kint-tabs > li:not(.kint-search-match) {
-      opacity: 1 !important;
-    }
-  }
-
-  div.access-path {
-    background: $secondary-background !important;
-    display: none !important;
-    margin-top: 5px !important;
-    padding: 4px !important;
-    white-space: pre !important;
-
-    &.kint-show {
-      display: block !important;
-    }
-  }
-
-  footer {
-    padding: 5px 3px 3px !important;
-    font-size: 9px !important;
-    background: transparent !important;
-
-    > .kint-popup-trigger {
-      background: transparent !important;
-      color: $text-color !important;
-    }
-
-    nav {
-      height: 10px !important;
-      width: 10px !important;
-      background-size: 10px 50px !important;
-    }
-
-    > ol {
-      display: none; // !important;
-      margin-left: 32px !important;
-    }
-
-    &.kint-show {
-      > ol {
-        display: block !important;
-      }
-    }
-  }
-
-  a {
-    color: $text-color !important;
-    text-shadow: none !important;
-    text-decoration: underline !important;
-
-    &:hover {
-      color: $variable-name-color !important;
-      border-bottom: 1px dotted $variable-name-color !important;
-    }
-  }
-
-  // Tab styles
-  ul {
-    list-style: none !important;
-    padding-left: $spacing * 3px !important;
-
-    &:not(.kint-tabs) {
-      li {
-        border-left: 1px dashed $border-color !important;
-
-        > dl {
-          border-left: none !important;
-        }
-      }
-    }
-
-    &.kint-tabs {
-      margin: 0 0 0 ($spacing * 3px) !important;
-      padding-left: 0 !important;
-      background: $main-background !important;
-      border: $border !important;
-      border-top: 0 !important;
-
-      > li {
-        background: $secondary-background !important;
-        border: $border !important;
-        cursor: pointer !important;
-        display: inline-block !important;
-        height: $spacing * 6px !important;
-        margin: math.round(math.div($spacing, 2)) * 1px !important;
-        padding: 0 (2px + math.round($spacing * 2.5px)) !important;
-        vertical-align: top !important;
-
-        &:hover,
-        &.kint-active-tab:hover {
-          border-color: $border-color-hover !important;
-          color: $variable-type-color-hover !important;
-        }
-
-        &.kint-active-tab {
-          background: $main-background !important;
-          border-top: 0 !important;
-          margin-top: -1px !important;
-          height: 27px !important;
-          line-height: 24px !important;
-        }
-
-        &:not(.kint-active-tab) {
-          line-height: $spacing * 5px !important;
-        }
-      }
-
-      li + li {
-        margin-left: 0 !important;
-      }
-    }
-
-    &:not(.kint-tabs) > li:not(:first-child) {
-      display: none !important;
-    }
-  }
-
-  dt:hover + dd > ul > li.kint-active-tab {
-    border-color: $border-color-hover !important;
-    color: $variable-type-color-hover !important;
-  }
-
-  dt > .kint-color-preview {
-    width: $color_size * 1px !important;
-    height: $color_size * 1px !important;
-    display: inline-block !important;
-    vertical-align: middle !important;
-    margin-left: 10px !important;
-    border: $border !important;
-    background: {
-      color: #ccc !important;
-      image: url('data:image/svg+xml !important;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2 2"><path fill="%23FFF" d="M0 0h1v2h1V1H0z"/></svg>') !important;
-      size: if($color_size >= 30, 30px, 100%) !important;
-    }
-
-    &:hover {
-      border-color: $border-color-hover !important;
-    }
-
-    > div {
-      width: 100% !important;
-      height: 100% !important;
-    }
-  }
-
-  // Table representation
-  table {
-    border-collapse: collapse !important;
-    empty-cells: show !important;
-    border-spacing: 0 !important;
-
-    * {
-      font-size: 12px !important;
-    }
-
-    dt {
-      background: none !important;
-      padding: math.div($spacing, 2) * 1px !important;
-
-      .kint-parent {
-        min-width: 100% !important;
-        overflow: hidden !important;
-        text-overflow: ellipsis !important;
-        white-space: nowrap !important;
-      }
-    }
-
-    td,
-    th {
-      border: $border !important;
-      padding: math.div($spacing, 2) * 1px !important;
-      vertical-align: center !important;
-    }
-
-    th {
-      cursor: alias !important;
-    }
-
-    td:first-child,
-    th {
-      font-weight: bold !important;
-      background: $secondary-background !important;
-      color: $variable-name-color !important;
-    }
-
-    td {
-      background: $main-background !important;
-      white-space: pre !important;
-
-      > dl {
-        padding: 0 !important;
-      }
-    }
-
-    pre {
-      border-top: 0 !important;
-      border-right: 0 !important;
-    }
-
-    thead th:first-child {
-      background: none !important;
-      border: 0 !important;
-    }
-
-    tr:hover {
-      > td {
-        box-shadow: 0 0 1px 0 $border-color-hover inset !important;
-      }
-
-      var {
-        color: $variable-type-color-hover !important;
-      }
-    }
-
-    ul.kint-tabs li.kint-active-tab {
-      height: 20px !important;
-      line-height: 17px !important;
-    }
-  }
-
-  // Source representation
-  pre.kint-source {
-    margin-left: -1px !important;
-
-    &[data-kint-filename]:before {
-      display: block !important;
-      content: attr(data-kint-filename) !important;
-      margin-bottom: $spacing * 1px !important;
-      padding-bottom: $spacing * 1px !important;
-      border-bottom: 1px solid $secondary-background !important;
-    }
-
-    > div:before {
-      display: inline-block !important;
-      content: counter(kint-l) !important;
-      counter-increment: kint-l !important;
-      border-right: 1px solid $border-color-hover !important;
-      padding-right: $spacing * 2px !important;
-      margin-right: $spacing * 2px !important;
-    }
-
-    > div.kint-highlight {
-      background: $secondary-background !important;
-    }
-  }
-
-  // Microtime representation
-  .kint-microtime-lap {
-    text-shadow: -1px 0 $border-color-hover, 0 1px $border-color-hover, 1px 0 $border-color-hover, 0 -1px $border-color-hover !important;
-    color: $main-background !important;
-    font-weight: bold !important;
-  }
-}
+	.kint-rich {
+		font-size: 13px !important;
+		overflow-x: auto !important;
+		white-space: nowrap !important;
+		background: $backdrop-color !important;
+
+		&.kint-folder {
+			position: fixed !important;
+			bottom: 0 !important;
+			left: 0 !important;
+			right: 0 !important;
+			z-index: $foldout-zindex !important;
+			width: 100% !important;
+			margin: 0 !important;
+			display: block !important;
+
+			dd.kint-foldout {
+				max-height: $foldout-max-size !important;
+				padding-right: $spacing * 2px !important;
+				overflow-y: scroll !important;
+				display: none !important;
+
+				&.kint-show {
+					display: block !important;
+				}
+			}
+		}
+
+		&::selection,
+		&::-moz-selection,
+		&::-webkit-selection {
+			background: $border-color-hover !important;
+			color: $text-color !important;
+		}
+
+		.kint-focused {
+			box-shadow: 0 0 3px 2px $variable-type-color-hover !important;
+		}
+
+		&,
+		&::before,
+		&::after,
+		& *,
+		& *::before,
+		& *::after {
+			box-sizing: border-box !important;
+			border-radius: 0 !important;
+			color: $text-color !important;
+			float: none !important;
+			// font-family: Consolas, Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif !important;
+			line-height: 15px !important;
+			margin: 0 !important;
+			padding: 0 !important;
+			text-align: left !important;
+		}
+
+		& {
+			margin: ($spacing * 2px) 0 !important;
+		}
+
+		dt,
+		dl {
+			width: auto !important;
+		}
+
+		dt,
+		div.access-path {
+			background: $main-background !important;
+			border: $border !important;
+			color: $text-color !important;
+			display: block !important;
+			font-weight: bold !important;
+			list-style: none outside none !important;
+			overflow: auto !important;
+			padding: $spacing * 1px !important;
+
+			&:hover {
+				border-color: $border-color-hover !important;
+			}
+		}
+
+		> dl dl {
+			padding: 0 0 0 ($spacing * 3px) !important;
+		}
+
+		// Caret styles
+		dt.kint-parent > nav,
+		> footer > nav {
+			background: $caret-image no-repeat scroll 0 0 / 15px 75px transparent !important;
+			cursor: pointer !important;
+			display: inline-block !important;
+			height: 15px !important;
+			width: 15px !important;
+			margin-right: 3px !important;
+			vertical-align: middle !important;
+		}
+
+		dt.kint-parent:hover > nav,
+		> footer > nav:hover {
+			background-position: 0 (math.div(1, 4) * 100%) !important;
+		}
+
+		dt.kint-parent.kint-show > nav,
+		> footer.kint-show > nav {
+			background-position: 0 (math.div(2, 4) * 100%) !important;
+		}
+
+		dt.kint-parent.kint-show:hover > nav,
+		> footer.kint-show > nav:hover {
+			background-position: 0 (math.div(3, 4) * 100%) !important;
+		}
+
+		dt.kint-parent.kint-locked > nav {
+			background-position: 0 (math.div(4, 4) * 100%) !important;
+		}
+
+		dt.kint-parent + dd {
+			display: none !important;
+			border-left: 1px dashed $border-color !important;
+		}
+
+		dt.kint-parent.kint-show + dd {
+			display: block !important;
+		}
+
+		// Other styles
+		var,
+		var a {
+			color: $variable-type-color !important;
+			font-style: normal !important;
+		}
+
+		dt:hover var,
+		dt:hover var a {
+			color: $variable-type-color-hover !important;
+		}
+
+		dfn {
+			font-style: normal !important;
+			font-family: monospace !important;
+			color: $variable-name-color !important;
+		}
+
+		pre {
+			color: $text-color !important;
+			margin: 0 0 0 ($spacing * 3px) !important;
+			padding: 5px !important;
+			overflow-y: hidden !important;
+			border-top: 0 !important;
+			border: $border !important;
+			background: $main-background !important;
+			display: block !important;
+			word-break: normal !important;
+		}
+
+		.kint-popup-trigger,
+		.kint-access-path-trigger,
+		.kint-search-trigger {
+			background: rgba($text-color, 0.8) !important;
+			border-radius: 3px !important;
+			height: ($color_size * 1px) !important;
+			font-size: ($color_size * 1px) !important;
+			margin-left: 5px !important;
+			font-weight: bold !important;
+			width: ($color_size * 1px) !important;
+			text-align: center !important;
+			float: right !important;
+			cursor: pointer !important;
+			color: $main-background !important;
+			position: relative !important;
+			overflow: hidden !important;
+
+			// Carefully balanced on multiple browsers
+			line-height: ($color_size * 1.1 * 1px) !important;
+
+			&:hover {
+				color: $text-color !important;
+				// background: $main-background !important;
+				background: color.adjust($main-background, $lightness: 10%) !important;
+			}
+		}
+
+		// The &boxbox !important; icon is slightly higher than the &lrarr !important; icon,
+		// so increase the line height to make it line out better
+		dt.kint-parent > .kint-popup-trigger {
+			line-height: $color_size * 1.2 * 1px !important;
+		}
+
+		// The &telrec !important; icon is slightly smaller than the &lrarr !important; icon,
+		// so make it a bit bigger to line it out better
+		.kint-search-trigger {
+			font-size: $color_size * 1.25 * 1px !important;
+		}
+
+		input.kint-search {
+			display: none !important;
+			border: $border !important;
+			border-top-width: 0 !important;
+			border-bottom-width: 0 !important;
+			padding: $spacing * 1px !important;
+			float: right !important;
+			margin: ($spacing * -1px) 0 !important;
+			color: $variable-name-color !important;
+			background: $secondary-background !important;
+			height: $color_size * 1px + $spacing * 2px !important;
+			width: $color_size * 10px !important;
+			position: relative !important;
+			z-index: 100 !important;
+
+			&.kint-show {
+				display: block !important;
+			}
+		}
+
+		.kint-search-root ul.kint-tabs > li:not(.kint-search-match) {
+			background: color.adjust($secondary-background, $saturation: -100%) !important;
+			opacity: 0.5 !important;
+		}
+
+		.kint-search-root dl:not(.kint-search-match) {
+			opacity: 0.5 !important;
+
+			> dt {
+				background: color.adjust($main-background, $saturation: -100%) !important;
+			}
+
+			dl,
+			ul.kint-tabs > li:not(.kint-search-match) {
+				opacity: 1 !important;
+			}
+		}
+
+		div.access-path {
+			background: $secondary-background !important;
+			display: none !important;
+			margin-top: 5px !important;
+			padding: 4px !important;
+			white-space: pre !important;
+
+			&.kint-show {
+				display: block !important;
+			}
+		}
+
+		footer {
+			padding: 5px 3px 3px !important;
+			font-size: 9px !important;
+			background: transparent !important;
+
+			> .kint-popup-trigger {
+				background: transparent !important;
+				color: $text-color !important;
+			}
+
+			nav {
+				height: 10px !important;
+				width: 10px !important;
+				background-size: 10px 50px !important;
+			}
+
+			> ol {
+				display: none; // !important;
+				margin-left: 32px !important;
+			}
+
+			&.kint-show {
+				> ol {
+					display: block !important;
+				}
+			}
+		}
+
+		a {
+			color: $text-color !important;
+			text-shadow: none !important;
+			text-decoration: underline !important;
+
+			&:hover {
+				color: $variable-name-color !important;
+				border-bottom: 1px dotted $variable-name-color !important;
+			}
+		}
+
+		// Tab styles
+		ul {
+			list-style: none !important;
+			padding-left: $spacing * 3px !important;
+
+			&:not(.kint-tabs) {
+				li {
+					border-left: 1px dashed $border-color !important;
+
+					> dl {
+						border-left: none !important;
+					}
+				}
+			}
+
+			&.kint-tabs {
+				margin: 0 0 0 ($spacing * 3px) !important;
+				padding-left: 0 !important;
+				background: $main-background !important;
+				border: $border !important;
+				border-top: 0 !important;
+
+				> li {
+					background: $secondary-background !important;
+					border: $border !important;
+					cursor: pointer !important;
+					display: inline-block !important;
+					height: $spacing * 6px !important;
+					margin: math.round(math.div($spacing, 2)) * 1px !important;
+					padding: 0 (2px + math.round($spacing * 2.5px)) !important;
+					vertical-align: top !important;
+
+					&:hover,
+					&.kint-active-tab:hover {
+						border-color: $border-color-hover !important;
+						color: $variable-type-color-hover !important;
+					}
+
+					&.kint-active-tab {
+						background: $main-background !important;
+						border-top: 0 !important;
+						margin-top: -1px !important;
+						height: 27px !important;
+						line-height: 24px !important;
+					}
+
+					&:not(.kint-active-tab) {
+						line-height: $spacing * 5px !important;
+					}
+				}
+
+				li + li {
+					margin-left: 0 !important;
+				}
+			}
+
+			&:not(.kint-tabs) > li:not(:first-child) {
+				display: none !important;
+			}
+		}
+
+		dt:hover + dd > ul > li.kint-active-tab {
+			border-color: $border-color-hover !important;
+			color: $variable-type-color-hover !important;
+		}
+
+		dt > .kint-color-preview {
+			width: $color_size * 1px !important;
+			height: $color_size * 1px !important;
+			display: inline-block !important;
+			vertical-align: middle !important;
+			margin-left: 10px !important;
+			border: $border !important;
+			background: {
+				color: #ccc !important;
+				image: url('data:image/svg+xml !important;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2 2"><path fill="%23FFF" d="M0 0h1v2h1V1H0z"/></svg>') !important;
+				size: if($color_size >= 30, 30px, 100%) !important;
+			}
+
+			&:hover {
+				border-color: $border-color-hover !important;
+			}
+
+			> div {
+				width: 100% !important;
+				height: 100% !important;
+			}
+		}
+
+		// Table representation
+		table {
+			border-collapse: collapse !important;
+			empty-cells: show !important;
+			border-spacing: 0 !important;
+
+			* {
+				font-size: 12px !important;
+			}
+
+			dt {
+				background: none !important;
+				padding: math.div($spacing, 2) * 1px !important;
+
+				.kint-parent {
+					min-width: 100% !important;
+					overflow: hidden !important;
+					text-overflow: ellipsis !important;
+					white-space: nowrap !important;
+				}
+			}
+
+			td,
+			th {
+				border: $border !important;
+				padding: math.div($spacing, 2) * 1px !important;
+				vertical-align: center !important;
+			}
+
+			th {
+				cursor: alias !important;
+			}
+
+			td:first-child,
+			th {
+				font-weight: bold !important;
+				background: $secondary-background !important;
+				color: $variable-name-color !important;
+			}
+
+			td {
+				background: $main-background !important;
+				white-space: pre !important;
+
+				> dl {
+					padding: 0 !important;
+				}
+			}
+
+			pre {
+				border-top: 0 !important;
+				border-right: 0 !important;
+			}
+
+			thead th:first-child {
+				background: none !important;
+				border: 0 !important;
+			}
+
+			tr:hover {
+				> td {
+					box-shadow: 0 0 1px 0 $border-color-hover inset !important;
+				}
+
+				var {
+					color: $variable-type-color-hover !important;
+				}
+			}
+
+			ul.kint-tabs li.kint-active-tab {
+				height: 20px !important;
+				line-height: 17px !important;
+			}
+		}
+
+		// Source representation
+		pre.kint-source {
+			margin-left: -1px !important;
+
+			&[data-kint-filename]:before {
+				display: block !important;
+				content: attr(data-kint-filename) !important;
+				margin-bottom: $spacing * 1px !important;
+				padding-bottom: $spacing * 1px !important;
+				border-bottom: 1px solid $secondary-background !important;
+			}
+
+			> div:before {
+				display: inline-block !important;
+				content: counter(kint-l) !important;
+				counter-increment: kint-l !important;
+				border-right: 1px solid $border-color-hover !important;
+				padding-right: $spacing * 2px !important;
+				margin-right: $spacing * 2px !important;
+			}
+
+			> div.kint-highlight {
+				background: $secondary-background !important;
+			}
+		}
+
+		// Microtime representation
+		.kint-microtime-lap {
+			text-shadow:
+				-1px 0 $border-color-hover,
+				0 1px $border-color-hover,
+				1px 0 $border-color-hover,
+				0 -1px $border-color-hover !important;
+			color: $main-background !important;
+			font-weight: bold !important;
+		}
+	}
 }

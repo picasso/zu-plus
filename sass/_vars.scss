@@ -1,20 +1,24 @@
-@use "sass:color";
+@use 'sass:color';
 @use 'sass:math';
-@function div($be-divided, $by) { @return math.div($be-divided, $by); }
+@function div($be-divided, $by) {
+	@return math.div($be-divided, $by);
+}
 
 @mixin breakpoint-width($point) {
-	@media all and (max-width: $point)  { @content; }
+	@media all and (max-width: $point) {
+		@content;
+	}
 }
 
 // Alert colors
 $wp-alert-yellow: #f0b849;
 $wp-alert-red: #cc1818;
 $wp-alert-green: #4ab866;
-$wp-gray-900: #1e1e1e;          	// For UI, use $gray-900.
-$wp-gray-700: #757575;		    	// Meets 4.6:1 text contrast against white.
-$wp-gray-600: #949494;		    	// Meets 3:1 UI or large text contrast against white.
+$wp-gray-900: #1e1e1e; // For UI, use $gray-900.
+$wp-gray-700: #757575; // Meets 4.6:1 text contrast against white.
+$wp-gray-600: #949494; // Meets 3:1 UI or large text contrast against white.
 $wp-gray-400: #ccc;
-$wp-gray-200: #ddd;             	// Used for most borders.
+$wp-gray-200: #ddd; // Used for most borders.
 $wp-blue-medium-100: #e5f5fa;
 $wp-blue-medium-500: #00a0d2;
 $wp-light-gray-500: #e2e4e7;
@@ -33,15 +37,21 @@ $text-shadow-for-white: 0 1px 3px rgba(black, 0.3);
 
 $font-family: Roboto, Menlo, Ubuntu, sans-serif;
 
-$kint-theme-main: #FFDF99;
-$kint-theme-secondary: #CCAA61;
+$kint-theme-main: #ffdf99;
+$kint-theme-secondary: #ccaa61;
 $kint-theme-text: color.adjust($kint-theme-secondary, $lightness: -35%);
 $kint-theme-text-light: color.adjust($kint-theme-secondary, $lightness: -30%);
 $kint-theme-text-dark: color.adjust($kint-theme-secondary, $lightness: -40%);
 
 $kint-theme-var-color: $kint-theme-text-dark;
-$kint-theme-var-bg-color: color.adjust(color.adjust($kint-theme-main, $lightness: -20%), $saturation: -15%);
-$kint-theme-var-bg-internal-color: color.adjust(color.adjust($kint-theme-main, $lightness: -8%), $saturation: -20%);
+$kint-theme-var-bg-color: color.adjust(
+	color.adjust($kint-theme-main, $lightness: -20%),
+	$saturation: -15%
+);
+$kint-theme-var-bg-internal-color: color.adjust(
+	color.adjust($kint-theme-main, $lightness: -8%),
+	$saturation: -20%
+);
 
 $debug-bar-selector: '#qm-debug_bar_zu_plusdebugbarpanel';
 $query-monitor-selector: '#query-monitor-main';

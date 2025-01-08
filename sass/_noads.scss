@@ -14,22 +14,25 @@
 // #itsec-sidebar-widget-form-support,
 // .itsec-module-pro-upsell,
 .itsec-promo,
-#toplevel_page_itsec ul li:not(.wp-first-item)
-{ display: none !important;}
+#toplevel_page_itsec ul li:not(.wp-first-item) {
+	display: none !important;
+}
 
 // BBQ Firewall
 tr[data-slug*="block-bad-queries"] .row-actions span:first-child:not(.activate):not(.delete):not(.deactivate)
 
 // a[title*="BBQ Firewall"],
 // a[href*="bbq_settings"]
-{ display: none !important;}
+{
+	display: none !important;
+}
 
 // Improvements -----------------------------------------------------------------------------------]
 
 // чтобы блок 'shortcode' позволял изменять размер поля ввода
 .blocks-shortcode__textarea {
-    min-height: 120px !important;
-    resize: vertical !important;
+	min-height: 120px !important;
+	resize: vertical !important;
 	font-size: 1.5em;
 }
 
