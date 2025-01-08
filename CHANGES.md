@@ -1,5 +1,6 @@
 #### 2.2.5 / 2025-01-08
 
+* __Zukit__ updated to version 2.0.1
 * update outdated npm packages
 * add __Prettier__ and its config
 * replace __ESLint__ config with v9
