@@ -1,7 +1,7 @@
 {
 	"name": "zuplus",
-	"version": "2.2.3",
-	"testedWP": "5.9.1",
+	"version": "2.2.5",
+	"testedWP": "6.6.2",
 	"requiresPHP": ">=7.4.1",
 	"type": "module",
 	"repository": {
@@ -22,10 +22,10 @@
 		"dev": "wp-scripts start --config wp-dev.config.cjs",
 		"build": "wp-scripts build --config wp-scripts.config.cjs",
 		"---------": "",
-		"lint:eslint": "eslint src/scripts",
+		"lint:eslint": "eslint scripts",
 		"lint:fix": "npm run lint:eslint -- --fix",
-		"format:check": "prettier --check \"src/**/*.{ts,tsx,js,jsx,json}\"",
-		"format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json}\"",
+		"format:check": "prettier --check \"{scripts,sass}/*.{ts,tsx,js,jsx,json,scss}\"",
+		"format": "prettier --write \"{scripts,sass}/*.{ts,tsx,js,jsx,json,scss}\"",
 		"----------": "",
 		"plugin-zip": "wp-scripts plugin-zip",
 		"packages-update": "wp-scripts packages-update"

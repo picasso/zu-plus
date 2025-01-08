@@ -1,3 +1,16 @@
+#### 2.2.5 / 2025-01-08
+
+* update outdated npm packages
+* add __Prettier__ and its config
+* replace __ESLint__ config with v9
+* add `markdownlint` and fix `.md` files
+* add `wp-scripts` build and webpack configs for it
+* migrate SASS files to avoid deprecation warnings
+* refactor JS  with `lodash-es` and prettier rules
+* replace wordpress import from `const` to `import`
+* fix PHP formatting and some errors found by `intelephense`
+* update `gitattributes` ignore
+
 #### 2.2.3 / 2022-03-07
 
 * __Zukit__ updated to version 1.5.5
