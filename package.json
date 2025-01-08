@@ -1,31 +1,51 @@
 {
-    "name": "zuplus",
-    "version": "2.2.3",
-    "testedWP": "5.9.1",
-    "requiresPHP": ">=7.4.1",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/picasso/zuplus.git"
-    },
-    "keywords": [
-        "wordpress",
-        "development",
-        "plugin",
-        "gutenberg",
-        "debug"
-    ],
-    "author": "Dmitry Rudakov",
-    "description": "Supports development with the Zukit framework and implements various debugging methods and other service functions.",
-    "license": "MIT",
-    "scripts": {},
-    "devDependencies": {
-        "@wordpress/eslint-plugin": "^7.2.1",
-        "eslint": "^7.10.0",
-        "prettier": "^2.2.1",
-        "eslint-plugin-react": "^7.21.3",
-        "eslint-plugin-react-hooks": "^4.1.2",
-        "replace-in-file": "^6.1.0",
-        "typescript": "^4.0.3"
-    },
-    "optionalDependencies": {}
+	"name": "zuplus",
+	"version": "2.2.3",
+	"testedWP": "5.9.1",
+	"requiresPHP": ">=7.4.1",
+	"type": "module",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/picasso/zuplus.git"
+	},
+	"keywords": [
+		"wordpress",
+		"development",
+		"plugin",
+		"gutenberg",
+		"debug"
+	],
+	"author": "Dmitry Rudakov",
+	"description": "Supports development with the Zukit framework and implements various debugging methods and other service functions.",
+	"license": "MIT",
+	"scripts": {
+		"dev": "wp-scripts start --config wp-dev.config.cjs",
+		"build": "wp-scripts build --config wp-scripts.config.cjs",
+		"---------": "",
+		"lint:eslint": "eslint src/scripts",
+		"lint:fix": "npm run lint:eslint -- --fix",
+		"format:check": "prettier --check \"src/**/*.{ts,tsx,js,jsx,json}\"",
+		"format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json}\"",
+		"----------": "",
+		"plugin-zip": "wp-scripts plugin-zip",
+		"packages-update": "wp-scripts packages-update"
+	},
+	"dependencies": {
+		"lodash-es": "^4.17.21"
+	},
+	"devDependencies": {
+		"@eslint/js": "^9.17.0",
+		"@wordpress/eslint-plugin": "^22.1.1",
+		"@wordpress/scripts": "^30.8.1",
+		"browser-sync-webpack-plugin": "^2.3.0",
+		"eslint": "^9.17.0",
+		"eslint-plugin-react": "^7.37.3",
+		"eslint-plugin-react-hooks": "^5.1.0",
+		"eslint-plugin-simple-import-sort": "^12.1.1",
+		"globals": "^15.14.0",
+		"prettier": "^3.4.2",
+		"replace-in-file": "^8.3.0",
+		"typescript": "^5.7.2"
+	},
+	"optionalDependencies": {}
 }
