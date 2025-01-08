@@ -93,7 +93,7 @@ export default [
 						['^\\u0000'],
 						['^lodash-es', '^react', '^@?\\w'],
 						['^@wordpress/'],
-						['^components', '^data', '^hooks', '^plugins'],
+						['^settings'],
 						['^\\.'],
 					],
 				},
@@ -102,5 +102,5 @@ export default [
 	},
 	// `ignores` should be the last item in config
 	// https://github.com/eslint/eslint/issues/17400#issuecomment-1647463901
-	{ ignores: ['dist/**'] },
+	{ ignores: ['admin/**'] },
 ]
