@@ -2,32 +2,31 @@
 
 // Debug Output helpers ---------------------------------------------------------------------------]
 
-class Kint {
-	const MODE_RICH = 'r';
-	const MODE_TEXT = 't';
-	// const MODE_CLI = 'c';
-	// const MODE_PLAIN = 'p';
-	public static $enabled_mode = true;
-	public static $return;
-	public static $aliases = [];
-}
-
 trait zu_PlusDebugOutput {
 
 	private $kint_version = '3.3';
 
 	private function init_kint() {
+		/** @disregard P1009 because `Kint` class is loaded in `zuplus-debug.php` **/
 		Kint::$return = true;
+		/** @disregard P1009 because `Kint` class is loaded in `zuplus-debug.php` **/
 		Kint::$aliases[] = 'zu_log';
+		/** @disregard P1009 because `Kint` class is loaded in `zuplus-debug.php` **/
 		Kint::$aliases[] = 'zu_logc';
+		/** @disregard P1009 because `Kint` class is loaded in `zuplus-debug.php` **/
 		Kint::$aliases[] = 'zu_log_if';
+		/** @disregard P1009 because `Kint` class is loaded in `zuplus-debug.php` **/
 		Kint::$aliases[] = ['zukit_Plugin', 'log'];
+		/** @disregard P1009 because `Kint` class is loaded in `zuplus-debug.php` **/
 		Kint::$aliases[] = ['zukit_Plugin', 'logc'];
+		/** @disregard P1009 because `Kint` class is loaded in `zuplus-debug.php` **/
 		Kint::$enabled_mode = $this->is_option('use_kint');
 	}
 
 	private function kint_log($args, $rich_mode = false) {
+		/** @disregard P1009 because `Kint` class is loaded in `zuplus-debug.php` **/
 		$stash = Kint::$enabled_mode;
+		/** @disregard P1009 because `Kint` class is loaded in `zuplus-debug.php` **/
 		Kint::$enabled_mode = $rich_mode ? Kint::MODE_RICH : Kint::MODE_TEXT;
 		$log = call_user_func_array(['Kint', 'dump'], $args);
 		if ($args[0] === '!context!') {
@@ -49,6 +48,7 @@ trait zu_PlusDebugOutput {
 				$log
 			);
 		}
+		/** @disregard P1009 because `Kint` class is loaded in `zuplus-debug.php` **/
 		Kint::$enabled_mode = $stash;
 		return $log . PHP_EOL;
 	}
@@ -96,7 +96,6 @@ trait zu_PlusDebugOutput {
 			else {
 				$name = is_object($value) ? get_class($value) : false;
 				if ($name !== false) $args[$key] = "instance of $name";
-				// $this->is_option('use_kint') ? "!instance!$name" :  "instance of $name";
 			}
 		}
 		return $args;
@@ -119,27 +118,6 @@ trait zu_PlusDebugOutput {
 		}
 		return $log;
 	}
-
-	// public function write_ajax_log($data) {
-	//
-	// 	if(!$this->alog) return;
-	//
-	// 	$f = $this->log_location('ajax.log');
-	// 	$ip = $this->get_request_ip();
-	// 	$refer = str_replace(zu()->base_url(null, null, true)['host'], '', $this->get_request_refer());
-	// 	$refer = preg_replace('/https?:\/\//i', '', $refer);
-	// 	$refer = str_replace('<strong>-ajax-</strong> ', 'ajax:', urldecode($refer));
-	//
-	// 	$msg = sprintf('[%1$s] %3$s -------------------[%2$s]%4$s', date('d.m H:i:s'), $ip, $refer, PHP_EOL);
-	// 	$msg .= $this->process_var($data);
-	//
-	// 	if($this->write_to_file) error_log($msg.PHP_EOL.PHP_EOL, 3, $f);
-	// }
-
-
-	// public function get_request_ip() { return zu_get_server_value('REMOTE_ADDR'); }
-	// public function get_request_ajax() { return zu_get_server_value('AJAX'); }
-	// public function get_request_refer() { return zu_get_server_value('HTTP_REFERER'); }
 }
 
 function zu_get_server_value($name) {

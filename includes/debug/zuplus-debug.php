@@ -42,7 +42,6 @@ class zu_PlusDebug extends zukit_Addon {
 				'debug_menus'		=> false,
 				'debug_plugins'		=> false,
 				'classname_only'	=> false,
-				// 'ajax_log'			=> false,
 			],
 		];
 	}
@@ -96,9 +95,11 @@ class zu_PlusDebug extends zukit_Addon {
 	}
 
 	public function admin_init() {
-		// $this->logc('?Debug Bar option', $this->is_option('debug_bar'));
-		// zu_log($this->dbar);
-		// $this->log($this->options, $this->location, $this->abs_path, $this->content_path);
+		// для проверки разных вариантов
+		// $this->logc('Debug Bar option', $this->is_option('debug_bar'));
+		// zu_logc('!Debug Bar option', $this->is_option('debug_bar'));
+		// zu_log($this->dbar, $this->flywheel_path);
+		// $this->log($this->options, $this->location, $this->content_path);
 	}
 
 	public function is($key) {
